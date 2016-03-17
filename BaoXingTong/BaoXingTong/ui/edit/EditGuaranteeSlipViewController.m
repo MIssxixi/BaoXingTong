@@ -29,10 +29,10 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 #define TEXTFIELDTABLEVIEWCELLIDENTIFIER @"TEXTFIELDTABLEVIEWCELL"
 #define CHOSEOREDITTABLEVIEWCELLIDENTIFIER @"CHOSEOREDITTABLEVIEWCELL"
 
-@interface EditGuaranteeSlipViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
+@interface EditGuaranteeSlipViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, DoImagePickerControllerDelegate>
 
-//@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *propertyList;
+@property (nonatomic, strong) DoImagePickerController *doImagePickerController;
 
 @end
 
@@ -40,21 +40,19 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    [self setTitle:@"编辑保单"];
     
     self.automaticallyAdjustsScrollViewInsets = YES;
     self.extendedLayoutIncludesOpaqueBars = NO;
     self.edgesForExtendedLayout = UIRectEdgeBottom | UIRectEdgeLeft | UIRectEdgeRight;
-//    [self.view addSubview:self.tableView];
-//    [self.tableView autoPinEdgesToSuperviewEdges];
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyeboardHide)];
-//    tapGestureRecognizer.delegate = self;
-//    [self.view addGestureRecognizer:tapGestureRecognizer];
+    
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyeboardHide:)];
     tapGestureRecognizer.cancelsTouchesInView = NO;
-    [self setTitle:@"编辑保单"];
+    [self.view addGestureRecognizer:tapGestureRecognizer];
+    
     [self.tableView registerClass:[TextFieldTableViewCell class] forCellReuseIdentifier:TEXTFIELDTABLEVIEWCELLIDENTIFIER];
     [self.tableView registerClass:[ChoseOrEditTableViewCell class] forCellReuseIdentifier:CHOSEOREDITTABLEVIEWCELLIDENTIFIER];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyHide) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -62,20 +60,11 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     // Dispose of any resources that can be recreated.
 }
 
-- (void)keyeboardHide
+- (void)keyeboardHide:(UIGestureRecognizer *)tap
 {
-//    if (tap.state == UIGestureRecognizerStateEnded) {
+    if (tap.state == UIGestureRecognizerStateEnded) {
         [self.tableView endEditing:YES];
-    self.tableView.contentSize = self.view.frame.size;
-    self.tableView.contentInset = UIEdgeInsetsZero;
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
-//    }
-}
-
-- (void)keyHide
-{
-    self.tableView.contentInset = UIEdgeInsetsZero;
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -108,17 +97,6 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         cell.rightTextField.keyboardType = keyboardType;
         cell.cellStyle = cellType;
         
-        __weak TextFieldTableViewCell *weakCell = cell;
-        [weakCell setKeyBoardDidBeginEditing:^{
-//            UIEdgeInsets edgeInsets = tableView.contentInset;
-//            edgeInsets.bottom = weakCell.rightTextField.inputView.bounds.size.height + weakCell.rightTextField.inputAccessoryView.bounds.size.height;
-//            [tableView setContentInset:edgeInsets];
-//            CGPoint contenOffset = tableView.contentOffset;
-//            CGPoint pointInTable = [weakCell convertPoint:weakCell.frame.origin toView:tableView];
-//            contenOffset.y = 100;
-//            [tableView setContentOffset:contenOffset animated:YES];
-        }];
-        
         return cell;
     }
     else if([cellClass isEqualToString:NSStringFromClass([ChoseOrEditTableViewCell class])])
@@ -143,42 +121,29 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     NSDictionary *dic = self.propertyList[indexPath.row];
     NSInteger selectCellAction = [[dic valueForKey:EDITGUARANTEESLIPLIST_SELECT_CELL_ACTION] integerValue];
     if (selectCellAction == SelectCellActionAddPicture) {
-        DoImagePickerController *doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
-        doImagePickerController.delegate = self;
-        doImagePickerController.nMaxCount = 4;
-        doImagePickerController.nColumnCount =3 ;
-        doImagePickerController.nResultType = 1;
-        [self.navigationController pushViewController:doImagePickerController animated:YES];
+
+        [self.navigationController pushViewController:self.doImagePickerController animated:YES];
     }
-    
-//    [self keyeboardHide];
 }
 
 #pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-//    [self.tableView endEditing:YES];
-}
-
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [self.tableView endEditing:YES];
 }
 
-#pragma mark - get
-//- (UITableView *)tableView
-//{
-//    if (!_tableView) {
-//        _tableView = [[UITableView alloc] initWithFrame:CGRectZero];
-//        [_tableView registerClass:[TextFieldTableViewCell class] forCellReuseIdentifier:TEXTFIELDTABLEVIEWCELLIDENTIFIER];
-//        [_tableView registerClass:[ChoseOrEditTableViewCell class] forCellReuseIdentifier:CHOSEOREDITTABLEVIEWCELLIDENTIFIER];
-//        _tableView.backgroundColor = [UIColor whiteColor];
-//        _tableView.delegate = self;
-//        _tableView.dataSource = self;
-//    }
-//    return _tableView;
-//}
+#pragma mark - DoImagePickerControllerDelegate
+- (void)didCancelDoImagePickerController
+{
+    
+}
 
+- (void)didSelectPhotosFromDoImagePickerController:(DoImagePickerController *)picker result:(NSArray *)aSelected
+{
+    [picker.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - get
 - (NSArray *)propertyList
 {
     if (!_propertyList) {
@@ -187,4 +152,17 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     }
     return _propertyList;
 }
+
+- (DoImagePickerController *)doImagePickerController
+{
+    if (!_doImagePickerController) {
+        _doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
+        _doImagePickerController.delegate = self;
+        _doImagePickerController.nMaxCount = 4;
+        _doImagePickerController.nColumnCount =3 ;
+//        _doImagePickerController.nResultType = 1;
+    }
+    return _doImagePickerController;
+}
+
 @end

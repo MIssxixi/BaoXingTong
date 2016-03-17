@@ -90,12 +90,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaoXingTong/ui/edit/EditGuaranteeSlipViewController.m"
-            timestampString = "479892436.131475"
+            timestampString = "479897268.475286"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "-keyHide"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "-didSelectPhotosFromDoImagePickerController:result:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
