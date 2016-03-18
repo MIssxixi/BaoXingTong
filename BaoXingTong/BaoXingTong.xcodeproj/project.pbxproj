@@ -21,6 +21,8 @@
 		1FD5B57A1C96660800C9E8CD /* EditGuaranteeSlipList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1FD5B5791C96660800C9E8CD /* EditGuaranteeSlipList.plist */; };
 		1FD5B57D1C96906700C9E8CD /* ChoseOrEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD5B57C1C96906700C9E8CD /* ChoseOrEditTableViewCell.m */; };
 		1FD5B5801C9693E000C9E8CD /* cell_indicator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD5B57F1C9693E000C9E8CD /* cell_indicator@2x.png */; };
+		1FD61F8B1C9AB47500F40906 /* ImageFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD61F8A1C9AB47500F40906 /* ImageFooterView.m */; };
+		1FD61F8E1C9ABA6200F40906 /* ImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD61F8D1C9ABA6200F40906 /* ImageCollectionViewCell.m */; };
 		46ACD379B8967ACB7F3814CF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACA3706010934276AB44135 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +74,10 @@
 		1FD5B57B1C96906700C9E8CD /* ChoseOrEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoseOrEditTableViewCell.h; sourceTree = "<group>"; };
 		1FD5B57C1C96906700C9E8CD /* ChoseOrEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoseOrEditTableViewCell.m; sourceTree = "<group>"; };
 		1FD5B57F1C9693E000C9E8CD /* cell_indicator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_indicator@2x.png"; sourceTree = "<group>"; };
+		1FD61F891C9AB47500F40906 /* ImageFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFooterView.h; sourceTree = "<group>"; };
+		1FD61F8A1C9AB47500F40906 /* ImageFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageFooterView.m; sourceTree = "<group>"; };
+		1FD61F8C1C9ABA6200F40906 /* ImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCollectionViewCell.h; sourceTree = "<group>"; };
+		1FD61F8D1C9ABA6200F40906 /* ImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCollectionViewCell.m; sourceTree = "<group>"; };
 		1FF379151C996426006FC3BE /* DoImagePickerController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DoImagePickerController.framework; path = "Pods/../build/Debug-iphoneos/DoImagePickerController.framework"; sourceTree = "<group>"; };
 		4ACA3706010934276AB44135 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E521B45D65ECAABC95D95CAF /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -217,6 +223,10 @@
 				1FD50D9F1C784C0E002F66F0 /* TextFieldTableViewCell.m */,
 				1FD5B57B1C96906700C9E8CD /* ChoseOrEditTableViewCell.h */,
 				1FD5B57C1C96906700C9E8CD /* ChoseOrEditTableViewCell.m */,
+				1FD61F891C9AB47500F40906 /* ImageFooterView.h */,
+				1FD61F8A1C9AB47500F40906 /* ImageFooterView.m */,
+				1FD61F8C1C9ABA6200F40906 /* ImageCollectionViewCell.h */,
+				1FD61F8D1C9ABA6200F40906 /* ImageCollectionViewCell.m */,
 			);
 			path = edit;
 			sourceTree = "<group>";
@@ -422,8 +432,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FD48E7F1C9174B5001E75E6 /* UIColor+WithString.m in Sources */,
+				1FD61F8B1C9AB47500F40906 /* ImageFooterView.m in Sources */,
 				1FD4F6041C75F53B00012DCD /* ViewController.m in Sources */,
 				1FD4F6011C75F53B00012DCD /* AppDelegate.m in Sources */,
+				1FD61F8E1C9ABA6200F40906 /* ImageCollectionViewCell.m in Sources */,
 				1FD4F5FE1C75F53B00012DCD /* main.m in Sources */,
 				1FD50D9D1C7843DE002F66F0 /* EditGuaranteeSlipViewController.m in Sources */,
 				1FD50DA01C784C0E002F66F0 /* TextFieldTableViewCell.m in Sources */,

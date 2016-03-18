@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++39851D0",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++BCE2083" : 0,
+    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++B43E476" : 0,
+    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++39851D0" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "A1B2BFAB-3174-4F65-85C3-DD5E89D48344",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++BCE2083" : "",
+    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++B43E476" : "",
+    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++39851D0" : "BaoXingTong\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "BaoXingTong",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "BaoXingTong\/BaoXingTong.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/MIssxixi\/BaoXingTong.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++39851D0"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/MIssxixi\/BaoXingTong.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++B43E476"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/MIssxixi\/BaoXingTong.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++BCE2083"
+    }
+  ]
+}

@@ -11,6 +11,7 @@
 #import <DoImagePickerController/AssetHelper.h>
 #import "TextFieldTableViewCell.h"
 #import "ChoseOrEditTableViewCell.h"
+#import "ImageFooterView.h"
 
 typedef NS_ENUM(NSInteger, SelectCellAction) {
     SelectCellActionNone = 0,
@@ -28,15 +29,28 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 #define TEXTFIELDTABLEVIEWCELLIDENTIFIER @"TEXTFIELDTABLEVIEWCELL"
 #define CHOSEOREDITTABLEVIEWCELLIDENTIFIER @"CHOSEOREDITTABLEVIEWCELL"
+#define IMAGEFOOTERVIEWIDENTIFIER @"IMAGEFOOTERVIEW"
 
 @interface EditGuaranteeSlipViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, DoImagePickerControllerDelegate>
 
 @property (nonatomic, strong) NSArray *propertyList;
-@property (nonatomic, strong) DoImagePickerController *doImagePickerController;
+@property (nonatomic, strong) NSMutableArray <UIImage *> *imageArray;
+@property (nonatomic, strong) ImageFooterView *imageFooterView;
 
 @end
 
 @implementation EditGuaranteeSlipViewController
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.imageFooterView setImageArray:self.imageArray];
+    CGRect rect = self.imageFooterView.frame;
+    rect.size.height = [ImageFooterView heightWithImageArray:self.imageArray];
+    self.imageFooterView.frame = rect;
+    self.tableView.tableFooterView = self.imageFooterView;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,6 +67,8 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     
     [self.tableView registerClass:[TextFieldTableViewCell class] forCellReuseIdentifier:TEXTFIELDTABLEVIEWCELLIDENTIFIER];
     [self.tableView registerClass:[ChoseOrEditTableViewCell class] forCellReuseIdentifier:CHOSEOREDITTABLEVIEWCELLIDENTIFIER];
+    [self.tableView registerClass:[ImageFooterView class] forHeaderFooterViewReuseIdentifier:IMAGEFOOTERVIEWIDENTIFIER];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -121,8 +137,11 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     NSDictionary *dic = self.propertyList[indexPath.row];
     NSInteger selectCellAction = [[dic valueForKey:EDITGUARANTEESLIPLIST_SELECT_CELL_ACTION] integerValue];
     if (selectCellAction == SelectCellActionAddPicture) {
-
-        [self.navigationController pushViewController:self.doImagePickerController animated:YES];
+        DoImagePickerController *doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
+        doImagePickerController.nColumnCount = 3;
+        doImagePickerController.nMaxCount = -1;
+        doImagePickerController.delegate = self;
+        [self.navigationController pushViewController:doImagePickerController animated:YES];
     }
 }
 
@@ -140,7 +159,9 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 - (void)didSelectPhotosFromDoImagePickerController:(DoImagePickerController *)picker result:(NSArray *)aSelected
 {
+    [self.imageArray addObjectsFromArray:aSelected];
     [picker.navigationController popViewControllerAnimated:YES];
+    [self.tableView reloadData];
 }
 
 #pragma mark - get
@@ -153,16 +174,19 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     return _propertyList;
 }
 
-- (DoImagePickerController *)doImagePickerController
+- (NSMutableArray <UIImage *> *)imageArray
 {
-    if (!_doImagePickerController) {
-        _doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
-        _doImagePickerController.delegate = self;
-        _doImagePickerController.nMaxCount = 4;
-        _doImagePickerController.nColumnCount =3 ;
-//        _doImagePickerController.nResultType = 1;
+    if (!_imageArray) {
+        _imageArray = [[NSMutableArray alloc] init];
     }
-    return _doImagePickerController;
+    return _imageArray;
 }
 
+- (ImageFooterView *)imageFooterView
+{
+    if (!_imageFooterView) {
+        _imageFooterView = [[ImageFooterView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, [ImageFooterView heightWithImageArray:self.imageArray])];
+    }
+    return _imageFooterView;
+}
 @end
