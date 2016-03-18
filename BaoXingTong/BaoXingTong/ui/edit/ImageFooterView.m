@@ -8,13 +8,14 @@
 
 #import "ImageFooterView.h"
 #import "ImageCollectionViewCell.h"
+#import "MWPhotoBrowser.h"
 
 #define IMAGECOLLECTIONVIEWCELL_IDENTIFIER @"IMAGECOLLECTIONVIEWCELL"
 
 const CGFloat collectionViewCellHeight = 80;
 const CGFloat collectionViewCellminimumLineSpacing = 10;
 
-@interface ImageFooterView () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ImageFooterView () <UICollectionViewDataSource, UICollectionViewDelegate, MWPhotoBrowserDelegate>
 
 @property (nonatomic, strong) NSArray <UIImage *> * imageArray;
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -32,8 +33,6 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
     }
     return self;
 }
-
-
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -54,6 +53,32 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
     }
     return cell;
 }
+
+#pragma mark - UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row < self.imageArray.count) {
+        MWPhotoBrowser *photoBrowser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+        [photoBrowser setCurrentPhotoIndex:indexPath.row];
+        [[UIViewController currentViewController].navigationController pushViewController:photoBrowser animated:YES];
+    }
+}
+
+#pragma mark - MWPhotoBrowserDelegate
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser
+{
+    return self.imageArray.count;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index
+{
+    if (index < self.imageArray.count) {
+        MWPhoto *photo = [MWPhoto photoWithImage:self.imageArray[index]];
+        return photo;
+    }
+    return nil;
+}
+
 #pragma mark - get set
 - (UICollectionView *)collectionView
 {
@@ -77,8 +102,6 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
 - (void)setImageArray:(NSArray<UIImage *> *)imageArray
 {
     _imageArray = imageArray;
-    [self setNeedsUpdateConstraints];
-    [self setNeedsLayout];
     [self.collectionView reloadData];
 }
 

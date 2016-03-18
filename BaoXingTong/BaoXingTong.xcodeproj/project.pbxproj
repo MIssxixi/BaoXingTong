@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1FD1AB641C9C034F0057710B /* UIViewController+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD1AB631C9C034F0057710B /* UIViewController+Utils.m */; };
 		1FD48E7F1C9174B5001E75E6 /* UIColor+WithString.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD48E7E1C9174B5001E75E6 /* UIColor+WithString.m */; };
 		1FD4F5FE1C75F53B00012DCD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD4F5FD1C75F53B00012DCD /* main.m */; };
 		1FD4F6011C75F53B00012DCD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD4F6001C75F53B00012DCD /* AppDelegate.m */; };
@@ -45,6 +46,8 @@
 
 /* Begin PBXFileReference section */
 		127044377FB66D04E4213EF9 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		1FD1AB621C9C034F0057710B /* UIViewController+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Utils.h"; sourceTree = "<group>"; };
+		1FD1AB631C9C034F0057710B /* UIViewController+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utils.m"; sourceTree = "<group>"; };
 		1FD398CD1C7C5ED4006486B0 /* style.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = style.h; sourceTree = "<group>"; };
 		1FD48E7D1C9174B5001E75E6 /* UIColor+WithString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+WithString.h"; sourceTree = "<group>"; };
 		1FD48E7E1C9174B5001E75E6 /* UIColor+WithString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+WithString.m"; sourceTree = "<group>"; };
@@ -132,6 +135,8 @@
 				1FD48E801C917BAE001E75E6 /* CommonCategory.h */,
 				1FD48E7D1C9174B5001E75E6 /* UIColor+WithString.h */,
 				1FD48E7E1C9174B5001E75E6 /* UIColor+WithString.m */,
+				1FD1AB621C9C034F0057710B /* UIViewController+Utils.h */,
+				1FD1AB631C9C034F0057710B /* UIViewController+Utils.m */,
 			);
 			path = category;
 			sourceTree = "<group>";
@@ -439,6 +444,7 @@
 				1FD4F5FE1C75F53B00012DCD /* main.m in Sources */,
 				1FD50D9D1C7843DE002F66F0 /* EditGuaranteeSlipViewController.m in Sources */,
 				1FD50DA01C784C0E002F66F0 /* TextFieldTableViewCell.m in Sources */,
+				1FD1AB641C9C034F0057710B /* UIViewController+Utils.m in Sources */,
 				1FD5B57D1C96906700C9E8CD /* ChoseOrEditTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

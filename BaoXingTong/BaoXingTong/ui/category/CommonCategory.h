@@ -10,5 +10,6 @@
 #define CommonCategory_h
 
 #import "UIColor+WithString.h"
+#import "UIViewController+Utils.h"
 
 #endif /* CommonCategory_h */
