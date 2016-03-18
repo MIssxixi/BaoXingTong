@@ -50,6 +50,11 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
     ImageCollectionViewCell *cell = (ImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:IMAGECOLLECTIONVIEWCELL_IDENTIFIER forIndexPath:indexPath];
     if (self.imageArray.count > indexPath.row) {
         cell.image = self.imageArray[indexPath.row];
+        [cell setDidDeleteAction:^(UICollectionViewCell *cell) {
+            if (self.didDeleteAction) {
+                self.didDeleteAction(indexPath.row);
+            }
+        }];
     }
     return cell;
 }

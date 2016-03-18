@@ -11,6 +11,7 @@
 @interface ImageCollectionViewCell ()
 
 @property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIButton *deleteButton;
 
 @end
 
@@ -25,10 +26,22 @@
             [self.imageView autoPinEdgesToSuperviewEdges];
         }
         
+        {
+            [self.contentView addSubview:self.deleteButton];
+            [self.deleteButton autoPinEdgeToSuperviewEdge:ALEdgeTop];
+            [self.deleteButton autoPinEdgeToSuperviewEdge:ALEdgeRight];
+            [self.deleteButton autoSetDimensionsToSize:CGSizeMake(22, 22)];
+        }
     }
     return self;
 }
 
+- (void)tapDeleteButton
+{
+    if (self.didDeleteAction) {
+        self.didDeleteAction(self);
+    }
+}
 
 #pragma mark - get set
 - (UIImageView *)imageView
@@ -40,6 +53,18 @@
         _imageView.backgroundColor = [UIColor clearColor];
     }
     return _imageView;
+}
+
+- (UIButton *)deleteButton
+{
+    if (!_deleteButton) {
+        _deleteButton = [UIButton newAutoLayoutView];
+        [_deleteButton setImage:[UIImage imageNamed:@"cell_cancle"] forState:UIControlStateNormal];
+        _deleteButton.contentMode = UIViewContentModeScaleToFill;
+        [_deleteButton sizeToFit];
+        [_deleteButton addTarget:self action:@selector(tapDeleteButton) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _deleteButton;
 }
 
 - (void)setImage:(UIImage *)image

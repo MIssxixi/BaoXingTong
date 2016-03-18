@@ -10,6 +10,8 @@
 
 @interface ImageCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, copy) UIImage *image;
+@property (nonatomic, strong) UIImage *image;
+
+@property (nonatomic, copy) void (^didDeleteAction)(UICollectionViewCell *cell);
 
 @end

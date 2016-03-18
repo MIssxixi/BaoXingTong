@@ -45,11 +45,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 {
     [super viewWillAppear:animated];
     
-    [self.imageFooterView setImageArray:self.imageArray];
-    CGRect rect = self.imageFooterView.frame;
-    rect.size.height = [ImageFooterView heightWithImageArray:self.imageArray];
-    self.imageFooterView.frame = rect;
-    self.tableView.tableFooterView = self.imageFooterView;
+    [self updateFooterView];
 }
 
 - (void)viewDidLoad {
@@ -81,6 +77,20 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     if (tap.state == UIGestureRecognizerStateEnded) {
         [self.tableView endEditing:YES];
     }
+}
+
+- (void)updateFooterView
+{
+    [self.imageFooterView setImageArray:self.imageArray];
+    CGRect rect = self.imageFooterView.frame;
+    rect.size.height = [ImageFooterView heightWithImageArray:self.imageArray];
+    self.imageFooterView.frame = rect;
+    self.tableView.tableFooterView = self.imageFooterView;
+}
+
+- (void)updateForceInsurance:(BOOL)hasBought
+{
+    
 }
 
 #pragma mark - UITableViewDataSource
@@ -136,12 +146,26 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 {
     NSDictionary *dic = self.propertyList[indexPath.row];
     NSInteger selectCellAction = [[dic valueForKey:EDITGUARANTEESLIPLIST_SELECT_CELL_ACTION] integerValue];
+    
     if (selectCellAction == SelectCellActionAddPicture) {
         DoImagePickerController *doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
         doImagePickerController.nColumnCount = 3;
         doImagePickerController.nMaxCount = -1;
         doImagePickerController.delegate = self;
         [self.navigationController pushViewController:doImagePickerController animated:YES];
+    }
+    else if (selectCellAction == SelectCellActionForceInsurance)
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"交强险" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *alertActionYes = [UIAlertAction actionWithTitle:@"是" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self updateForceInsurance:YES];
+        }];
+        UIAlertAction *alertActionNo = [UIAlertAction actionWithTitle:@"否" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self updateForceInsurance:NO];
+        }];
+        [alertController addAction:alertActionYes];
+        [alertController addAction:alertActionNo];
+        [self presentViewController:alertController animated:YES completion:nil];
     }
 }
 
@@ -186,7 +210,15 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 {
     if (!_imageFooterView) {
         _imageFooterView = [[ImageFooterView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, [ImageFooterView heightWithImageArray:self.imageArray])];
+        __weak typeof (self) weakSelf = self;
+        [_imageFooterView setDidDeleteAction:^(NSInteger index) {
+            if (index < self.imageArray.count) {
+                [weakSelf.imageArray removeObjectAtIndex:index];
+                [weakSelf updateFooterView];
+            }
+        }];
     }
     return _imageFooterView;
 }
+
 @end

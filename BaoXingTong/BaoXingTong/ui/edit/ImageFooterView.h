@@ -10,6 +10,8 @@
 
 @interface ImageFooterView : UITableViewHeaderFooterView
 
+@property (nonatomic, copy) void (^didDeleteAction)(NSInteger index);
+
 - (void)setImageArray:(NSArray <UIImage *> *)imageArray;
 
 + (CGFloat)heightWithImageArray:(NSArray <UIImage *> *)imageArray;
