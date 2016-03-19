@@ -66,6 +66,9 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    if (self.keyBoardDidEndEditing) {
+        self.keyBoardDidEndEditing(textField.text);
+    }
 }
 
 #pragma mark - UITextFieldDelegate
@@ -82,7 +85,6 @@
         _leftLabel = [UILabel newAutoLayoutView];
         _leftLabel.font = FONT(15);
         _leftLabel.textColor = COLOR_FROM_RGB(99, 99, 99, 1);
-        _leftLabel.backgroundColor = [UIColor grayColor];
     }
     return _leftLabel;
 }
@@ -94,8 +96,6 @@
         _rightTextField.font = FONT(15);
         _rightTextField.textColor = COLOR_FROM_RGB(33, 33, 33, 1);
         _rightTextField.delegate = self;
-        _rightTextField.placeholder = @"faf";
-        _rightTextField.backgroundColor = [UIColor greenColor];
     }
     return _rightTextField;
 }

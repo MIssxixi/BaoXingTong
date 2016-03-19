@@ -15,4 +15,6 @@
 @property (nonatomic, strong) UITextField *rightTextField;
 
 @property (nonatomic, strong) void (^didTapIndicator)();
+@property (nonatomic, copy) void (^keyBoardDidEndEditing)(NSString *text);
+
 @end

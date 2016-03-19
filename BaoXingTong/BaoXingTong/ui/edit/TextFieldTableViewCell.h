@@ -22,5 +22,6 @@ typedef NS_ENUM(NSInteger, TextFieldTableViewCellStyle)
 @property (nonatomic, strong) UITextField *rightTextField;
 
 @property (nonatomic, copy) void (^keyBoardDidBeginEditing)();
+@property (nonatomic, copy) void (^keyBoardDidEndEditing)(NSString *text);
 
 @end

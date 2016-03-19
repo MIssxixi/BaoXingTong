@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1FD1A1961C9CFE38007961FB /* check_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD1A1941C9CFE38007961FB /* check_gray@2x.png */; };
+		1FD1A1971C9CFE39007961FB /* uncheck_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD1A1951C9CFE38007961FB /* uncheck_gray@2x.png */; };
 		1FD1AB641C9C034F0057710B /* UIViewController+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD1AB631C9C034F0057710B /* UIViewController+Utils.m */; };
 		1FD1AB661C9C0CBE0057710B /* cell_cancle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD1AB651C9C0CBE0057710B /* cell_cancle@2x.png */; };
+		1FD1AB6A1C9C290E0057710B /* GuaranteeSlipModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD1AB691C9C290E0057710B /* GuaranteeSlipModel.m */; };
 		1FD48E7F1C9174B5001E75E6 /* UIColor+WithString.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD48E7E1C9174B5001E75E6 /* UIColor+WithString.m */; };
 		1FD4F5FE1C75F53B00012DCD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD4F5FD1C75F53B00012DCD /* main.m */; };
 		1FD4F6011C75F53B00012DCD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD4F6001C75F53B00012DCD /* AppDelegate.m */; };
@@ -47,9 +50,13 @@
 
 /* Begin PBXFileReference section */
 		127044377FB66D04E4213EF9 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		1FD1A1941C9CFE38007961FB /* check_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "check_gray@2x.png"; path = "../../../../../BaoXingTong/BaoXingTong/Resources/check_gray@2x.png"; sourceTree = "<group>"; };
+		1FD1A1951C9CFE38007961FB /* uncheck_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "uncheck_gray@2x.png"; path = "../../../../../BaoXingTong/BaoXingTong/Resources/uncheck_gray@2x.png"; sourceTree = "<group>"; };
 		1FD1AB621C9C034F0057710B /* UIViewController+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Utils.h"; sourceTree = "<group>"; };
 		1FD1AB631C9C034F0057710B /* UIViewController+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utils.m"; sourceTree = "<group>"; };
 		1FD1AB651C9C0CBE0057710B /* cell_cancle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_cancle@2x.png"; sourceTree = "<group>"; };
+		1FD1AB681C9C290E0057710B /* GuaranteeSlipModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuaranteeSlipModel.h; sourceTree = "<group>"; };
+		1FD1AB691C9C290E0057710B /* GuaranteeSlipModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuaranteeSlipModel.m; sourceTree = "<group>"; };
 		1FD398CD1C7C5ED4006486B0 /* style.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = style.h; sourceTree = "<group>"; };
 		1FD48E7D1C9174B5001E75E6 /* UIColor+WithString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+WithString.h"; sourceTree = "<group>"; };
 		1FD48E7E1C9174B5001E75E6 /* UIColor+WithString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+WithString.m"; sourceTree = "<group>"; };
@@ -123,6 +130,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		1FD1AB671C9C28C10057710B /* model */ = {
+			isa = PBXGroup;
+			children = (
+				1FD1AB681C9C290E0057710B /* GuaranteeSlipModel.h */,
+				1FD1AB691C9C290E0057710B /* GuaranteeSlipModel.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		1FD398CC1C7C5E9A006486B0 /* style */ = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +184,7 @@
 		1FD4F5FB1C75F53B00012DCD /* BaoXingTong */ = {
 			isa = PBXGroup;
 			children = (
+				1FD1AB671C9C28C10057710B /* model */,
 				1FD5B57E1C9693C700C9E8CD /* Resources */,
 				1FD50D951C780929002F66F0 /* ui */,
 				1FD4F5FF1C75F53B00012DCD /* AppDelegate.h */,
@@ -241,6 +258,8 @@
 		1FD5B57E1C9693C700C9E8CD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1FD1A1941C9CFE38007961FB /* check_gray@2x.png */,
+				1FD1A1951C9CFE38007961FB /* uncheck_gray@2x.png */,
 				1FD1AB651C9C0CBE0057710B /* cell_cancle@2x.png */,
 				1FD5B57F1C9693E000C9E8CD /* cell_indicator@2x.png */,
 			);
@@ -365,7 +384,9 @@
 				1FD4F60C1C75F53B00012DCD /* LaunchScreen.storyboard in Resources */,
 				1FD5B5801C9693E000C9E8CD /* cell_indicator@2x.png in Resources */,
 				1FD1AB661C9C0CBE0057710B /* cell_cancle@2x.png in Resources */,
+				1FD1A1971C9CFE39007961FB /* uncheck_gray@2x.png in Resources */,
 				1FD4F6091C75F53B00012DCD /* Assets.xcassets in Resources */,
+				1FD1A1961C9CFE38007961FB /* check_gray@2x.png in Resources */,
 				1FD4F6071C75F53B00012DCD /* Main.storyboard in Resources */,
 				1FD5B57A1C96660800C9E8CD /* EditGuaranteeSlipList.plist in Resources */,
 			);
@@ -448,6 +469,7 @@
 				1FD4F5FE1C75F53B00012DCD /* main.m in Sources */,
 				1FD50D9D1C7843DE002F66F0 /* EditGuaranteeSlipViewController.m in Sources */,
 				1FD50DA01C784C0E002F66F0 /* TextFieldTableViewCell.m in Sources */,
+				1FD1AB6A1C9C290E0057710B /* GuaranteeSlipModel.m in Sources */,
 				1FD1AB641C9C034F0057710B /* UIViewController+Utils.m in Sources */,
 				1FD5B57D1C96906700C9E8CD /* ChoseOrEditTableViewCell.m in Sources */,
 			);
@@ -591,6 +613,7 @@
 			baseConfigurationReference = E521B45D65ECAABC95D95CAF /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
@@ -609,6 +632,7 @@
 			baseConfigurationReference = 127044377FB66D04E4213EF9 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: 永杰 邹 (4637329BYW)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",

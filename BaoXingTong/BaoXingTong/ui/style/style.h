@@ -19,6 +19,6 @@
 #define TABLEVIEWCELL_HEIGHT_DEFAULT 54  //列表条目的默认高度
 
 #pragma mark - 通用边距
-#define PADDING_LR      13      //// 通用的左右边距
+#define PADDING_LR      20      //// 通用的左右边距
 
 #endif /* style_h */
