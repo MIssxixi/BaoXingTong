@@ -28,6 +28,14 @@
              };
 }
 
+- (NSArray <NSString *> *)commercialInsurance
+{
+    if (!_commercialInsurance) {
+        _commercialInsurance = [NSArray new];
+    }
+    return _commercialInsurance;
+}
+
 - (NSMutableArray <UIImage *> *)imageArray
 {
     if (!_imageArray) {

@@ -7,6 +7,7 @@
 //
 
 #import "EditGuaranteeSlipViewController.h"
+#import "SelectViewController.h"
 #import "GuaranteeSlipModel.h"
 #import <DoImagePickerController/DoImagePickerController.h>
 #import <DoImagePickerController/AssetHelper.h>
@@ -19,7 +20,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     SelectCellActionForceInsurance = 1,
     SelectCellActionCommercialInsurance = 2,
     SelectCellActionExpirationReminder = 3,
-    SelectCellActionAddPicture = 4
+    SelectCellActionAddPicture = 4,
 };
 
 #define EDITGUARANTEESLIPLIST_ID @"id"
@@ -156,7 +157,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     if ([cellClass isEqualToString:NSStringFromClass([TextFieldTableViewCell class])]) {
         TextFieldTableViewCell *cell = (TextFieldTableViewCell *)[tableView dequeueReusableCellWithIdentifier:TEXTFIELDTABLEVIEWCELLIDENTIFIER forIndexPath:indexPath];
        
-        NSString *text;             //= [self.model valueForKey:cellId];
+        NSString *text = [NSString string];             //= [self.model valueForKey:cellId];
         if ([cellId isEqualToString:@"hasBoughtForceInsurance"]) {
             if (self.model.hasBoughtForceInsurance) {
                 text = @"已购买";
@@ -164,6 +165,11 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
             else
             {
                 text = @"未购买";
+            }
+        }
+        else if ([cellId isEqualToString:@"commercialInsurance"]) {
+            for (NSString *string in self.model.commercialInsurance) {
+                text = [text stringByAppendingString:string];
             }
         }
         else
@@ -198,6 +204,30 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         }
         cell.rightTextField.placeholder = title;
         cell.rightTextField.keyboardType = keyboardType;
+        
+        [cell setDidTapIndicator:^{
+            if ([cellId isEqualToString:@"carType"]) {
+                SelectViewController *carTypeVC = [[SelectViewController alloc] initWithResourcePath:@"CarTypeList" selectedString:self.model.carType title:@"车型"];
+                [carTypeVC setDidSelectedString:^(NSString *selectedString) {
+                    if (selectedString.length) {
+                        self.model.carType = selectedString;
+                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    }
+                }];
+                [self.navigationController pushViewController:carTypeVC animated:YES];
+            }
+            else if ([cellId isEqualToString:@"insuranceAgent"])
+            {
+                SelectViewController *insuranceAgentVC = [[SelectViewController alloc] initWithResourcePath:@"InsuranceAgentList" selectedString:self.model.insuranceAgent title:@"保险公司"];
+                [insuranceAgentVC setDidSelectedString:^(NSString *selectedString) {
+                    if (selectedString.length) {
+                        self.model.insuranceAgent = selectedString;
+                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    }
+                }];
+                [self.navigationController pushViewController:insuranceAgentVC animated:YES];
+            }
+        }];
         
         [cell setKeyBoardDidEndEditing:^(NSString *text) {
             if ([self.model respondsToSelector:NSSelectorFromString(cellId)]) {
@@ -268,18 +298,15 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     }
     else if (selectCellAction == SelectCellActionCommercialInsurance)
     {
-//        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 200, 30, 30)];
-//        view.backgroundColor = [UIColor redColor];
-//        view.alpha = 0;
-//        view.transform = CGAffineTransformMakeScale(0.5, 0.5);
-//        [[[UIApplication sharedApplication].delegate window] addSubview:view];
-//        [UIView animateWithDuration:1 animations:^{
-//            view.alpha = 1;
-//            view.transform = CGAffineTransformIdentity;
-//        } completion:^(BOOL finished) {
-//            
-//        }];
-        
+        SelectViewController *selectVC = [[SelectViewController alloc] initWithResourcePath:@"CommercialInsurance" selectedArray:self.model.commercialInsurance title:@"商业险"];
+        selectVC.canMutilSelect = YES;
+        [selectVC setDidSelectedArray:^(NSArray <NSString *> *selectedArray) {
+            if (selectedArray.count) {
+                self.model.commercialInsurance = selectedArray;
+                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+        }];
+        [self.navigationController pushViewController:selectVC animated:YES];
     }
     else if (selectCellAction == SelectCellActionExpirationReminder)
     {

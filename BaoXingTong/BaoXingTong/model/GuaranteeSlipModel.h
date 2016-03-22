@@ -18,7 +18,7 @@
 @property (nonatomic, copy) NSString *carId;
 @property (nonatomic, copy) NSString *insuranceAgent;
 @property (nonatomic, assign) BOOL hasBoughtForceInsurance;
-@property (nonatomic, copy) NSString *commercialInsurance;
+@property (nonatomic, copy) NSArray <NSString *> *commercialInsurance;
 @property (nonatomic, strong) NSString *boughtDate;     // yyyy-MM-dd
 @property (nonatomic, assign) NSString *yearInterval;
 @property (nonatomic, assign) BOOL isNeedRemind;

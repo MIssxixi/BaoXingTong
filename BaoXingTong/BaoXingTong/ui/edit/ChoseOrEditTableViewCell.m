@@ -111,7 +111,6 @@
         _indicatorButton = [UIButton newAutoLayoutView];
         [_indicatorButton setImage:[UIImage imageNamed:@"cell_indicator"] forState:UIControlStateNormal];
         _indicatorButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        _indicatorButton.backgroundColor = [UIColor redColor];
         [_indicatorButton addTarget:self action:@selector(tapIndicator) forControlEvents:UIControlEventTouchUpInside];
     }
     return _indicatorButton;

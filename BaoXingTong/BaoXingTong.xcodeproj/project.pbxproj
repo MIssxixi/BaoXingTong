@@ -7,12 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F5080871C9FC9F700C9D28C /* SelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F5080861C9FC9F700C9D28C /* SelectViewController.m */; };
+		1F50808B1C9FD83A00C9D28C /* InsuranceAgentList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F50808A1C9FD83A00C9D28C /* InsuranceAgentList.plist */; };
+		1F50808D1C9FE5CE00C9D28C /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F50808C1C9FE5CE00C9D28C /* delete@2x.png */; };
 		1FD1A1961C9CFE38007961FB /* check_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD1A1941C9CFE38007961FB /* check_gray@2x.png */; };
 		1FD1A1971C9CFE39007961FB /* uncheck_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD1A1951C9CFE38007961FB /* uncheck_gray@2x.png */; };
 		1FD1AB641C9C034F0057710B /* UIViewController+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD1AB631C9C034F0057710B /* UIViewController+Utils.m */; };
 		1FD1AB661C9C0CBE0057710B /* cell_cancle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD1AB651C9C0CBE0057710B /* cell_cancle@2x.png */; };
 		1FD1AB6A1C9C290E0057710B /* GuaranteeSlipModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD1AB691C9C290E0057710B /* GuaranteeSlipModel.m */; };
 		1FD48E7F1C9174B5001E75E6 /* UIColor+WithString.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD48E7E1C9174B5001E75E6 /* UIColor+WithString.m */; };
+		1FD4F30C1CA0F90A00748C4E /* SelectStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD4F30B1CA0F90A00748C4E /* SelectStateView.m */; };
 		1FD4F5FE1C75F53B00012DCD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD4F5FD1C75F53B00012DCD /* main.m */; };
 		1FD4F6011C75F53B00012DCD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD4F6001C75F53B00012DCD /* AppDelegate.m */; };
 		1FD4F6041C75F53B00012DCD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD4F6031C75F53B00012DCD /* ViewController.m */; };
@@ -50,6 +54,10 @@
 
 /* Begin PBXFileReference section */
 		127044377FB66D04E4213EF9 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		1F5080851C9FC9F700C9D28C /* SelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectViewController.h; sourceTree = "<group>"; };
+		1F5080861C9FC9F700C9D28C /* SelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectViewController.m; sourceTree = "<group>"; };
+		1F50808A1C9FD83A00C9D28C /* InsuranceAgentList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = InsuranceAgentList.plist; sourceTree = "<group>"; };
+		1F50808C1C9FE5CE00C9D28C /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete@2x.png"; path = "../../../../../BaoXingTong/BaoXingTong/Resources/delete@2x.png"; sourceTree = "<group>"; };
 		1FD1A1941C9CFE38007961FB /* check_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "check_gray@2x.png"; path = "../../../../../BaoXingTong/BaoXingTong/Resources/check_gray@2x.png"; sourceTree = "<group>"; };
 		1FD1A1951C9CFE38007961FB /* uncheck_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "uncheck_gray@2x.png"; path = "../../../../../BaoXingTong/BaoXingTong/Resources/uncheck_gray@2x.png"; sourceTree = "<group>"; };
 		1FD1AB621C9C034F0057710B /* UIViewController+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Utils.h"; sourceTree = "<group>"; };
@@ -61,6 +69,8 @@
 		1FD48E7D1C9174B5001E75E6 /* UIColor+WithString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+WithString.h"; sourceTree = "<group>"; };
 		1FD48E7E1C9174B5001E75E6 /* UIColor+WithString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+WithString.m"; sourceTree = "<group>"; };
 		1FD48E801C917BAE001E75E6 /* CommonCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonCategory.h; sourceTree = "<group>"; };
+		1FD4F30A1CA0F90A00748C4E /* SelectStateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectStateView.h; sourceTree = "<group>"; };
+		1FD4F30B1CA0F90A00748C4E /* SelectStateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectStateView.m; sourceTree = "<group>"; };
 		1FD4F5F91C75F53B00012DCD /* BaoXingTong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BaoXingTong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FD4F5FD1C75F53B00012DCD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1FD4F5FF1C75F53B00012DCD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -128,6 +138,18 @@
 				127044377FB66D04E4213EF9 /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		1F5080841C9FC9D800C9D28C /* Select */ = {
+			isa = PBXGroup;
+			children = (
+				1F5080851C9FC9F700C9D28C /* SelectViewController.h */,
+				1F5080861C9FC9F700C9D28C /* SelectViewController.m */,
+				1FD4F30A1CA0F90A00748C4E /* SelectStateView.h */,
+				1FD4F30B1CA0F90A00748C4E /* SelectStateView.m */,
+				1F50808A1C9FD83A00C9D28C /* InsuranceAgentList.plist */,
+			);
+			path = Select;
 			sourceTree = "<group>";
 		};
 		1FD1AB671C9C28C10057710B /* model */ = {
@@ -251,6 +273,7 @@
 				1FD61F8A1C9AB47500F40906 /* ImageFooterView.m */,
 				1FD61F8C1C9ABA6200F40906 /* ImageCollectionViewCell.h */,
 				1FD61F8D1C9ABA6200F40906 /* ImageCollectionViewCell.m */,
+				1F5080841C9FC9D800C9D28C /* Select */,
 			);
 			path = edit;
 			sourceTree = "<group>";
@@ -262,6 +285,7 @@
 				1FD1A1951C9CFE38007961FB /* uncheck_gray@2x.png */,
 				1FD1AB651C9C0CBE0057710B /* cell_cancle@2x.png */,
 				1FD5B57F1C9693E000C9E8CD /* cell_indicator@2x.png */,
+				1F50808C1C9FE5CE00C9D28C /* delete@2x.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -384,11 +408,13 @@
 				1FD4F60C1C75F53B00012DCD /* LaunchScreen.storyboard in Resources */,
 				1FD5B5801C9693E000C9E8CD /* cell_indicator@2x.png in Resources */,
 				1FD1AB661C9C0CBE0057710B /* cell_cancle@2x.png in Resources */,
+				1F50808D1C9FE5CE00C9D28C /* delete@2x.png in Resources */,
 				1FD1A1971C9CFE39007961FB /* uncheck_gray@2x.png in Resources */,
 				1FD4F6091C75F53B00012DCD /* Assets.xcassets in Resources */,
 				1FD1A1961C9CFE38007961FB /* check_gray@2x.png in Resources */,
 				1FD4F6071C75F53B00012DCD /* Main.storyboard in Resources */,
 				1FD5B57A1C96660800C9E8CD /* EditGuaranteeSlipList.plist in Resources */,
+				1F50808B1C9FD83A00C9D28C /* InsuranceAgentList.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,12 +487,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5080871C9FC9F700C9D28C /* SelectViewController.m in Sources */,
 				1FD48E7F1C9174B5001E75E6 /* UIColor+WithString.m in Sources */,
 				1FD61F8B1C9AB47500F40906 /* ImageFooterView.m in Sources */,
 				1FD4F6041C75F53B00012DCD /* ViewController.m in Sources */,
 				1FD4F6011C75F53B00012DCD /* AppDelegate.m in Sources */,
 				1FD61F8E1C9ABA6200F40906 /* ImageCollectionViewCell.m in Sources */,
 				1FD4F5FE1C75F53B00012DCD /* main.m in Sources */,
+				1FD4F30C1CA0F90A00748C4E /* SelectStateView.m in Sources */,
 				1FD50D9D1C7843DE002F66F0 /* EditGuaranteeSlipViewController.m in Sources */,
 				1FD50DA01C784C0E002F66F0 /* TextFieldTableViewCell.m in Sources */,
 				1FD1AB6A1C9C290E0057710B /* GuaranteeSlipModel.m in Sources */,
