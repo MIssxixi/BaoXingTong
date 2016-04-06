@@ -123,8 +123,8 @@
 {
     [[UIApplication sharedApplication].keyWindow addSubview:self.popBackgroudView];
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removePopView)];
-    tapGesture.cancelsTouchesInView = NO;
-    tapGesture.delegate = self;
+//    tapGesture.cancelsTouchesInView = NO;       //如果设置为no，点击popTextField的清除按钮，popTextField会消失，即会调用removePopView，如果要设置为no，实现tapGesture.delegate
+//    tapGesture.delegate = self;
     [self.popBackgroudView addGestureRecognizer: tapGesture];
     
     [self.popTextField becomeFirstResponder];
@@ -144,13 +144,14 @@
 }
 
 #pragma mark - UIGestureRecognizerDelegate
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    if ([touch.view isDescendantOfView:self.popTextField]) {
-        return NO;
-    }
-    return YES;
-}
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+//{
+//    if ([touch.view isDescendantOfView:self.popTextField]) {
+//        return NO;
+//    }
+//    return YES;   //为啥点击popTextField可以出发，却不调用removePopView
+//}
+
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -165,7 +166,14 @@
     else
     {
         UILabel *errorLabel = [UILabel newAutoLayoutView];
-        errorLabel.text = @"已存在！";
+        
+        if (text.length) {
+            errorLabel.text = @"已存在！";
+        }
+        else
+        {
+            errorLabel.text = @"不能为空!";
+        }
         errorLabel.textColor = [UIColor redColor];
         [errorLabel sizeToFit];
         errorLabel.backgroundColor = [UIColor whiteColor];
