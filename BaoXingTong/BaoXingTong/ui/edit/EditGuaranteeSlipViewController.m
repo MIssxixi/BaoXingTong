@@ -14,6 +14,8 @@
 #import "TextFieldTableViewCell.h"
 #import "ChoseOrEditTableViewCell.h"
 #import "ImageFooterView.h"
+#import "DataManager.h"
+#import "TipView.h"
 
 typedef NS_ENUM(NSInteger, SelectCellAction) {
     SelectCellActionNone = 0,
@@ -52,10 +54,15 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     [self updateFooterView];
 }
 
+- (instancetype)initWithModel:(GuaranteeSlipModel *)model
+{
+    self = [super init];
+    self.model = model;
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [self getData];
     
     [self setTitle:@"编辑保单"];
     
@@ -67,14 +74,22 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     tapGestureRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapGestureRecognizer];
     
-    UIBarButtonItem *rightBarButonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(restoreData)];
-    self.navigationItem.rightBarButtonItem = rightBarButonItem;
+    UIBarButtonItem *saveBarButonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(restoreData)];
+    UIBarButtonItem *deleteBarButonItem = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteData)];
+    NSArray *array;
+    if (self.model.guaranteeSlipModelId > 0) {
+        array = @[saveBarButonItem, deleteBarButonItem];
+    }
+    else
+    {
+        array = @[saveBarButonItem];
+    }
+    self.navigationItem.rightBarButtonItems = array;
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:UITABLEVIEWCELLIDENTIFIER];
     [self.tableView registerClass:[TextFieldTableViewCell class] forCellReuseIdentifier:TEXTFIELDTABLEVIEWCELLIDENTIFIER];
     [self.tableView registerClass:[ChoseOrEditTableViewCell class] forCellReuseIdentifier:CHOSEOREDITTABLEVIEWCELLIDENTIFIER];
     [self.tableView registerClass:[ImageFooterView class] forHeaderFooterViewReuseIdentifier:IMAGEFOOTERVIEWIDENTIFIER];
-    self.model.guaranteeSlipModelId = 1;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -82,24 +97,31 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc
-{
-    [self restoreData];
-}
-
-- (void)getData
-{
-    NSData *data = [[NSUserDefaults standardUserDefaults] valueForKey:@"data"];
-    self.model = (GuaranteeSlipModel *)[NSKeyedUnarchiver unarchiveObjectWithData:data];
-}
-
 - (void)restoreData
 {
     [self.tableView endEditing:YES];
     
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.model];
-    [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"data"];
+    if (0 == self.model.name.length) {
+        [TipView show:@"姓名不能为空"];
+        return;
+    }
     
+    [[DataManager sharedManager] saveDataWithModel:self.model];
+    if (self.didSave) {
+        self.didSave(self.model);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)deleteData
+{
+    [self.tableView endEditing:YES];
+    
+    [[DataManager sharedManager] deleteDataWithId:self.model.guaranteeSlipModelId];
+    if (self.didDelete) {
+        self.didDelete(self.model);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)keyeboardHide:(UIGestureRecognizer *)tap

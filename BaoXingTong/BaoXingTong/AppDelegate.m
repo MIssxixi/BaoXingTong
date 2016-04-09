@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "HomeViewController.h"
 #import "EditGuaranteeSlipViewController.h"
 
 @interface AppDelegate ()
@@ -20,7 +21,8 @@
     // Override point for customization after application launch.
     
     EditGuaranteeSlipViewController *editVC = [[EditGuaranteeSlipViewController alloc] init];
-    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:editVC];
+    HomeViewController *homeVC = [[HomeViewController alloc] init];
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:homeVC];
     self.window.rootViewController = navi;
     self.window.backgroundColor = [UIColor whiteColor];
     return YES;

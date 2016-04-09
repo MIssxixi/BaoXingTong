@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+@class GuaranteeSlipModel;
 
 @interface EditGuaranteeSlipViewController : UITableViewController
+
+@property (nonatomic, copy) void (^didSave)(GuaranteeSlipModel *model);
+@property (nonatomic, copy) void (^didDelete)(GuaranteeSlipModel *model);
+
+- (instancetype)initWithModel:(GuaranteeSlipModel *)model;
 
 @end

@@ -17,6 +17,6 @@
 
 #import <PureLayout/PureLayout.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
-#import <DoImagePickerController/DoImagePickerController.h>
+#import <DoImagePickerController/DoImagePickerController.h> 
 
 #endif /* BaoXingTong_Prefix_pch */

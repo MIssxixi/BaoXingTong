@@ -24,9 +24,11 @@ PODS:
 DEPENDENCIES:
   - DoImagePickerController
   - Mantle
+  - MBProgressHUD (~> 0.9.2)
   - MWPhotoBrowser
   - PureLayout
   - ReactiveCocoa (~> 2.5)
+  - SDWebImage
 
 SPEC CHECKSUMS:
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
