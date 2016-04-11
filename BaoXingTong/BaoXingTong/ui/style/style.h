@@ -17,6 +17,7 @@
 
 #pragma mark - 高度
 #define TABLEVIEWCELL_HEIGHT_DEFAULT 54  //列表条目的默认高度
+#define BUTTON_HEIGHT 54
 
 #pragma mark - 通用边距
 #define PADDING_LR      20      //// 通用的左右边距

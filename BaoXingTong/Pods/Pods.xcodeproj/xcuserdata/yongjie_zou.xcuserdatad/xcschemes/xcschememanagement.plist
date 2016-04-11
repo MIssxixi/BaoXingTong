@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FPPopover.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MBProgressHUD.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -62,22 +67,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5532ECAA46C0BF07E8A1336D4F9F5A0B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>5813251FEA21E4AEE97385709F1912DE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>68415B49D189EEA11FBB4A188A7E9C4C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>74EB9F108CE4F90EA4FD3784B3209533</key>
+		<key>65B914455D410D54EFC9ECF395E26A7A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -92,7 +87,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>BC0B613C6AA4257F4478531D48AA5A4C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>DE3B07ED7FF04F506B0C5E00F4973589</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E1DBEE0B5792D12A1C58E982020FEA0C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E24013C7E4C2A2F376A3B7F9ED43C0FA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
