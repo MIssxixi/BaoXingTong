@@ -9,10 +9,13 @@
 #import "HomeViewController.h"
 #import "HomeViewTableViewCell.h"
 #import "DataManager.h"
+#import "DataServiceManager.h"
 #import "GuaranteeSlipModel.h"
 #import "EditGuaranteeSlipViewController.h"
 #import "PopoverController.h"
 #import "HomeBottomButton.h"
+#import <ASIHTTPRequest/ASIHTTPRequest.h>
+#import <ASIHTTPRequest/ASIFormDataRequest.h>
 
 #define HOMEVIEWTABLEVIEWCELL_IDENTIFER @"HOMEVIEWTABLEVIEWCELL"
 
@@ -25,11 +28,20 @@
 
 @property (nonatomic, strong) NSMutableArray *idsArray;
 @property (nonatomic, strong) NSMutableArray <GuaranteeSlipModel *> *modelArray;    //暂时不支持加载，直接一次性将数据获取完
+@property (nonatomic, strong) NSMutableArray *needReadIdsArray;
 @property (nonatomic, strong) UITableView *tableView;
 
 @end
 
 @implementation HomeViewController
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.needReadIdsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllRemindGuaranteeSlipIds]];
+    [self.tableView reloadData];
+}
 
 - (void)viewDidLoad
 {
@@ -47,6 +59,8 @@
     
     [self.bottomButton autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
     self.bottomButtonHeight = [self.bottomButton autoSetDimension:ALDimensionHeight toSize:0];
+    
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)edit
@@ -86,6 +100,38 @@
         else if (1 == index)
         {
             [self.tableView setEditing:YES animated:YES];
+            
+            NSString *url = @"http://172.26.251.63/~yongjie_zou/BaoXingTong/editGuaranteeSlip.php";
+            NSDictionary *parameters = @{
+                                         @"key":@"value"
+                                         };
+            [[DataServiceManager sharedManager] listOfGuarateeSlips:^(ServiceResponseModel *responseModel) {
+            }];
+//            NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:parameters error:nil];
+//            NSLog(@"%@", request);
+            AFHTTPSessionManager *session = [AFHTTPSessionManager manager];
+//            [session GET:url parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
+//                NSLog(@"%@", downloadProgress);
+//            } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//                NSLog(@"%@", responseObject);
+//            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                NSLog(@"%@", error);
+//            }];
+//            [session POST:url parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+//                
+//            } progress:^(NSProgress * _Nonnull uploadProgress) {
+//                
+//            } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//                NSLog(@"%@", responseObject);
+//            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                NSLog(@"%@", error);
+//            }];
+//            AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+//            [operation start];
+//            url = @"www.baidu.com";
+//            ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url]];
+//            [request setPostValue:@"value" forKey:@"key"];
+            
         }
         
         [self dismissViewControllerAnimated:NO completion:nil];
@@ -170,6 +216,17 @@
     }
 }
 
+#pragma mark - 下拉刷新
+- (void)onRefresh
+{
+    WS(weakSelf)
+    [[DataServiceManager sharedManager] listOfGuarateeSlips:^(ServiceResponseModel *responseModel) {
+        weakSelf.modelArray = [NSMutableArray arrayWithArray:[MTLJSONAdapter modelsOfClass:[GuaranteeSlipModel class] fromJSONArray:responseModel.data error:nil]];
+        [weakSelf.tableView reloadData];
+        [weakSelf.tableView.mj_header endRefreshing];
+    }];
+}
+
 #pragma mark - UIPopoverPresentationControllerDelegate
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
 {
@@ -192,6 +249,9 @@
     HomeViewTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:HOMEVIEWTABLEVIEWCELL_IDENTIFER forIndexPath:indexPath];
     if (indexPath.row < self.modelArray.count) {
         [cell setData:self.modelArray[indexPath.row]];
+        
+        BOOL needRead = [self.needReadIdsArray containsObject:@(self.modelArray[indexPath.row].guaranteeSlipModelId)];
+        [cell needRead:needRead];
     }
     return cell;
 }
@@ -269,6 +329,10 @@
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
         _tableView.allowsMultipleSelectionDuringEditing = YES;
+        
+        _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+            [self onRefresh];
+        }];
     }
     return _tableView;
 }
@@ -285,6 +349,11 @@
 {
     if (!_modelArray) {
         _modelArray = [[NSMutableArray alloc] init];
+        
+        if (isUsingService) {       //采用服务器
+            return _modelArray;
+        }
+        
         for (NSNumber *number in self.idsArray) {
             GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue];
             if (model) {                                    //！！！为nil会崩溃

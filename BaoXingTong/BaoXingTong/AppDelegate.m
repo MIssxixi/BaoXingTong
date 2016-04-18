@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "HomeViewController.h"
-#import "EditGuaranteeSlipViewController.h"
+#import "DataManager.h"
 
 @interface AppDelegate ()
 
@@ -20,12 +20,33 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    EditGuaranteeSlipViewController *editVC = [[EditGuaranteeSlipViewController alloc] init];
     HomeViewController *homeVC = [[HomeViewController alloc] init];
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:homeVC];
     self.window.rootViewController = navi;
     self.window.backgroundColor = [UIColor whiteColor];
+    
+    [self registerLocalNotification];
+    
     return YES;
+}
+
+- (void)registerLocalNotification
+{
+    UIMutableUserNotificationCategory *category = [[UIMutableUserNotificationCategory alloc] init];
+    category.identifier = kNotificationCategoryIdentifile;
+    UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:[NSSet setWithObject:category]];
+    
+    [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    [[DataManager sharedManager] setNeedRead:((NSNumber *)[notification.userInfo objectForKey:kLocalNotificationKey]).integerValue];
+}
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification withResponseInfo:(NSDictionary *)responseInfo completionHandler:(void (^)())completionHandler
+{
+    completionHandler();
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

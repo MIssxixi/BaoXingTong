@@ -72,6 +72,8 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "DoImagePickerController/ImagePicker/DoImagePicker/DoAlbumCell.xib"
   install_resource "DoImagePickerController/ImagePicker/DoImagePicker/DoImagePickerController.xib"
   install_resource "DoImagePickerController/ImagePicker/DoImagePicker/DoPhotoCell.xib"
+  install_resource "MJRefresh/MJRefresh/MJRefresh.bundle"
+  install_resource "${BUILT_PRODUCTS_DIR}/JSBadgeView.bundle"
   install_resource "${BUILT_PRODUCTS_DIR}/MWPhotoBrowser.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
@@ -89,6 +91,8 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "DoImagePickerController/ImagePicker/DoImagePicker/DoAlbumCell.xib"
   install_resource "DoImagePickerController/ImagePicker/DoImagePicker/DoImagePickerController.xib"
   install_resource "DoImagePickerController/ImagePicker/DoImagePicker/DoPhotoCell.xib"
+  install_resource "MJRefresh/MJRefresh/MJRefresh.bundle"
+  install_resource "${BUILT_PRODUCTS_DIR}/JSBadgeView.bundle"
   install_resource "${BUILT_PRODUCTS_DIR}/MWPhotoBrowser.bundle"
 fi
 

@@ -15,6 +15,7 @@
 #import "ChoseOrEditTableViewCell.h"
 #import "ImageFooterView.h"
 #import "DataManager.h"
+#import "DataServiceManager.h"
 #import "TipView.h"
 
 typedef NS_ENUM(NSInteger, SelectCellAction) {
@@ -106,10 +107,26 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         return;
     }
     
+    [[DataServiceManager sharedManager] saveDataWithModel:self.model response:^(ServiceResponseModel *responseModel) {
+        
+    }];
+    
     [[DataManager sharedManager] saveDataWithModel:self.model];
     if (self.didSave) {
         self.didSave(self.model);
     }
+    
+    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:5];
+    localNotification.timeZone = [NSTimeZone defaultTimeZone];
+    localNotification.alertBody = @"你有保单快到期了！";
+    localNotification.applicationIconBadgeNumber = 1;
+    localNotification.soundName = UILocalNotificationDefaultSoundName;
+    localNotification.userInfo = @{kLocalNotificationKey: @(self.model.guaranteeSlipModelId)};
+    localNotification.category = kNotificationCategoryIdentifile;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -150,6 +167,33 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 {
     self.model.isNeedRemind = needReminder;
     [self.tableView reloadData];
+    
+    if (needReminder) {
+//        if (!self.model.boughtDate.length) {
+//            [TipView show:@"请先填写购买日期"];
+//            return;
+//        }
+//        else if (!self.model.yearInterval.length)
+//        {
+//            [TipView show:@"请先填写购买年限"];
+//            return;
+//        }
+        
+//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        dateFormatter.dateFormat = @"yyyy-MM-dd";
+//        NSDate *date = [dateFormatter dateFromString:self.model.boughtDate];
+//        NSCalendar *calendar = [NSCalendar currentCalendar];
+//        NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour fromDate:date];
+//        components.hour = 10;
+//        date = [calendar dateFromComponents:components];
+//        NSTimeInterval sec = [date timeIntervalSince1970] - 1;
+        
+        
+    }
+    else
+    {
+        
+    }
 }
 
 #pragma mark - UITableViewDataSource

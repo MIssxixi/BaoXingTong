@@ -18,6 +18,7 @@
              @"IDcard":@"IDcard",
              @"phone":@"phone",
              @"carType":@"carType",
+             @"carId":@"carId",
              @"insuranceAgent":@"insuranceAgent",
              @"hasBoughtForceInsurance":@"hasBoughtForceInsurance",
              @"commercialInsurance":@"commercialInsurance",
@@ -42,6 +43,14 @@
         _imageArray = [NSMutableArray new];
     }
     return _imageArray;
+}
+
+- (BOOL)isEqual:(id)object
+{
+    if (self.guaranteeSlipModelId == ((GuaranteeSlipModel *)object).guaranteeSlipModelId) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

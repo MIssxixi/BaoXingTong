@@ -14,6 +14,11 @@
 
 + (instancetype)sharedManager;
 
+- (NSArray *)getAllRemindGuaranteeSlipIds;
+- (NSInteger)sumOfAllUnReadRmindGuranteeSlips;
+- (void)setNeedRead:(NSInteger)modelId;        //需要读
+- (void)resetNotNeedRead:(NSInteger)modelId;        //已经读过
+
 - (NSArray *)getAllIds;
 - (GuaranteeSlipModel *)getModelWithId:(NSInteger)Id;
 - (void)saveDataWithModel:(GuaranteeSlipModel *)model;

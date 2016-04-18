@@ -12,6 +12,7 @@
 
 @interface HomeViewTableViewCell : UITableViewCell
 
+- (void)needRead:(BOOL)need;
 - (void)setData:(GuaranteeSlipModel *)data;
 
 @end

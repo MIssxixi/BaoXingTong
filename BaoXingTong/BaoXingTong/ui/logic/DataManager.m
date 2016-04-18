@@ -9,10 +9,12 @@
 #import "DataManager.h"
 #import "GuaranteeSlipModel.h"
 
+static NSString *const allRemindGuaranteeSlipsIdentifer = @"allRemindGuaranteeSlipsIdentifer";
 static NSString *const allIdsIdentifer = @"allIdsIdentifer";
 
 @interface DataManager ()
 
+@property (nonatomic, strong) NSMutableArray *needReadArray;
 @property (nonatomic, strong) NSMutableArray *IdsArray;
 
 @end
@@ -34,6 +36,7 @@ static DataManager *sharedDataManager = nil;
 {
     self = [super init];
     if (self) {
+        self.needReadArray = [NSMutableArray arrayWithArray:[self getDataWithIdentifer:allRemindGuaranteeSlipsIdentifer]];
         self.IdsArray = [NSMutableArray arrayWithArray:[self getDataWithIdentifer:allIdsIdentifer]];
     }
     return self;
@@ -55,6 +58,34 @@ static DataManager *sharedDataManager = nil;
 - (void)deleteDataWithIdentifer:(NSString *)identifer
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:identifer];    //如果删除失败会怎样？
+}
+
+- (NSArray *)getAllRemindGuaranteeSlipIds
+{
+    return self.needReadArray;
+//    return [NSArray arrayWithArray:[self getDataWithIdentifer:allRemindGuaranteeSlipsIdentifer]];
+}
+
+- (NSInteger)sumOfAllUnReadRmindGuranteeSlips
+{
+    return self.needReadArray.count;
+//    return [NSArray arrayWithArray:[self getDataWithIdentifer:allRemindGuaranteeSlipsIdentifer]].count;
+}
+
+- (void)setNeedRead:(NSInteger)modelId
+{
+    if (modelId > 0 && ![self.needReadArray containsObject:@(modelId)]) {
+        [self.needReadArray addObject:@(modelId)];
+        [self saveData:self.needReadArray WithIdentifer:allRemindGuaranteeSlipsIdentifer];
+    }
+}
+
+- (void)resetNotNeedRead:(NSInteger)modelId
+{
+    if ([self.needReadArray containsObject:@(modelId)]) {
+        [self.needReadArray removeObject:@(modelId)];
+        [self saveData:self.needReadArray WithIdentifer:allRemindGuaranteeSlipsIdentifer];
+    }
 }
 
 - (NSArray *)getAllIds

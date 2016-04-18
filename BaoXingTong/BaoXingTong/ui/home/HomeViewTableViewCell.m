@@ -8,6 +8,7 @@
 
 #import "HomeViewTableViewCell.h"
 #import "GuaranteeSlipModel.h"
+#import <JSBadgeView/JSBadgeView.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @interface HomeViewTableViewCell ()
@@ -24,6 +25,19 @@
     if (self) {
     }
     return self;
+}
+
+- (void)needRead:(BOOL)need
+{
+    JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:self.imageView alignment:JSBadgeViewAlignmentTopRight];
+    badgeView.badgePositionAdjustment = CGPointMake(-5, 8);
+    if (need) {
+        badgeView.badgeText = @"1";
+    }
+    else
+    {
+        badgeView.badgeText = @"";
+    }
 }
 
 - (void)setData:(GuaranteeSlipModel *)data

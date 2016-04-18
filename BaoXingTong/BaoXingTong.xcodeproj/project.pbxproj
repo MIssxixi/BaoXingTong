@@ -39,6 +39,8 @@
 		1FD61F8E1C9ABA6200F40906 /* ImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD61F8D1C9ABA6200F40906 /* ImageCollectionViewCell.m */; };
 		1FD9E5611CB754B300DEF124 /* HomeViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD9E5601CB754B300DEF124 /* HomeViewTableViewCell.m */; };
 		1FDE4DA51CB7985800DAC317 /* TipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDE4DA41CB7985800DAC317 /* TipView.m */; };
+		1FE0F8AF1CC08681000A0D74 /* DataServiceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0F8AE1CC08681000A0D74 /* DataServiceManager.m */; };
+		1FE0F8B21CC09B38000A0D74 /* ServiceResponseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0F8B11CC09B38000A0D74 /* ServiceResponseModel.m */; };
 		46ACD379B8967ACB7F3814CF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACA3706010934276AB44135 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -120,6 +122,10 @@
 		1FD9E5601CB754B300DEF124 /* HomeViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewTableViewCell.m; sourceTree = "<group>"; };
 		1FDE4DA31CB7985800DAC317 /* TipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TipView.h; sourceTree = "<group>"; };
 		1FDE4DA41CB7985800DAC317 /* TipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TipView.m; sourceTree = "<group>"; };
+		1FE0F8AD1CC08681000A0D74 /* DataServiceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataServiceManager.h; sourceTree = "<group>"; };
+		1FE0F8AE1CC08681000A0D74 /* DataServiceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataServiceManager.m; sourceTree = "<group>"; };
+		1FE0F8B01CC09B38000A0D74 /* ServiceResponseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceResponseModel.h; sourceTree = "<group>"; };
+		1FE0F8B11CC09B38000A0D74 /* ServiceResponseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceResponseModel.m; sourceTree = "<group>"; };
 		1FF379151C996426006FC3BE /* DoImagePickerController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DoImagePickerController.framework; path = "Pods/../build/Debug-iphoneos/DoImagePickerController.framework"; sourceTree = "<group>"; };
 		4ACA3706010934276AB44135 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E521B45D65ECAABC95D95CAF /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -190,6 +196,8 @@
 			children = (
 				1FB2FA761CB516D5002CB0FA /* DataManager.h */,
 				1FB2FA771CB516D5002CB0FA /* DataManager.m */,
+				1FE0F8AD1CC08681000A0D74 /* DataServiceManager.h */,
+				1FE0F8AE1CC08681000A0D74 /* DataServiceManager.m */,
 			);
 			path = logic;
 			sourceTree = "<group>";
@@ -199,6 +207,8 @@
 			children = (
 				1FD1AB681C9C290E0057710B /* GuaranteeSlipModel.h */,
 				1FD1AB691C9C290E0057710B /* GuaranteeSlipModel.m */,
+				1FE0F8B01CC09B38000A0D74 /* ServiceResponseModel.h */,
+				1FE0F8B11CC09B38000A0D74 /* ServiceResponseModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -426,6 +436,7 @@
 				TargetAttributes = {
 					1FD4F5F81C75F53B00012DCD = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = Y883PUF2QP;
 					};
 					1FD4F6111C75F53B00012DCD = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -546,6 +557,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F5080871C9FC9F700C9D28C /* SelectViewController.m in Sources */,
+				1FE0F8AF1CC08681000A0D74 /* DataServiceManager.m in Sources */,
 				1FD3F97D1CB8FF5C0050349C /* PopoverController.m in Sources */,
 				1FB2FA781CB516D5002CB0FA /* DataManager.m in Sources */,
 				1FD48E7F1C9174B5001E75E6 /* UIColor+WithString.m in Sources */,
@@ -558,6 +570,7 @@
 				1FD9E5611CB754B300DEF124 /* HomeViewTableViewCell.m in Sources */,
 				1FD4F30C1CA0F90A00748C4E /* SelectStateView.m in Sources */,
 				1FD50D9D1C7843DE002F66F0 /* EditGuaranteeSlipViewController.m in Sources */,
+				1FE0F8B21CC09B38000A0D74 /* ServiceResponseModel.m in Sources */,
 				1FD5F9DA1CBB4F9000642D7C /* HomeBottomButton.m in Sources */,
 				1FDE4DA51CB7985800DAC317 /* TipView.m in Sources */,
 				1FD50DA01C784C0E002F66F0 /* TextFieldTableViewCell.m in Sources */,
@@ -705,7 +718,7 @@
 			baseConfigurationReference = E521B45D65ECAABC95D95CAF /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
@@ -724,7 +737,7 @@
 			baseConfigurationReference = 127044377FB66D04E4213EF9 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: 永杰 邹 (4637329BYW)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
