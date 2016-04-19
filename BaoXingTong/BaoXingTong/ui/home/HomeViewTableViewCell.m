@@ -42,7 +42,8 @@
 
 - (void)setData:(GuaranteeSlipModel *)data
 {
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:data.avatar] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.textLabel.text = data.name;
     self.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", data.carId.length ? data.carId : @"", data.insuranceAgent.length ? data.insuranceAgent : @""];
 }

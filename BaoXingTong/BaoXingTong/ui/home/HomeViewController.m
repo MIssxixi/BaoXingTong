@@ -101,37 +101,32 @@
         {
             [self.tableView setEditing:YES animated:YES];
             
-            NSString *url = @"http://172.26.251.63/~yongjie_zou/BaoXingTong/editGuaranteeSlip.php";
-            NSDictionary *parameters = @{
-                                         @"key":@"value"
-                                         };
-            [[DataServiceManager sharedManager] listOfGuarateeSlips:^(ServiceResponseModel *responseModel) {
-            }];
-//            NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:parameters error:nil];
-//            NSLog(@"%@", request);
-            AFHTTPSessionManager *session = [AFHTTPSessionManager manager];
-//            [session GET:url parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
-//                NSLog(@"%@", downloadProgress);
-//            } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//                NSLog(@"%@", responseObject);
-//            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//                NSLog(@"%@", error);
-//            }];
-//            [session POST:url parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-//                
-//            } progress:^(NSProgress * _Nonnull uploadProgress) {
-//                
-//            } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//                NSLog(@"%@", responseObject);
-//            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//                NSLog(@"%@", error);
-//            }];
-//            AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-//            [operation start];
-//            url = @"www.baidu.com";
-//            ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url]];
-//            [request setPostValue:@"value" forKey:@"key"];
+            NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:@"http://172.26.251.63/~yongjie_zou/BaoXingTongPHP/upload.php" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                [formData appendPartWithFileURL:[NSURL fileURLWithPath:@"/Users/bjhl/Documents/ios/MyRepository/BaoXingTong/BaoXingTong/BaoXingTong/Resources/default_avatar.png"] name:@"file" fileName:@"filename.jpg" mimeType:@"image/jpeg" error:nil];
+            } error:nil];
             
+            AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+            
+            NSURLSessionUploadTask *uploadTask;
+            uploadTask = [manager
+                          uploadTaskWithStreamedRequest:request
+                          progress:^(NSProgress * _Nonnull uploadProgress) {
+                              // This is not called back on the main queue.
+                              // You are responsible for dispatching to the main queue for UI updates
+                              dispatch_async(dispatch_get_main_queue(), ^{
+                                  //Update the progress view
+//                                  [progressView setProgress:uploadProgress.fractionCompleted];
+                              });
+                          }
+                          completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+                              if (error) {
+                                  NSLog(@"Error: %@", error);
+                              } else {
+                                  NSLog(@"%@ %@", response, responseObject);
+                              }
+                          }];
+            
+            [uploadTask resume];
         }
         
         [self dismissViewControllerAnimated:NO completion:nil];
