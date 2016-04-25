@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSString *boughtDate;     // yyyy-MM-dd
 @property (nonatomic, assign) NSString *yearInterval;
 @property (nonatomic, assign) BOOL isNeedRemind;
+@property (nonatomic, strong) NSString *remindDate;
 @property (nonatomic, strong) NSMutableArray <UIImage *> *imageArray;
 
 @end

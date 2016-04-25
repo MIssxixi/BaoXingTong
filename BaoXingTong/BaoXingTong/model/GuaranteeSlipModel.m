@@ -25,6 +25,7 @@
              @"boughtDate":@"boughtDate",
              @"yearInterval":@"yearInterval",
              @"isNeedRemind":@"isNeedRemind",
+             @"remindDate":@"remindDate",
              @"imageArray":@"imageArray",
              };
 }

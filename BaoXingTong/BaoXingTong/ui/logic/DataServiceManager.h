@@ -25,6 +25,8 @@ typedef void (^serviceResponseBlock)(ServiceResponseModel *responseModel);
 - (NSArray *)getAllIds:(serviceResponseBlock)response;
 - (GuaranteeSlipModel *)getModelWithId:(NSInteger)Id response:(serviceResponseBlock)response;
 - (void)saveDataWithModel:(GuaranteeSlipModel *)model response:(serviceResponseBlock)response;
-- (void)deleteDataWithId:(NSInteger)Id response:(serviceResponseBlock)response;
+- (void)uploadImageWithImage:(UIImage *)image progress:(void (^)(NSProgress *uploadProgress)) uploadProgressBlock response:(serviceResponseBlock)responseBlock;
+- (void)uploadImageWithPath:(NSString *)path progress:(void (^)(NSProgress *uploadProgress)) uploadProgressBlock response:(serviceResponseBlock)responseBlock;
+- (void)deleteDataWithIds:(NSArray *)ids response:(serviceResponseBlock)response;
 
 @end

@@ -26,6 +26,6 @@
 #import <AFNetworking/AFNetworking.h>
 #import <MJRefresh/MJRefresh.h>
 
-static BOOL isUsingService = YES;
+static BOOL isUsingService = NO;
 
 #endif /* BaoXingTong_Prefix_pch */

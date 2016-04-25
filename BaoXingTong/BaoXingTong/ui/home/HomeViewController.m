@@ -38,9 +38,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    self.needReadIdsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllRemindGuaranteeSlipIds]];
-    [self.tableView reloadData];
+    [self updateBadgeView];
 }
 
 - (void)viewDidLoad
@@ -60,7 +58,15 @@
     [self.bottomButton autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
     self.bottomButtonHeight = [self.bottomButton autoSetDimension:ALDimensionHeight toSize:0];
     
-    [self.tableView.mj_header beginRefreshing];
+    if (isUsingService) {
+        [self.tableView.mj_header beginRefreshing];
+    }
+}
+
+- (void)updateBadgeView
+{
+    self.needReadIdsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllRemindGuaranteeSlipIds]];
+    [self.tableView reloadData];
 }
 
 - (void)edit
@@ -99,34 +105,28 @@
         }
         else if (1 == index)
         {
-            [self.tableView setEditing:YES animated:YES];
+            [[UIApplication sharedApplication] cancelAllLocalNotifications];
+//            [self.tableView setEditing:YES animated:YES];
             
-            NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:@"http://172.26.251.63/~yongjie_zou/BaoXingTongPHP/upload.php" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-                [formData appendPartWithFileURL:[NSURL fileURLWithPath:@"/Users/bjhl/Documents/ios/MyRepository/BaoXingTong/BaoXingTong/BaoXingTong/Resources/default_avatar.png"] name:@"file" fileName:@"filename.jpg" mimeType:@"image/jpeg" error:nil];
-            } error:nil];
+//            [[DataServiceManager sharedManager] uploadImage:[UIImage imageNamed:@"/Users/bjhl/Documents/ios/MyRepository/BaoXingTong/BaoXingTong/BaoXingTong/Resources/default_avatar.png"] progress:^(NSProgress *uploadProgress) {
+//            
+//            } response:^(ServiceResponseModel *responseModel) {
+//                
+//            }];
             
-            AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
             
-            NSURLSessionUploadTask *uploadTask;
-            uploadTask = [manager
-                          uploadTaskWithStreamedRequest:request
-                          progress:^(NSProgress * _Nonnull uploadProgress) {
-                              // This is not called back on the main queue.
-                              // You are responsible for dispatching to the main queue for UI updates
-                              dispatch_async(dispatch_get_main_queue(), ^{
-                                  //Update the progress view
-//                                  [progressView setProgress:uploadProgress.fractionCompleted];
-                              });
-                          }
-                          completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-                              if (error) {
-                                  NSLog(@"Error: %@", error);
-                              } else {
-                                  NSLog(@"%@ %@", response, responseObject);
-                              }
-                          }];
-            
-            [uploadTask resume];
+//            NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/deleteGuaranteeSlips.php"];
+//            NSDictionary *params = @{
+//                                     @"ids" : @[@(101), @(100), @(102)]
+//                                     };
+//            
+//            [[AFHTTPSessionManager manager] POST:url parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {
+//                
+//            } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//                NSLog(@"%@", responseObject);
+//            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                NSLog(@"%@", error);
+//            }];
         }
         
         [self dismissViewControllerAnimated:NO completion:nil];
@@ -142,6 +142,19 @@
 
 - (void)deleteAll
 {
+    if (isUsingService) {
+        NSMutableArray *ids = [NSMutableArray new];
+        for (GuaranteeSlipModel *model in self.modelArray) {
+            [ids addObject:@(model.guaranteeSlipModelId)];
+        }
+        
+        [[DataServiceManager sharedManager] deleteDataWithIds:ids response:^(ServiceResponseModel *responseModel) {
+            
+        }];
+        
+        return;
+    }
+    
     for (GuaranteeSlipModel *model in self.modelArray) {
         [[DataManager sharedManager] deleteDataWithId:model.guaranteeSlipModelId];
     }
@@ -270,6 +283,7 @@
                 [self.tableView reloadData];
             }];
             [self.navigationController pushViewController:editGuaranteeSlipViewController animated:YES];
+            [[DataManager sharedManager] resetNotNeedRead:self.modelArray[indexPath.row].guaranteeSlipModelId];
         }
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
@@ -325,9 +339,11 @@
         _tableView.tableFooterView = [UIView new];
         _tableView.allowsMultipleSelectionDuringEditing = YES;
         
-        _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-            [self onRefresh];
-        }];
+        if (isUsingService) {
+            _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+                [self onRefresh];
+            }];
+        }
     }
     return _tableView;
 }

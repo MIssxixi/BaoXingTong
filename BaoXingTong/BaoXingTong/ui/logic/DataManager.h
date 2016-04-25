@@ -14,6 +14,10 @@
 
 + (instancetype)sharedManager;
 
+//本地通知，最多不超过64条  Id为保单Id
+- (void)addLocalNotifaction:(NSInteger)Id fireDate:(NSDate *)date;
+- (void)removeLocalNotifaction:(NSInteger)Id;
+
 - (NSArray *)getAllRemindGuaranteeSlipIds;
 - (NSInteger)sumOfAllUnReadRmindGuranteeSlips;
 - (void)setNeedRead:(NSInteger)modelId;        //需要读

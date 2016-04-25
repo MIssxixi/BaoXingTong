@@ -10,4 +10,6 @@
 
 @interface HomeViewController : UIViewController
 
+- (void)updateBadgeView;
+
 @end

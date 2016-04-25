@@ -9,19 +9,25 @@
 #import "AppDelegate.h"
 #import "HomeViewController.h"
 #import "DataManager.h"
+#import "GuaranteeSlipModel.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic, strong) HomeViewController *homeVC;
 
 @end
 
 @implementation AppDelegate
 
-
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    return YES;
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    HomeViewController *homeVC = [[HomeViewController alloc] init];
-    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:homeVC];
+    self.homeVC = [[HomeViewController alloc] init];
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:self.homeVC];
     self.window.rootViewController = navi;
     self.window.backgroundColor = [UIColor whiteColor];
     
@@ -42,10 +48,17 @@
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     [[DataManager sharedManager] setNeedRead:((NSNumber *)[notification.userInfo objectForKey:kLocalNotificationKey]).integerValue];
+    [self.homeVC updateBadgeView];
+}
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
+{
+    
 }
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification withResponseInfo:(NSDictionary *)responseInfo completionHandler:(void (^)())completionHandler
 {
+    [[DataManager sharedManager] setNeedRead:((NSNumber *)[notification.userInfo objectForKey:kLocalNotificationKey]).integerValue];
+    [self.homeVC updateBadgeView];
     completionHandler();
 }
 
@@ -65,6 +78,21 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    //主要用于点击app图标时，更新红点状态。因为通知到时，如果不点击通知栏，app无法知道通知到了
+    NSDate *currentDate = [NSDate date];
+    NSArray *allIds = [[DataManager sharedManager] getAllIds];
+    for (NSNumber *number in allIds) {
+        GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        NSDate *remindDate = [formatter dateFromString:model.remindDate];
+        if ([currentDate compare:remindDate] == NSOrderedDescending && model.isNeedRemind) {
+            [[DataManager sharedManager] setNeedRead:model.guaranteeSlipModelId];
+        }
+    }
+    
+    [self.homeVC updateBadgeView];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

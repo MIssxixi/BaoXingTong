@@ -15,7 +15,7 @@
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     hud.mode = MBProgressHUDModeText;
-    hud.labelText = @"名字不能为空";
+    hud.labelText = message;
     [hud hide:YES afterDelay:1];
 }
 

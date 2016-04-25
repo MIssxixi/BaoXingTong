@@ -124,17 +124,15 @@
 	</dict>
 	<dict>
 		<key>id</key>
-		<string>isNeedRemind</string>
+		<string>remindDate</string>
 		<key>title</key>
 		<string>是否到期提醒</string>
 		<key>cellClass</key>
-		<string>UITableViewCell</string>
+		<string>TextFieldTableViewCell</string>
 		<key>cellType</key>
-		<integer>2</integer>
+		<integer>1</integer>
 		<key>keyboardType</key>
 		<integer>100</integer>
-		<key>selectCellAction</key>
-		<string>3</string>
 	</dict>
 	<dict>
 		<key>id</key>

@@ -106,10 +106,48 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         [TipView show:@"姓名不能为空"];
         return;
     }
-    
-    [[DataServiceManager sharedManager] saveDataWithModel:self.model response:^(ServiceResponseModel *responseModel) {
+    if (self.model.isNeedRemind) {
+        if (0 == self.model.remindDate.length) {
+            [TipView show:@"到期提醒日期为空"];
+            return;
+        }
         
-    }];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        NSTimeInterval currentSec = [[NSDate date] timeIntervalSince1970];
+        NSTimeInterval remindSec = [[formatter dateFromString:self.model.remindDate] timeIntervalSince1970];
+        if (remindSec <= currentSec) {
+            [TipView show:@"到期提醒日期已过期"];
+            return;
+        }
+        
+//        [[DataManager sharedManager] addLocalNotifaction:self.model.guaranteeSlipModelId fireDate:[formatter dateFromString:self.model.remindDate]];
+        [[DataManager sharedManager] addLocalNotifaction:self.model.guaranteeSlipModelId fireDate:[formatter dateFromString:self.model.remindDate]];
+    }
+    else
+    {
+        [[DataManager sharedManager] removeLocalNotifaction:self.model.guaranteeSlipModelId];
+        self.model.remindDate = nil;
+    }
+
+    if (isUsingService) {
+        [[DataServiceManager sharedManager] saveDataWithModel:self.model response:^(ServiceResponseModel *responseModel) {
+            NSLog(@"%@", responseModel);
+        }];
+        
+        for (UIImage *image in self.model.imageArray) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[DataServiceManager sharedManager] uploadImageWithImage:image progress:^(NSProgress *uploadProgress) {
+                    
+                } response:^(ServiceResponseModel *responseModel) {
+                    
+                }];
+            });
+        }
+        
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
     
     [[DataManager sharedManager] saveDataWithModel:self.model];
     if (self.didSave) {
@@ -120,12 +158,13 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:5];
     localNotification.timeZone = [NSTimeZone defaultTimeZone];
     localNotification.alertBody = @"你有保单快到期了！";
-    localNotification.applicationIconBadgeNumber = 1;
+    localNotification.applicationIconBadgeNumber = 2;
     localNotification.soundName = UILocalNotificationDefaultSoundName;
     localNotification.userInfo = @{kLocalNotificationKey: @(self.model.guaranteeSlipModelId)};
     localNotification.category = kNotificationCategoryIdentifile;
     
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+//    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+
     
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -163,36 +202,15 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     [self.tableView reloadData];
 }
 
-- (void)updateExpirationReminder:(BOOL)needReminder
+- (void)updateIsNeedRemind:(UITapGestureRecognizer *)sender
 {
-    self.model.isNeedRemind = needReminder;
-    [self.tableView reloadData];
-    
-    if (needReminder) {
-//        if (!self.model.boughtDate.length) {
-//            [TipView show:@"请先填写购买日期"];
-//            return;
-//        }
-//        else if (!self.model.yearInterval.length)
-//        {
-//            [TipView show:@"请先填写购买年限"];
-//            return;
-//        }
-        
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        dateFormatter.dateFormat = @"yyyy-MM-dd";
-//        NSDate *date = [dateFormatter dateFromString:self.model.boughtDate];
-//        NSCalendar *calendar = [NSCalendar currentCalendar];
-//        NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour fromDate:date];
-//        components.hour = 10;
-//        date = [calendar dateFromComponents:components];
-//        NSTimeInterval sec = [date timeIntervalSince1970] - 1;
-        
-        
+    self.model.isNeedRemind = !self.model.isNeedRemind;
+    if (self.model.isNeedRemind) {
+        [(UIImageView *)sender.view setImage:[UIImage imageNamed:@"check_gray"]];
     }
     else
     {
-        
+        [(UIImageView *)sender.view setImage:[UIImage imageNamed:@"uncheck_gray"]];
     }
 }
 
@@ -222,6 +240,8 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     
     if ([cellClass isEqualToString:NSStringFromClass([TextFieldTableViewCell class])]) {
         TextFieldTableViewCell *cell = (TextFieldTableViewCell *)[tableView dequeueReusableCellWithIdentifier:TEXTFIELDTABLEVIEWCELLIDENTIFIER forIndexPath:indexPath];
+        cell.accessoryView = nil;                       //出现数据混乱，提醒框会出现在其他cell中
+        cell.rightTextField.text = nil;                 //出现数据混乱
        
         NSString *text = [NSString string];             //= [self.model valueForKey:cellId];
         if ([cellId isEqualToString:@"hasBoughtForceInsurance"]) {
@@ -237,6 +257,22 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
             for (NSString *string in self.model.commercialInsurance) {
                 text = [text stringByAppendingString:string];
             }
+        }
+        else if ([cellId isEqualToString:@"remindDate"]){
+            UIImageView *imageView = [[UIImageView alloc] init];
+            if (self.model.isNeedRemind) {
+                [imageView setImage:[UIImage imageNamed:@"check_gray"]];
+            }
+            else
+            {
+                [imageView setImage:[UIImage imageNamed:@"uncheck_gray"]];
+            }
+            [imageView sizeToFit];
+            cell.accessoryView = imageView;
+            UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateIsNeedRemind:)];
+            cell.accessoryView.userInteractionEnabled = YES;
+            [cell.accessoryView addGestureRecognizer:gesture];
+            text = [self.model valueForKey:cellId];
         }
         else
         {
@@ -373,10 +409,6 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
             }
         }];
         [self.navigationController pushViewController:selectVC animated:YES];
-    }
-    else if (selectCellAction == SelectCellActionExpirationReminder)
-    {
-        [self updateExpirationReminder:!self.model.isNeedRemind];
     }
 }
 

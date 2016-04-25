@@ -14,6 +14,7 @@
 @interface HomeViewTableViewCell ()
 
 @property (nonatomic, strong) UIImageView *avatarImageView;
+@property (nonatomic, strong) JSBadgeView *badgeView;
 
 @end
 
@@ -29,14 +30,15 @@
 
 - (void)needRead:(BOOL)need
 {
-    JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:self.imageView alignment:JSBadgeViewAlignmentTopRight];
-    badgeView.badgePositionAdjustment = CGPointMake(-5, 8);
+    //坑！！！！！必须当作属性，否则每次都创建新的badgeview，不能更改红点值！！
+//    JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:self.imageView alignment:JSBadgeViewAlignmentTopRight];
+//    badgeView.badgePositionAdjustment = CGPointMake(-5, 8);
     if (need) {
-        badgeView.badgeText = @"1";
+        self.badgeView.badgeText = @"1";
     }
     else
     {
-        badgeView.badgeText = @"";
+        self.badgeView.badgeText = @"";
     }
 }
 
@@ -46,6 +48,15 @@
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.textLabel.text = data.name;
     self.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", data.carId.length ? data.carId : @"", data.insuranceAgent.length ? data.insuranceAgent : @""];
+}
+
+- (JSBadgeView *)badgeView
+{
+    if (!_badgeView) {
+        _badgeView = [[JSBadgeView alloc] initWithParentView:self.imageView alignment:JSBadgeViewAlignmentTopRight];
+        _badgeView.badgePositionAdjustment = CGPointMake(-5, 8);
+    }
+    return _badgeView;
 }
 
 @end
