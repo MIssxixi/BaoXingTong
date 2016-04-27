@@ -8,16 +8,21 @@
 
 #import "DataManager.h"
 #import "GuaranteeSlipModel.h"
+#import "UserModel.h"
 
+static NSString *const userIdsIdentifer = @"userIdsIdentifer";
 static NSString *const allLocalNotificationsIdentifer = @"allLocalNotificationsIdentifer";
 static NSString *const allRemindGuaranteeSlipsIdentifer = @"allRemindGuaranteeSlipsIdentifer";
 static NSString *const allIdsIdentifer = @"allIdsIdentifer";
 
 @interface DataManager ()
 
+@property (nonatomic, assign) NSInteger currentUserId;
+
+@property (nonatomic, strong) NSMutableArray *userIdsArray;
 @property (nonatomic, strong) NSMutableArray *notificationArray;
 @property (nonatomic, strong) NSMutableArray *needReadArray;
-@property (nonatomic, strong) NSMutableArray *IdsArray;
+@property (nonatomic, strong) NSMutableArray *IdsArray;         //保单id
 
 @end
 
@@ -38,7 +43,7 @@ static DataManager *sharedDataManager = nil;
 {
     self = [super init];
     if (self) {
-        
+        self.userIdsArray = [NSMutableArray arrayWithArray:[self getDataWithIdentifer:userIdsIdentifer]];
         self.needReadArray = [NSMutableArray arrayWithArray:[self getDataWithIdentifer:allRemindGuaranteeSlipsIdentifer]];
         self.IdsArray = [NSMutableArray arrayWithArray:[self getDataWithIdentifer:allIdsIdentifer]];
     }
@@ -62,6 +67,111 @@ static DataManager *sharedDataManager = nil;
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:identifer];    //如果删除失败会怎样？
 }
+
+#pragma mark - user
+- (NSString *)userIdentifer:(NSInteger)userId
+{
+    return [NSString stringWithFormat:@"user-%ld", userId];
+}
+
+- (BOOL)loginWithUserName:(NSString *)name password:(NSString *)password
+{
+    NSArray *usersArray = [self getAllUsers];
+    for (UserModel *model in usersArray) {
+        if ([model.name isEqualToString:name] && [model.password isEqualToString:password]) {
+            self.currentUserId = model.userId;
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (UserModel *)currentUser
+{
+    if (self.currentUserId <= 0) {
+        return nil;
+    }
+    
+    NSData *data = [self getDataWithIdentifer:[self userIdentifer:self.currentUserId]];
+    return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+- (UserModel *)getUserWithPhoneNumber:(NSString *)phoneNumber
+{
+    NSArray *users = [self getAllUsers];
+    for (UserModel *model in users) {
+        if ([phoneNumber isEqualToString:model.phone]) {
+            return model;
+        }
+    }
+    return nil;
+}
+
+- (NSArray *)getAllUsers
+{
+    NSMutableArray *users = [NSMutableArray new];
+    for (NSNumber *userId in self.userIdsArray) {
+        NSData *data = [self getDataWithIdentifer:[self userIdentifer:userId.integerValue]];
+        UserModel *model = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        [users addObject:model];
+    }
+    return [NSArray arrayWithArray:users];
+}
+
+- (void)registerNewUser:(UserModel *)model
+{
+    if (0 == model.name.length || 0 == model.password.length) {
+        return;
+    }
+    
+    if (model.userId <= 0) {      //新建的用户
+        model.userId = self.userIdsArray.count + 1;
+        NSInteger i = 1;
+        for (; i <= self.userIdsArray.count; i++) {
+            if (![self.userIdsArray containsObject:@(i)]) {
+                model.userId = i;
+                break;
+            }
+        }
+    }
+    
+    if (![self.userIdsArray containsObject:@(model.userId)]) {
+        [self.userIdsArray addObject:@(model.userId)];
+        [self saveData:self.userIdsArray WithIdentifer:userIdsIdentifer];
+    }
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:model];
+    
+    [self saveData:data WithIdentifer:[self userIdentifer:model.userId]];
+}
+
+- (void)saveUser:(UserModel *)model
+{
+    if (0 == model.name.length || 0 == model.password.length) {
+        return;
+    }
+    
+    if (![self.userIdsArray containsObject:@(model.userId)]) {
+        return;
+    }
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:model];
+    [self saveData:data WithIdentifer:[self userIdentifer:model.userId]];
+}
+
+- (void)deleteUser:(UserModel *)model
+{
+    if (![model isKindOfClass:[UserModel class]]) {
+        return;
+    }
+    
+    NSInteger Id = model.userId;
+    if ([self.userIdsArray containsObject:@(Id)]) {
+        [self.userIdsArray removeObject:@(Id)];
+        [self deleteDataWithIdentifer:[self userIdentifer:Id]];
+        [self saveData:self.IdsArray WithIdentifer:userIdsIdentifer];
+    }
+}
+
 
 #pragma mark - notification
 - (void)updataLocalNotification         //更新所有本地通知，主要是applicationIconBadgeNumber
@@ -156,7 +266,12 @@ static DataManager *sharedDataManager = nil;
     [self updataLocalNotification];
 }
 
-#pragma mark - data
+#pragma mark - guarantee
+- (NSString *)guaranteeSlipIdentifer:(NSInteger)Id
+{
+    return [NSString stringWithFormat:@"guarantee-%ld", Id];
+}
+
 - (NSArray *)getAllRemindGuaranteeSlipIds
 {
     return self.needReadArray;
@@ -201,7 +316,8 @@ static DataManager *sharedDataManager = nil;
 - (GuaranteeSlipModel *)getModelWithId:(NSInteger)Id
 {
     if ([self.IdsArray containsObject:@(Id)]) {
-        NSData *data = [self getDataWithIdentifer:@(Id).stringValue];
+//        NSData *data = [self getDataWithIdentifer:@(Id).stringValue];
+        NSData *data = [self getDataWithIdentifer:[self guaranteeSlipIdentifer:Id]];
         return (GuaranteeSlipModel *)[NSKeyedUnarchiver unarchiveObjectWithData:data];
     }
     return nil;
@@ -225,15 +341,20 @@ static DataManager *sharedDataManager = nil;
         [self saveData:self.IdsArray WithIdentifer:allIdsIdentifer];
     }
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:model];
-    [self saveData:data WithIdentifer:@(model.guaranteeSlipModelId).stringValue];
+//    [self saveData:data WithIdentifer:@(model.guaranteeSlipModelId).stringValue];
+    [self saveData:data WithIdentifer:[self guaranteeSlipIdentifer:model.guaranteeSlipModelId]];
 }
 
 - (void)deleteDataWithId:(NSInteger)Id
 {
     if ([self.IdsArray containsObject:@(Id)]) {
         [self.IdsArray removeObject:@(Id)];
-        [self deleteDataWithIdentifer:@(Id).stringValue];
+//        [self deleteDataWithIdentifer:@(Id).stringValue];
+        [self deleteDataWithIdentifer:[self guaranteeSlipIdentifer:Id]];
         [self saveData:self.IdsArray WithIdentifer:allIdsIdentifer];
+        
+        [self removeLocalNotifaction:Id];
+        [self resetNotNeedRead:Id];
     }
 }
 

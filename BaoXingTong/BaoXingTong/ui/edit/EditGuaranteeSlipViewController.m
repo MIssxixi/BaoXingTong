@@ -112,11 +112,15 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
             return;
         }
         
+        if (self.model.remindDate.length < 19) {
+            self.model.remindDate = [self.model.remindDate stringByAppendingString:@" 10:00:00"];   //这个地方需要改进
+        }
+        
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
         NSTimeInterval currentSec = [[NSDate date] timeIntervalSince1970];
         NSTimeInterval remindSec = [[formatter dateFromString:self.model.remindDate] timeIntervalSince1970];
-        if (remindSec <= currentSec) {
+        if (remindSec <= currentSec && remindSec > 0) {
             [TipView show:@"到期提醒日期已过期"];
             return;
         }

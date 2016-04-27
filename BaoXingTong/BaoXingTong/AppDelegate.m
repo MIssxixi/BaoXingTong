@@ -10,6 +10,8 @@
 #import "HomeViewController.h"
 #import "DataManager.h"
 #import "GuaranteeSlipModel.h"
+#import "LoginViewController.h"
+#import <SMS_SDK/SMSSDK.h>
 
 @interface AppDelegate ()
 
@@ -19,19 +21,20 @@
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    return YES;
-}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
     self.homeVC = [[HomeViewController alloc] init];
-    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:self.homeVC];
+    LoginViewController *loginVC = [LoginViewController new];
+//    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:self.homeVC];
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:loginVC];
     self.window.rootViewController = navi;
     self.window.backgroundColor = [UIColor whiteColor];
     
     [self registerLocalNotification];
+    
+    //短信认证
+    [SMSSDK registerApp:@"121a438480c48" withSecret:@"6b8023ec70606a3a888b55a8b899c06d"];
     
     return YES;
 }

@@ -19,12 +19,14 @@
 
 #import "style.h"
 #import "CommonCategory.h"
+#import "TipView.h"
 
 #import <PureLayout/PureLayout.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <DoImagePickerController/DoImagePickerController.h> 
 #import <AFNetworking/AFNetworking.h>
 #import <MJRefresh/MJRefresh.h>
+#import <SMS_SDK/SMSSDK.h>
 
 static BOOL isUsingService = NO;
 

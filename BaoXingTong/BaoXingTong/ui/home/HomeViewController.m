@@ -12,6 +12,7 @@
 #import "DataServiceManager.h"
 #import "GuaranteeSlipModel.h"
 #import "EditGuaranteeSlipViewController.h"
+#import "AccountViewController.h"
 #import "PopoverController.h"
 #import "HomeBottomButton.h"
 #import <ASIHTTPRequest/ASIHTTPRequest.h>
@@ -92,7 +93,7 @@
     popoverViewContoller.popoverPresentationController.barButtonItem = self.navigationItem.rightBarButtonItem;
     popoverViewContoller.popoverPresentationController.delegate = self;
     
-    PopoverController *popover = [[PopoverController alloc] initWithBarButtonItem:self.navigationItem.rightBarButtonItem Options:@[@"新增", @"删除"] selectedCallBack:^(NSInteger index) {
+    PopoverController *popover = [[PopoverController alloc] initWithBarButtonItem:self.navigationItem.rightBarButtonItem Options:@[@"新增", @"账户管理"] selectedCallBack:^(NSInteger index) {
         if (0 == index) {
             EditGuaranteeSlipViewController *editGuaranteeSlipViewController = [[EditGuaranteeSlipViewController alloc] init];
             [editGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
@@ -105,7 +106,8 @@
         }
         else if (1 == index)
         {
-            [[UIApplication sharedApplication] cancelAllLocalNotifications];
+            AccountViewController *accountViewController = [[AccountViewController alloc] init];
+            [self.navigationController pushViewController:accountViewController animated:YES];
 //            [self.tableView setEditing:YES animated:YES];
             
 //            [[DataServiceManager sharedManager] uploadImage:[UIImage imageNamed:@"/Users/bjhl/Documents/ios/MyRepository/BaoXingTong/BaoXingTong/BaoXingTong/Resources/default_avatar.png"] progress:^(NSProgress *uploadProgress) {
