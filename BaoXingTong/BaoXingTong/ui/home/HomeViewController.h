@@ -10,6 +10,7 @@
 
 @interface HomeViewController : UIViewController
 
++ (instancetype)sharedInstance;
 - (void)updateBadgeView;
 
 @end

@@ -19,6 +19,7 @@
 #import <ASIHTTPRequest/ASIFormDataRequest.h>
 
 #define HOMEVIEWTABLEVIEWCELL_IDENTIFER @"HOMEVIEWTABLEVIEWCELL"
+static HomeViewController *sharedInstance = nil;
 
 @interface HomeViewController () <UITableViewDataSource, UITableViewDelegate, UIPopoverPresentationControllerDelegate>
 
@@ -35,6 +36,43 @@
 @end
 
 @implementation HomeViewController
+
++ (instancetype)sharedInstance
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[super allocWithZone:NULL] init];
+    });
+    return sharedInstance;
+}
+
++ (instancetype)allocWithZone:(struct _NSZone *)zone
+{
+    return [self sharedInstance];
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+//        if (isUsingService) {         //采用服务器
+//            return self;
+//        }
+        
+        //每次退出账号然后登录，由于采用单例，所以需要改变之前数据
+        [_modelArray removeAllObjects];
+        _idsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllIds]];
+        for (NSNumber *number in self.idsArray) {
+            GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue];
+            if (model) {                                    //！！！为nil会崩溃
+                [_modelArray addObject:[[DataManager sharedManager] getModelWithId:number.integerValue]];
+            }
+        }
+        [self.tableView reloadData];
+    }
+    
+    return self;
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {

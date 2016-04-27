@@ -92,10 +92,16 @@
     
     if (1 == indexPath.section) {
         ChangeNameOrPasswordViewController *changeNameOrPasswordViewController = [ChangeNameOrPasswordViewController new];
+        [changeNameOrPasswordViewController setDidChangeName:^(NSString *name) {
+            NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];
+            UITableViewCell *cell = [tableView cellForRowAtIndexPath:index];
+            cell.textLabel.text = name;
+        }];
         [self.navigationController pushViewController:changeNameOrPasswordViewController animated:YES];
     }
     else if (2 == indexPath.section)
     {
+        [[DataManager sharedManager] logout];
         LoginViewController *loginViewController = [[LoginViewController alloc] init];
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:loginViewController];
         [UIApplication sharedApplication].windows[0].rootViewController = navi;

@@ -88,6 +88,7 @@
     }
     currentUser.password = self.newlyPassWordTextField.text;
     [[DataManager sharedManager] saveUser:currentUser];
+    [[DataManager sharedManager] loginWithUserName:currentUser.name password:currentUser.password];
     
     HomeViewController *homeViewController = [[HomeViewController alloc] init];
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:homeViewController];

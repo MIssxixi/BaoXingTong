@@ -10,4 +10,6 @@
 
 @interface ChangeNameOrPasswordViewController : UIViewController
 
+@property (nonatomic, copy) void (^didChangeName)(NSString *name);
+
 @end

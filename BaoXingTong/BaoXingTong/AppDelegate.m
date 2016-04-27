@@ -26,8 +26,14 @@
     
     self.homeVC = [[HomeViewController alloc] init];
     LoginViewController *loginVC = [LoginViewController new];
-//    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:self.homeVC];
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:loginVC];
+    if ([DataManager sharedManager].hasLogin) {
+        navi = [[UINavigationController alloc] initWithRootViewController:self.homeVC];
+    }
+    else
+    {
+        navi = [[UINavigationController alloc] initWithRootViewController:loginVC];
+    }
     self.window.rootViewController = navi;
     self.window.backgroundColor = [UIColor whiteColor];
     

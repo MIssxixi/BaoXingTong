@@ -10,6 +10,7 @@
 #import "GuaranteeSlipModel.h"
 #import "UserModel.h"
 
+static NSString *const loginIdentifer = @"loginIdentifer";
 static NSString *const userIdsIdentifer = @"userIdsIdentifer";
 static NSString *const allLocalNotificationsIdentifer = @"allLocalNotificationsIdentifer";
 static NSString *const allRemindGuaranteeSlipsIdentifer = @"allRemindGuaranteeSlipsIdentifer";
@@ -17,7 +18,7 @@ static NSString *const allIdsIdentifer = @"allIdsIdentifer";
 
 @interface DataManager ()
 
-@property (nonatomic, assign) NSInteger currentUserId;
+@property (nonatomic, assign) NSInteger loginUserId;
 
 @property (nonatomic, strong) NSMutableArray *userIdsArray;
 @property (nonatomic, strong) NSMutableArray *notificationArray;
@@ -43,6 +44,7 @@ static DataManager *sharedDataManager = nil;
 {
     self = [super init];
     if (self) {
+        self.loginUserId = ((NSNumber *)[self getDataWithIdentifer:loginIdentifer]).integerValue;
         self.userIdsArray = [NSMutableArray arrayWithArray:[self getDataWithIdentifer:userIdsIdentifer]];
         self.needReadArray = [NSMutableArray arrayWithArray:[self getDataWithIdentifer:allRemindGuaranteeSlipsIdentifer]];
         self.IdsArray = [NSMutableArray arrayWithArray:[self getDataWithIdentifer:allIdsIdentifer]];
@@ -74,25 +76,40 @@ static DataManager *sharedDataManager = nil;
     return [NSString stringWithFormat:@"user-%ld", userId];
 }
 
+- (BOOL)hasLogin
+{
+    if (self.loginUserId > 0) {
+        return YES;
+    }
+    return NO;
+}
+
 - (BOOL)loginWithUserName:(NSString *)name password:(NSString *)password
 {
     NSArray *usersArray = [self getAllUsers];
     for (UserModel *model in usersArray) {
         if ([model.name isEqualToString:name] && [model.password isEqualToString:password]) {
-            self.currentUserId = model.userId;
+            self.loginUserId = model.userId;
+            [self saveData:@(self.loginUserId) WithIdentifer:loginIdentifer];
             return YES;
         }
     }
     return NO;
 }
 
+- (void)logout
+{
+    self.loginUserId = 0;
+    [self saveData:@(0) WithIdentifer:loginIdentifer];
+}
+
 - (UserModel *)currentUser
 {
-    if (self.currentUserId <= 0) {
+    if (self.loginUserId <= 0) {
         return nil;
     }
     
-    NSData *data = [self getDataWithIdentifer:[self userIdentifer:self.currentUserId]];
+    NSData *data = [self getDataWithIdentifer:[self userIdentifer:self.loginUserId]];
     return [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
 
@@ -269,7 +286,7 @@ static DataManager *sharedDataManager = nil;
 #pragma mark - guarantee
 - (NSString *)guaranteeSlipIdentifer:(NSInteger)Id
 {
-    return [NSString stringWithFormat:@"guarantee-%ld", Id];
+    return [NSString stringWithFormat:@"user-%ld-guarantee-%ld", self.loginUserId, Id];
 }
 
 - (NSArray *)getAllRemindGuaranteeSlipIds

@@ -86,6 +86,9 @@
     
     if (self.nameTextField.text.length) {
         currentUser.name = self.nameTextField.text;
+        if (self.didChangeName) {
+            self.didChangeName(currentUser.name);
+        }
     }
     currentUser.password = self.newlyPassWordTextField.text;
     [[DataManager sharedManager] saveUser:currentUser];

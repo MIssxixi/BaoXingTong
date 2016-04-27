@@ -15,7 +15,9 @@
 
 + (instancetype)sharedManager;
 
+- (BOOL)hasLogin;
 - (BOOL)loginWithUserName:(NSString *)name password:(NSString *)password;
+- (void)logout;
 - (NSArray *)getAllUsers;
 - (UserModel *)currentUser;
 - (UserModel *)getUserWithPhoneNumber:(NSString *)phoneNumber;
