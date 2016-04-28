@@ -57,6 +57,7 @@
 		1FDB1F641CCF3BBA0018AB19 /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB1F631CCF3BBA0018AB19 /* VerificationViewController.m */; };
 		1FDB472F1CCE1321000C31B7 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB472E1CCE1321000C31B7 /* LoginViewController.m */; };
 		1FDB47321CCE3807000C31B7 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB47311CCE3807000C31B7 /* UserModel.m */; };
+		1FDBD21B1CD19F0B0045DE01 /* PdfManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDBD21A1CD19F0B0045DE01 /* PdfManager.m */; };
 		1FDE4DA51CB7985800DAC317 /* TipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDE4DA41CB7985800DAC317 /* TipView.m */; };
 		1FE0F8AF1CC08681000A0D74 /* DataServiceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0F8AE1CC08681000A0D74 /* DataServiceManager.m */; };
 		1FE0F8B21CC09B38000A0D74 /* ServiceResponseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0F8B11CC09B38000A0D74 /* ServiceResponseModel.m */; };
@@ -170,6 +171,8 @@
 		1FDB472E1CCE1321000C31B7 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		1FDB47301CCE3807000C31B7 /* UserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserModel.h; sourceTree = "<group>"; };
 		1FDB47311CCE3807000C31B7 /* UserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserModel.m; sourceTree = "<group>"; };
+		1FDBD2191CD19F0B0045DE01 /* PdfManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PdfManager.h; sourceTree = "<group>"; };
+		1FDBD21A1CD19F0B0045DE01 /* PdfManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PdfManager.m; sourceTree = "<group>"; };
 		1FDE4DA31CB7985800DAC317 /* TipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TipView.h; sourceTree = "<group>"; };
 		1FDE4DA41CB7985800DAC317 /* TipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TipView.m; sourceTree = "<group>"; };
 		1FE0F8AD1CC08681000A0D74 /* DataServiceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataServiceManager.h; sourceTree = "<group>"; };
@@ -268,6 +271,8 @@
 				1FE0F8AE1CC08681000A0D74 /* DataServiceManager.m */,
 				1F52628D1CD055D8006821D9 /* HtmlManager.h */,
 				1F52628E1CD055D8006821D9 /* HtmlManager.m */,
+				1FDBD2191CD19F0B0045DE01 /* PdfManager.h */,
+				1FDBD21A1CD19F0B0045DE01 /* PdfManager.m */,
 			);
 			path = logic;
 			sourceTree = "<group>";
@@ -708,6 +713,7 @@
 				1FD1AB641C9C034F0057710B /* UIViewController+Utils.m in Sources */,
 				1FDB1F611CCF36740018AB19 /* TextField.m in Sources */,
 				1FDB472F1CCE1321000C31B7 /* LoginViewController.m in Sources */,
+				1FDBD21B1CD19F0B0045DE01 /* PdfManager.m in Sources */,
 				1FD5B57D1C96906700C9E8CD /* ChoseOrEditTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

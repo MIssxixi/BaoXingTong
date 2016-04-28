@@ -9,6 +9,7 @@
 #import "HomeViewController.h"
 #import "HomeViewTableViewCell.h"
 #import "DataManager.h"
+#import "HtmlManager.h"
 #import "DataServiceManager.h"
 #import "GuaranteeSlipModel.h"
 #import "EditGuaranteeSlipViewController.h"
@@ -17,11 +18,12 @@
 #import "HomeBottomButton.h"
 #import <ASIHTTPRequest/ASIHTTPRequest.h>
 #import <ASIHTTPRequest/ASIFormDataRequest.h>
+#import "PdfManager.h"
 
 #define HOMEVIEWTABLEVIEWCELL_IDENTIFER @"HOMEVIEWTABLEVIEWCELL"
 static HomeViewController *sharedInstance = nil;
 
-@interface HomeViewController () <UITableViewDataSource, UITableViewDelegate, UIPopoverPresentationControllerDelegate>
+@interface HomeViewController () <UITableViewDataSource, UITableViewDelegate, UIPopoverPresentationControllerDelegate, UIDocumentInteractionControllerDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *leftBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;
@@ -30,8 +32,11 @@ static HomeViewController *sharedInstance = nil;
 
 @property (nonatomic, strong) NSMutableArray *idsArray;
 @property (nonatomic, strong) NSMutableArray <GuaranteeSlipModel *> *modelArray;    //暂时不支持加载，直接一次性将数据获取完
+@property (nonatomic, strong) NSMutableArray <GuaranteeSlipModel *> *selectedArray;
 @property (nonatomic, strong) NSMutableArray *needReadIdsArray;
 @property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, strong) UIDocumentInteractionController *documentInteractionController;
 
 @end
 
@@ -178,6 +183,16 @@ static HomeViewController *sharedInstance = nil;
 - (void)share
 {
     
+//    NSString *folderPath = [[HtmlManager sharedManager] creatHtmlWithGuaranteeSlipModel:self.modelArray[0]];
+    NSString *filePath = [[PdfManager sharedManager] creatPdfWithModels:self.selectedArray];
+    
+    [self.documentInteractionController dismissMenuAnimated:YES];
+    self.documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:filePath]];
+    self.documentInteractionController.delegate = self;
+    self.documentInteractionController.UTI = @"com.adobe.pdf";
+    [self.documentInteractionController presentOpenInMenuFromRect:CGRectMake(0, 20, 100, 300) inView:self.view animated:YES];
+//    UIActivityViewController *vc = [[UIActivityViewController alloc] initWithActivityItems:@[] applicationActivities:nil];
+//    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)deleteAll
@@ -258,7 +273,7 @@ static HomeViewController *sharedInstance = nil;
     {
         self.leftBarButtonItem.title = @"编辑";
         [self.leftBarButtonItem setAction:@selector(edit)];
-        self.rightBarButtonItem.title = @"新增";
+        self.rightBarButtonItem.title = @"...";
         [self.rightBarButtonItem setAction:@selector(addGuaranteeSlip)];
         self.rightBarButtonItem.enabled = YES;
     }
@@ -310,6 +325,17 @@ static HomeViewController *sharedInstance = nil;
     if (tableView.isEditing)
     {
         [self updateButtonsToMatchTableState];
+        
+        if (indexPath.row < self.modelArray.count) {
+            GuaranteeSlipModel *model = self.modelArray[indexPath.row];
+            if ([self.selectedArray containsObject:model]) {
+                [self.selectedArray removeObject:model];
+            }
+            else
+            {
+                [self.selectedArray addObject:model];
+            }
+        }
     }
     else
     {
@@ -339,6 +365,22 @@ static HomeViewController *sharedInstance = nil;
     return TABLEVIEWCELL_HEIGHT_DEFAULT;
 }
 
+#pragma mark - UIDocumentInteractionControllerDelegate
+- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller
+{
+    return self;
+}
+
+- (UIView *)documentInteractionControllerViewForPreview:(UIDocumentInteractionController *)controller
+{
+    return self.view;
+}
+
+- (CGRect )documentInteractionControllerRectForPreview:(UIDocumentInteractionController *)controller
+{
+    return self.view.frame;
+}
+
 #pragma mark - get set
 - (UIBarButtonItem *)leftBarButtonItem
 {
@@ -351,7 +393,7 @@ static HomeViewController *sharedInstance = nil;
 - (UIBarButtonItem *)rightBarButtonItem
 {
     if (!_rightBarButtonItem) {
-        _rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"新增" style:UIBarButtonItemStylePlain target:self action:@selector(addGuaranteeSlip)];
+        _rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStylePlain target:self action:@selector(addGuaranteeSlip)];
     }
     return _rightBarButtonItem;
 }
@@ -413,6 +455,14 @@ static HomeViewController *sharedInstance = nil;
         }
     }
     return _modelArray;
+}
+
+- (NSMutableArray <GuaranteeSlipModel *> *)selectedArray
+{
+    if (!_selectedArray) {
+        _selectedArray = [[NSMutableArray alloc] init];
+    }
+    return _selectedArray;
 }
 
 @end

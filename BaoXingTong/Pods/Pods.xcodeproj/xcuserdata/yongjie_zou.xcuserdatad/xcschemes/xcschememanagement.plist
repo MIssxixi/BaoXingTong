@@ -89,9 +89,19 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>iOS-htmltopdf.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>14A64A00BAD1A004A2B8296A67D52F7A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>426BC4549A625B5E1E4200D5261A98BF</key>
 		<dict>
 			<key>primary</key>
@@ -102,22 +112,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>66A747DC13C7D69339F20F5521C72B0A</key>
+		<key>70A1FA4F4D4674AE1E583583207AE23B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>7BD4487416DA33E57AC650ACEC463FFC</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>8176041D7E40AE5D686C51382327AD66</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>86A95090B4CB4264B6D0EA4AB58F5F23</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -147,12 +147,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>C2A7232CF57E4902784657E0308AAAFF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>DDCE26CDE8794AF8E72BAE43A355AFC1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>DE3B07ED7FF04F506B0C5E00F4973589</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E11E6C1DD86D37A9CED5EA9116B2EADB</key>
 		<dict>
 			<key>primary</key>
 			<true/>

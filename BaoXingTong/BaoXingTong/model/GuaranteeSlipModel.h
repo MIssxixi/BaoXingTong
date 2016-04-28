@@ -19,11 +19,11 @@
 @property (nonatomic, copy) NSString *carId;
 @property (nonatomic, copy) NSString *insuranceAgent;
 @property (nonatomic, assign) BOOL hasBoughtForceInsurance;
-@property (nonatomic, copy) NSArray <NSString *> *commercialInsurance;
-@property (nonatomic, strong) NSString *boughtDate;     // yyyy-MM-dd
-@property (nonatomic, assign) NSString *yearInterval;
+@property (nonatomic, strong) NSArray <NSString *> *commercialInsurance;
+@property (nonatomic, copy) NSString *boughtDate;     // yyyy-MM-dd
+@property (nonatomic, copy) NSString *yearInterval;
 @property (nonatomic, assign) BOOL isNeedRemind;
-@property (nonatomic, strong) NSString *remindDate;
+@property (nonatomic, copy) NSString *remindDate;
 @property (nonatomic, strong) NSMutableArray <UIImage *> *imageArray;
 
 @end

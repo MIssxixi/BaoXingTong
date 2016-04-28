@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '030A601E7EA86680223784F8'
-               BlueprintName = 'JSBadgeView'
+               BlueprintIdentifier = 'FA482DC91A75879A283F6E61'
+               BlueprintName = 'iOS-htmltopdf'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'libJSBadgeView.a'>
+               BuildableName = 'libiOS-htmltopdf.a'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

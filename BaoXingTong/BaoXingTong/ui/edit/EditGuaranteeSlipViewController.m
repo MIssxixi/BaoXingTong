@@ -8,6 +8,7 @@
 
 #import "EditGuaranteeSlipViewController.h"
 #import "SelectViewController.h"
+#import "PopoverController.h"
 #import "GuaranteeSlipModel.h"
 #import <DoImagePickerController/DoImagePickerController.h>
 #import <DoImagePickerController/AssetHelper.h>
@@ -17,6 +18,7 @@
 #import "DataManager.h"
 #import "DataServiceManager.h"
 #import "TipView.h"
+#import "PdfManager.h"
 
 typedef NS_ENUM(NSInteger, SelectCellAction) {
     SelectCellActionNone = 0,
@@ -38,11 +40,12 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 #define CHOSEOREDITTABLEVIEWCELLIDENTIFIER @"CHOSEOREDITTABLEVIEWCELL"
 #define IMAGEFOOTERVIEWIDENTIFIER @"IMAGEFOOTERVIEW"
 
-@interface EditGuaranteeSlipViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, DoImagePickerControllerDelegate>
+@interface EditGuaranteeSlipViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, DoImagePickerControllerDelegate, UIPopoverPresentationControllerDelegate, UIDocumentInteractionControllerDelegate>
 
 @property (nonatomic, strong) GuaranteeSlipModel *model;
 @property (nonatomic, strong) NSArray *propertyList;
 @property (nonatomic, strong) ImageFooterView *imageFooterView;
+@property (nonatomic, strong) UIDocumentInteractionController *documentInteractionController;
 
 @end
 
@@ -75,11 +78,12 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     tapGestureRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapGestureRecognizer];
     
+    UIBarButtonItem *moreBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"..." style:UIBarButtonItemStylePlain target:self action:@selector(more)];
     UIBarButtonItem *saveBarButonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(restoreData)];
-    UIBarButtonItem *deleteBarButonItem = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteData)];
     NSArray *array;
     if (self.model.guaranteeSlipModelId > 0) {
-        array = @[saveBarButonItem, deleteBarButonItem];
+//        array = @[saveBarButonItem, deleteBarButonItem];
+        array = @[moreBarButtonItem, saveBarButonItem];
     }
     else
     {
@@ -96,6 +100,36 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)share
+{
+    NSString *filePath = [[PdfManager sharedManager] creatPdf:self.model];
+    
+    [self.documentInteractionController dismissMenuAnimated:YES];
+    self.documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:filePath]];
+    self.documentInteractionController.delegate = self;
+    self.documentInteractionController.UTI = @"com.adobe.pdf";
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.documentInteractionController presentOpenInMenuFromRect:CGRectMake(0, 20, 100, 300) inView:self.view animated:YES];
+    });
+}
+
+- (void)more
+{
+    PopoverController *popoverController = [[PopoverController alloc] initWithBarButtonItem:self.navigationItem.rightBarButtonItem Options:@[@"分享", @"删除"] selectedCallBack:^(NSInteger index) {
+        if (0 == index) {
+            [self share];
+        }
+        else if (1 == index)
+        {
+            [self deleteData];
+        }
+        
+        [self dismissViewControllerAnimated:NO completion:nil];
+    } delegate:self];
+    
+    [self presentViewController:popoverController animated:YES completion:nil];
 }
 
 - (void)restoreData
@@ -414,6 +448,28 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         }];
         [self.navigationController pushViewController:selectVC animated:YES];
     }
+}
+
+#pragma mark - UIDocumentInteractionControllerDelegate
+- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller
+{
+    return self;
+}
+
+- (UIView *)documentInteractionControllerViewForPreview:(UIDocumentInteractionController *)controller
+{
+    return self.view;
+}
+
+- (CGRect )documentInteractionControllerRectForPreview:(UIDocumentInteractionController *)controller
+{
+    return self.view.frame;
+}
+
+#pragma mark - UIPopoverPresentationControllerDelegate
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
+{
+    return UIModalPresentationNone;     //!!!在iphone下必须实现改代理，否则会pop出一个全屏
 }
 
 #pragma mark - UIScrollViewDelegate
