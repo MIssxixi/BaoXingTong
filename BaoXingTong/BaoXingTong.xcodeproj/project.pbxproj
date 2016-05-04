@@ -58,6 +58,7 @@
 		1FDB472F1CCE1321000C31B7 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB472E1CCE1321000C31B7 /* LoginViewController.m */; };
 		1FDB47321CCE3807000C31B7 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB47311CCE3807000C31B7 /* UserModel.m */; };
 		1FDBD21B1CD19F0B0045DE01 /* PdfManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDBD21A1CD19F0B0045DE01 /* PdfManager.m */; };
+		1FDBD21E1CD1E9D50045DE01 /* AlterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDBD21D1CD1E9D50045DE01 /* AlterView.m */; };
 		1FDE4DA51CB7985800DAC317 /* TipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDE4DA41CB7985800DAC317 /* TipView.m */; };
 		1FE0F8AF1CC08681000A0D74 /* DataServiceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0F8AE1CC08681000A0D74 /* DataServiceManager.m */; };
 		1FE0F8B21CC09B38000A0D74 /* ServiceResponseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FE0F8B11CC09B38000A0D74 /* ServiceResponseModel.m */; };
@@ -173,6 +174,8 @@
 		1FDB47311CCE3807000C31B7 /* UserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserModel.m; sourceTree = "<group>"; };
 		1FDBD2191CD19F0B0045DE01 /* PdfManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PdfManager.h; sourceTree = "<group>"; };
 		1FDBD21A1CD19F0B0045DE01 /* PdfManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PdfManager.m; sourceTree = "<group>"; };
+		1FDBD21C1CD1E9D50045DE01 /* AlterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlterView.h; sourceTree = "<group>"; };
+		1FDBD21D1CD1E9D50045DE01 /* AlterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlterView.m; sourceTree = "<group>"; };
 		1FDE4DA31CB7985800DAC317 /* TipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TipView.h; sourceTree = "<group>"; };
 		1FDE4DA41CB7985800DAC317 /* TipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TipView.m; sourceTree = "<group>"; };
 		1FE0F8AD1CC08681000A0D74 /* DataServiceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataServiceManager.h; sourceTree = "<group>"; };
@@ -473,6 +476,8 @@
 				1FD3F97C1CB8FF5C0050349C /* PopoverController.m */,
 				1FDB1F5F1CCF36740018AB19 /* TextField.h */,
 				1FDB1F601CCF36740018AB19 /* TextField.m */,
+				1FDBD21C1CD1E9D50045DE01 /* AlterView.h */,
+				1FDBD21D1CD1E9D50045DE01 /* AlterView.m */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -685,6 +690,7 @@
 				1F52628F1CD055D8006821D9 /* HtmlManager.m in Sources */,
 				1FE0F8AF1CC08681000A0D74 /* DataServiceManager.m in Sources */,
 				1F5262851CCF8691006821D9 /* ForgetPasswordGetVerificationCodeViewController.m in Sources */,
+				1FDBD21E1CD1E9D50045DE01 /* AlterView.m in Sources */,
 				1F52627F1CCF6041006821D9 /* AccountViewController.m in Sources */,
 				1FD3F97D1CB8FF5C0050349C /* PopoverController.m in Sources */,
 				1FB2FA781CB516D5002CB0FA /* DataManager.m in Sources */,

@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 @property (nonatomic, strong) GuaranteeSlipModel *model;
 @property (nonatomic, strong) NSArray *propertyList;
-@property (nonatomic, strong) ImageFooterView *imageFooterView;
+@property (nonatomic, retain) ImageFooterView *imageFooterView;
 @property (nonatomic, strong) UIDocumentInteractionController *documentInteractionController;
 
 @end
@@ -61,7 +61,23 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 - (instancetype)initWithModel:(GuaranteeSlipModel *)model
 {
     self = [super init];
-    self.model = model;
+    if (self) {
+        self.model = [[DataManager sharedManager] getModelWithId:model.guaranteeSlipModelId needImages:NO];
+        NSInteger item = 0;
+        for (;item < self.model.imageNames.count; item++) {
+            [self.model.imageArray addObject:[UIImage imageNamed:@"default_avatar"]];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                UIImage *image = [[DataManager sharedManager] getImage:self.model.imageNames[item]];
+                
+                if (image) {
+                    [self.model.imageArray replaceObjectAtIndex:item withObject:image];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.imageFooterView updateImageAtItem:item];
+                    });
+                }
+            });
+        }
+    }
     return self;
 }
 
@@ -94,7 +110,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:UITABLEVIEWCELLIDENTIFIER];
     [self.tableView registerClass:[TextFieldTableViewCell class] forCellReuseIdentifier:TEXTFIELDTABLEVIEWCELLIDENTIFIER];
     [self.tableView registerClass:[ChoseOrEditTableViewCell class] forCellReuseIdentifier:CHOSEOREDITTABLEVIEWCELLIDENTIFIER];
-    [self.tableView registerClass:[ImageFooterView class] forHeaderFooterViewReuseIdentifier:IMAGEFOOTERVIEWIDENTIFIER];
+//    [self.tableView registerClass:[ImageFooterView class] forHeaderFooterViewReuseIdentifier:IMAGEFOOTERVIEWIDENTIFIER];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -123,7 +139,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         }
         else if (1 == index)
         {
-            [self deleteData];
+            [self tapDelete];
         }
         
         [self dismissViewControllerAnimated:NO completion:nil];
@@ -218,6 +234,18 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)tapDelete
+{
+    AlterView *alterView = [[AlterView alloc] initWithTitle:@"确认删除该保单" message:nil sureAction:^{
+        [self deleteData];
+    } cancelAction:^{
+        
+    } owner:self];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [alterView show];
+    });
+}
+
 - (void)keyeboardHide:(UIGestureRecognizer *)tap
 {
     if (tap.state == UIGestureRecognizerStateEnded) {
@@ -265,6 +293,8 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //cell的block，引用self会循环引用！！！！
+//    return [UITableViewCell new];                 //这样退出该页时，回调用dealloc
     NSDictionary *dic;
     if (self.propertyList.count > indexPath.row) {
         dic = self.propertyList[indexPath.row];
@@ -292,12 +322,21 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
             }
         }
         else if ([cellId isEqualToString:@"commercialInsurance"]) {
+            NSInteger i = 0;
             for (NSString *string in self.model.commercialInsurance) {
-                text = [text stringByAppendingString:string];
+                NSString *str;
+                if (i++ > 0) {
+                    str = [NSString stringWithFormat:@"  %@", string];
+                }
+                else
+                {
+                    str = string;
+                }
+                text = [text stringByAppendingString:str];
             }
         }
         else if ([cellId isEqualToString:@"remindDate"]){
-            UIImageView *imageView = [[UIImageView alloc] init];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, TABLEVIEWCELL_HEIGHT_DEFAULT, TABLEVIEWCELL_HEIGHT_DEFAULT)];
             if (self.model.isNeedRemind) {
                 [imageView setImage:[UIImage imageNamed:@"check_gray"]];
             }
@@ -305,7 +344,9 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
             {
                 [imageView setImage:[UIImage imageNamed:@"uncheck_gray"]];
             }
-            [imageView sizeToFit];
+//            [imageView sizeToFit];
+//            imageView.backgroundColor = [UIColor redColor];
+            imageView.contentMode = UIViewContentModeRight;
             cell.accessoryView = imageView;
             UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateIsNeedRemind:)];
             cell.accessoryView.userInteractionEnabled = YES;
@@ -326,9 +367,10 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         cell.rightTextField.keyboardType = keyboardType;
         cell.cellStyle = cellType;
         
+        WS(weakSelf)
         [cell setKeyBoardDidEndEditing:^(NSString *text) {
-            if ([self.model respondsToSelector:NSSelectorFromString(cellId)]) {
-                [self.model setValue:text forKey:cellId];
+            if ([weakSelf.model respondsToSelector:NSSelectorFromString(cellId)]) {
+                [weakSelf.model setValue:text forKey:cellId];
             }
         }];
         
@@ -344,14 +386,17 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         }
         cell.rightTextField.placeholder = title;
         cell.rightTextField.keyboardType = keyboardType;
-        
+       
+        __weak UITableView *weakTable = self.tableView;
+        weakifyself;
         [cell setDidTapIndicator:^{
+            strongifyself;
             if ([cellId isEqualToString:@"carType"]) {
                 SelectViewController *carTypeVC = [[SelectViewController alloc] initWithResourcePath:@"CarTypeList" selectedString:self.model.carType title:@"车型"];
                 [carTypeVC setDidSelectedString:^(NSString *selectedString) {
                     if (selectedString.length) {
                         self.model.carType = selectedString;
-                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        [weakTable reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic]; //cell和tableview循环引用！！！
                     }
                 }];
                 [self.navigationController pushViewController:carTypeVC animated:YES];
@@ -362,22 +407,24 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
                 [insuranceAgentVC setDidSelectedString:^(NSString *selectedString) {
                     if (selectedString.length) {
                         self.model.insuranceAgent = selectedString;
-                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        [weakTable reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                     }
                 }];
                 [self.navigationController pushViewController:insuranceAgentVC animated:YES];
             }
         }];
         
+        WS(weakSelf)
         [cell setKeyBoardDidEndEditing:^(NSString *text) {
-            if ([self.model respondsToSelector:NSSelectorFromString(cellId)]) {
-                [self.model setValue:text forKey:cellId];
+            if ([weakSelf.model respondsToSelector:NSSelectorFromString(cellId)]) {
+                [weakSelf.model setValue:text forKey:cellId];
             }
         }];
         
         return cell;
     }
-    else if ([cellClass isEqualToString:NSStringFromClass([UITableViewCell class])])
+    else
+        if ([cellClass isEqualToString:NSStringFromClass([UITableViewCell class])])
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:UITABLEVIEWCELLIDENTIFIER forIndexPath:indexPath];
         cell.textLabel.font = FONT(15);
@@ -413,13 +460,19 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *dic = self.propertyList[indexPath.row];
     NSInteger selectCellAction = [[dic valueForKey:EDITGUARANTEESLIPLIST_SELECT_CELL_ACTION] integerValue];
     
     if (selectCellAction == SelectCellActionAddPicture) {
+        if (self.model.imageArray.count >= 9) {
+            [TipView show:@"最多添加9张照片"];
+            return;
+        }
+        
         DoImagePickerController *doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
         doImagePickerController.nColumnCount = 3;
-        doImagePickerController.nMaxCount = -1;
+        doImagePickerController.nMaxCount = 9 - self.model.imageArray.count;
         doImagePickerController.delegate = self;
         [self.navigationController pushViewController:doImagePickerController animated:YES];
     }
@@ -434,7 +487,9 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         }];
         [alertController addAction:alertActionYes];
         [alertController addAction:alertActionNo];
-        [self presentViewController:alertController animated:YES completion:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentViewController:alertController animated:YES completion:nil];
+        });
     }
     else if (selectCellAction == SelectCellActionCommercialInsurance)
     {
@@ -481,7 +536,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 #pragma mark - DoImagePickerControllerDelegate
 - (void)didCancelDoImagePickerController
 {
-    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didSelectPhotosFromDoImagePickerController:(DoImagePickerController *)picker result:(NSArray *)aSelected
@@ -515,13 +570,25 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         _imageFooterView = [[ImageFooterView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, [ImageFooterView heightWithImageArray:self.model.imageArray])];
         __weak typeof (self) weakSelf = self;
         [_imageFooterView setDidDeleteAction:^(NSInteger index) {
-            if (index < self.model.imageArray.count) {
-                [weakSelf.model.imageArray removeObjectAtIndex:index];
-                [weakSelf updateFooterView];
+            //会内存泄漏
+            if (index < weakSelf.model.imageArray.count) {
+                AlterView *alterView = [[AlterView alloc] initWithTitle:@"确定删除照片吗" message:@"删除后不可复原" sureAction:^{
+                    [[DataManager sharedManager] deleteImage:weakSelf.model.imageNames[index]];
+                    [weakSelf.model.imageArray removeObjectAtIndex:index];
+                    [weakSelf.model.imageNames removeObjectAtIndex:index];
+                    [weakSelf updateFooterView];
+                } cancelAction:^{
+                    
+                } owner:weakSelf];
+                [alterView show];
             }
         }];
     }
     return _imageFooterView;
+}
+
+- (void)dealloc
+{
 }
 
 @end

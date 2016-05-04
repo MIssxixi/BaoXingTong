@@ -52,6 +52,57 @@ static DataManager *sharedDataManager = nil;
     return self;
 }
 
+- (BOOL)saveImage:(UIImage *)image filePath:(NSString *)imagePath
+{
+    if (image) {
+        NSData *imageData = UIImagePNGRepresentation(image);
+        
+        NSLog((@"pre writing to file"));
+        if (![imageData writeToFile:imagePath atomically:NO])
+        {
+            return NO;
+        }
+        else
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)deleteImage:(NSString *)imageName
+{
+    NSLog(@"pre delete image");
+    return [[NSFileManager defaultManager] removeItemAtPath:[[self imageFolder] stringByAppendingPathComponent:imageName] error:nil];
+}
+
+- (UIImage *)getImage:(NSString *)imageName
+{
+    //保存时，图片已被删除
+    NSString *imagePath = [[self imageFolder] stringByAppendingPathComponent:imageName];
+    UIImage *tempImage = [UIImage imageWithContentsOfFile:imagePath];
+//    NSData *tempData = UIImagePNGRepresentation(tempImage);
+//    UIImage *newImage = [UIImage imageWithData:tempData];
+//    return newImage;
+    return tempImage;
+}
+
+- (NSString *)imageFolder
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *folderString = [documentsDirectory stringByAppendingPathComponent:@"images"];
+    
+    NSError *error;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:folderString]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:folderString withIntermediateDirectories:NO attributes:nil error:&error];
+        if (error) {
+            return nil;
+        }
+    }
+    return folderString;
+}
+
 - (id)getDataWithIdentifer:(NSString *)identifer
 {
     if (identifer.length) {
@@ -201,7 +252,7 @@ static DataManager *sharedDataManager = nil;
     NSMutableArray *modelArray = [NSMutableArray new];
     for (UILocalNotification *notification in array) {
         NSInteger localNotificationId = ((NSNumber *)[notification.userInfo objectForKey:kLocalNotificationKey]).integerValue;
-        GuaranteeSlipModel *model = [self getModelWithId:localNotificationId];
+        GuaranteeSlipModel *model = [self getModelWithId:localNotificationId needImages:NO];
         if (model) {
             [modelArray addObject:model];
         }
@@ -307,7 +358,7 @@ static DataManager *sharedDataManager = nil;
         [self.needReadArray addObject:@(modelId)];
         [self saveData:self.needReadArray WithIdentifer:allRemindGuaranteeSlipsIdentifer];
         
-        GuaranteeSlipModel *model = [self getModelWithId:modelId];
+        GuaranteeSlipModel *model = [self getModelWithId:modelId needImages:NO];
         model.isNeedRemind = NO;
         [self saveDataWithModel:model];
         
@@ -330,12 +381,25 @@ static DataManager *sharedDataManager = nil;
     return self.IdsArray;
 }
 
-- (GuaranteeSlipModel *)getModelWithId:(NSInteger)Id
+- (GuaranteeSlipModel *)getModelWithId:(NSInteger)Id needImages:(BOOL)needImages
 {
     if ([self.IdsArray containsObject:@(Id)]) {
 //        NSData *data = [self getDataWithIdentifer:@(Id).stringValue];
         NSData *data = [self getDataWithIdentifer:[self guaranteeSlipIdentifer:Id]];
-        return (GuaranteeSlipModel *)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+        GuaranteeSlipModel *model = (GuaranteeSlipModel *)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+        
+        if (needImages) {
+            for (NSString *imagePath in model.imageNames) {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                    UIImage *image = [self getImage:imagePath];
+                    if (image) {
+                        [model.imageArray addObject:image];
+                    }
+                });
+            }
+        }
+        
+        return model;
     }
     return nil;
 }
@@ -357,8 +421,24 @@ static DataManager *sharedDataManager = nil;
         [self.IdsArray addObject:@(model.guaranteeSlipModelId)];
         [self saveData:self.IdsArray WithIdentifer:allIdsIdentifer];
     }
+    
+//    //删除之前照片              //这样做非常消耗io，不好。同时会出现问题：每次删除的话，获取图片就不能用imageWithContentsOfFile，因为，接下来保存的时候之前的图片已经删了，只能通过NSData来转换，但这样又有其他问题，因为图片是异步获取的，点击保单详情后，快速返回，这时图片还没加载完，会继续加载，从而内存不断增加且不会释放
+//    for (NSString *imageName in model.imageNames) {
+//        [[NSFileManager defaultManager] removeItemAtPath:[[self imageFolder] stringByAppendingPathComponent:imageName] error:nil];
+//    }
+    
+    NSInteger temp = model.imageNames.count;
+    for (;temp < model.imageArray.count; temp++) {
+        NSString *imageName = [NSString stringWithFormat:@"%@-%ld-%@.png", model.name, model.guaranteeSlipModelId, [[NSProcessInfo processInfo] globallyUniqueString]];
+        NSString *imagePath = [[self imageFolder] stringByAppendingPathComponent:imageName];
+        [model.imageNames addObject:imageName];
+        UIImage *image = model.imageArray[temp];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [self saveImage:image filePath:imagePath];
+        });
+    }
+    [model.imageArray removeAllObjects];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:model];
-//    [self saveData:data WithIdentifer:@(model.guaranteeSlipModelId).stringValue];
     [self saveData:data WithIdentifer:[self guaranteeSlipIdentifer:model.guaranteeSlipModelId]];
 }
 

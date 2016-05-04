@@ -35,8 +35,11 @@
 - (void)resetNotNeedRead:(NSInteger)modelId;        //已经读过
 
 - (NSArray *)getAllIds;
-- (GuaranteeSlipModel *)getModelWithId:(NSInteger)Id;
+- (GuaranteeSlipModel *)getModelWithId:(NSInteger)Id needImages:(BOOL)needImages;
 - (void)saveDataWithModel:(GuaranteeSlipModel *)model;
 - (void)deleteDataWithId:(NSInteger)Id;
+
+- (UIImage *)getImage:(NSString *)imageName;
+- (BOOL)deleteImage:(NSString *)imageName;
 
 @end

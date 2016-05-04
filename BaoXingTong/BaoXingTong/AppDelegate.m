@@ -92,7 +92,7 @@
     NSDate *currentDate = [NSDate date];
     NSArray *allIds = [[DataManager sharedManager] getAllIds];
     for (NSNumber *number in allIds) {
-        GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue];
+        GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue needImages:NO];
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
         NSDate *remindDate = [formatter dateFromString:model.remindDate];

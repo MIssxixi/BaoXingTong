@@ -24,6 +24,10 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
 
 @implementation ImageFooterView
 
+- (void)dealloc
+{
+    
+}
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithReuseIdentifier:reuseIdentifier];
@@ -50,9 +54,11 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
     ImageCollectionViewCell *cell = (ImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:IMAGECOLLECTIONVIEWCELL_IDENTIFIER forIndexPath:indexPath];
     if (self.imageArray.count > indexPath.row) {
         cell.image = self.imageArray[indexPath.row];
+        
+        WS(weakSelf)
         [cell setDidDeleteAction:^(UICollectionViewCell *cell) {
-            if (self.didDeleteAction) {
-                self.didDeleteAction(indexPath.row);
+            if (weakSelf.didDeleteAction) {
+                weakSelf.didDeleteAction(indexPath.row);
             }
         }];
     }
@@ -62,7 +68,7 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row < self.imageArray.count) {
+    if (indexPath.item < self.imageArray.count) {
         MWPhotoBrowser *photoBrowser = [[MWPhotoBrowser alloc] initWithDelegate:self];
         [photoBrowser setCurrentPhotoIndex:indexPath.row];
         [[UIViewController currentViewController].navigationController pushViewController:photoBrowser animated:YES];
@@ -108,6 +114,11 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
 {
     _imageArray = imageArray;
     [self.collectionView reloadData];
+}
+
+- (void)updateImageAtItem:(NSInteger)item
+{
+    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:item inSection:0]]];
 }
 
 #pragma mark - static methods

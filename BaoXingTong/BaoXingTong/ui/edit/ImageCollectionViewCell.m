@@ -70,6 +70,7 @@
 - (void)setImage:(UIImage *)image
 {
     [self.imageView setImage:image];
+    _image = image;
 }
 
 @end

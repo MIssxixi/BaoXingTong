@@ -14,6 +14,8 @@
 #import "TipView.h"
 #import "DataManager.h"
 #import <SMS_SDK/SMSSDK.h>
+#import "EditGuaranteeSlipViewController.h"
+#import "GuaranteeSlipModel.h"
 
 #import "ForgetPasswordGetVerificationCodeViewController.h"
 

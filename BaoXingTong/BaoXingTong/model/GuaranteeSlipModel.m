@@ -46,12 +46,25 @@
     return _imageArray;
 }
 
+- (NSMutableArray <NSString *> *)imageNames
+{
+    if (!_imageNames) {
+        _imageNames = [NSMutableArray new];
+    }
+    return _imageNames;
+}
+
 - (BOOL)isEqual:(id)object
 {
     if (self.guaranteeSlipModelId == ((GuaranteeSlipModel *)object).guaranteeSlipModelId) {
         return YES;
     }
     return NO;
+}
+
+- (void)dealloc
+{
+    
 }
 
 @end

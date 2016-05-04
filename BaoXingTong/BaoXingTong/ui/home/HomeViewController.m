@@ -32,7 +32,6 @@ static HomeViewController *sharedInstance = nil;
 
 @property (nonatomic, strong) NSMutableArray *idsArray;
 @property (nonatomic, strong) NSMutableArray <GuaranteeSlipModel *> *modelArray;    //暂时不支持加载，直接一次性将数据获取完
-@property (nonatomic, strong) NSMutableArray <GuaranteeSlipModel *> *selectedArray;
 @property (nonatomic, strong) NSMutableArray *needReadIdsArray;
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -68,9 +67,9 @@ static HomeViewController *sharedInstance = nil;
         [_modelArray removeAllObjects];
         _idsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllIds]];
         for (NSNumber *number in self.idsArray) {
-            GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue];
+            GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue needImages:NO];
             if (model) {                                    //！！！为nil会崩溃
-                [_modelArray addObject:[[DataManager sharedManager] getModelWithId:number.integerValue]];
+                [_modelArray addObject:model];
             }
         }
         [self.tableView reloadData];
@@ -109,8 +108,10 @@ static HomeViewController *sharedInstance = nil;
 
 - (void)updateBadgeView
 {
-    self.needReadIdsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllRemindGuaranteeSlipIds]];
-    [self.tableView reloadData];
+    if (!self.tableView.isEditing) {
+        self.needReadIdsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllRemindGuaranteeSlipIds]];
+        [self.tableView reloadData];
+    }
 }
 
 - (void)edit
@@ -184,7 +185,18 @@ static HomeViewController *sharedInstance = nil;
 {
     
 //    NSString *folderPath = [[HtmlManager sharedManager] creatHtmlWithGuaranteeSlipModel:self.modelArray[0]];
-    NSString *filePath = [[PdfManager sharedManager] creatPdfWithModels:self.selectedArray];
+    NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+    NSMutableArray *selectedArray = [NSMutableArray new];
+    for (NSIndexPath *indexPath in selectedIndexPaths) {
+        [selectedArray addObject:self.modelArray[indexPath.row]];
+    }
+    
+    if (0 == selectedArray.count) {
+        [TipView show:@"未选择保单"];
+        return;
+    }
+    
+    NSString *filePath = [[PdfManager sharedManager] creatPdfWithModels:selectedArray];
     
     [self.documentInteractionController dismissMenuAnimated:YES];
     self.documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:filePath]];
@@ -219,6 +231,16 @@ static HomeViewController *sharedInstance = nil;
     [self updateButtonsToMatchTableState];
 }
 
+- (void)tapDeleteAllButton
+{
+    AlterView *alterView = [[AlterView alloc] initWithTitle:@"确认删除所有保单" message:nil sureAction:^{
+        [self deleteAll];
+    } cancelAction:^{
+        
+    } owner:self];
+    [alterView show];
+}
+
 - (void)delete
 {
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
@@ -233,6 +255,16 @@ static HomeViewController *sharedInstance = nil;
     [self.tableView deleteRowsAtIndexPaths:selectedIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
     
     [self updateButtonsToMatchTableState];
+}
+
+- (void)tapDeleteButton
+{
+    AlterView *alterView = [[AlterView alloc] initWithTitle:@"确认删除选择保单" message:nil sureAction:^{
+        [self delete];
+    } cancelAction:^{
+        
+    } owner:self];
+    [alterView show];
 }
 
 - (void)updateButtonsToMatchTableState
@@ -325,28 +357,18 @@ static HomeViewController *sharedInstance = nil;
     if (tableView.isEditing)
     {
         [self updateButtonsToMatchTableState];
-        
-        if (indexPath.row < self.modelArray.count) {
-            GuaranteeSlipModel *model = self.modelArray[indexPath.row];
-            if ([self.selectedArray containsObject:model]) {
-                [self.selectedArray removeObject:model];
-            }
-            else
-            {
-                [self.selectedArray addObject:model];
-            }
-        }
     }
     else
     {
         if (indexPath.row < self.modelArray.count) {
             EditGuaranteeSlipViewController *editGuaranteeSlipViewController = [[EditGuaranteeSlipViewController alloc] initWithModel:self.modelArray[indexPath.row]];
+            WS(weakSelf)
             [editGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
-                [self.tableView reloadData];
+                [weakSelf.tableView reloadData];
             }];
             [editGuaranteeSlipViewController setDidDelete:^(GuaranteeSlipModel *model) {
-                [self.modelArray removeObject:model];
-                [self.tableView reloadData];
+                [weakSelf.modelArray removeObject:model];
+                [weakSelf.tableView reloadData];
             }];
             [self.navigationController pushViewController:editGuaranteeSlipViewController animated:YES];
             [[DataManager sharedManager] resetNotNeedRead:self.modelArray[indexPath.row].guaranteeSlipModelId];
@@ -402,8 +424,8 @@ static HomeViewController *sharedInstance = nil;
 {
     if (!_bottomButton) {
         _bottomButton = [HomeBottomButton newAutoLayoutView];
-        [_bottomButton.leftButton addTarget:self action:@selector(deleteAll) forControlEvents:UIControlEventTouchUpInside];
-        [_bottomButton.rightButton addTarget:self action:@selector(delete) forControlEvents:UIControlEventTouchUpInside];
+        [_bottomButton.leftButton addTarget:self action:@selector(tapDeleteAllButton) forControlEvents:UIControlEventTouchUpInside];
+        [_bottomButton.rightButton addTarget:self action:@selector(tapDeleteButton) forControlEvents:UIControlEventTouchUpInside];
     }
     return _bottomButton;
 }
@@ -448,21 +470,13 @@ static HomeViewController *sharedInstance = nil;
         }
         
         for (NSNumber *number in self.idsArray) {
-            GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue];
+            GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue needImages:NO];
             if (model) {                                    //！！！为nil会崩溃
-                [_modelArray addObject:[[DataManager sharedManager] getModelWithId:number.integerValue]];
+                [_modelArray addObject:model];
             }
         }
     }
     return _modelArray;
-}
-
-- (NSMutableArray <GuaranteeSlipModel *> *)selectedArray
-{
-    if (!_selectedArray) {
-        _selectedArray = [[NSMutableArray alloc] init];
-    }
-    return _selectedArray;
 }
 
 @end

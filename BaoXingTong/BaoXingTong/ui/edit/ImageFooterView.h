@@ -13,6 +13,7 @@
 @property (nonatomic, copy) void (^didDeleteAction)(NSInteger index);
 
 - (void)setImageArray:(NSArray <UIImage *> *)imageArray;
+- (void)updateImageAtItem:(NSInteger)item;
 
 + (CGFloat)heightWithImageArray:(NSArray <UIImage *> *)imageArray;
 

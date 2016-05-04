@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TextField.h"
 
 typedef NS_ENUM(NSInteger, TextFieldTableViewCellStyle)
 {

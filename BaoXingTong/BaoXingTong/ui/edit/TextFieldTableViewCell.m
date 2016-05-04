@@ -19,6 +19,10 @@
 
 @implementation TextFieldTableViewCell
 
+- (void)dealloc
+{
+    
+}
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -113,6 +117,7 @@
 {
     if (!_rightTextField) {
         _rightTextField = [UITextField newAutoLayoutView];
+//        _rightTextField.textInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         _rightTextField.font = FONT(15);
         _rightTextField.textColor = COLOR_FROM_RGB(33, 33, 33, 1);
         _rightTextField.delegate = self;

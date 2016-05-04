@@ -15,11 +15,15 @@
 #define kLocalNotificationKey @"kLocalNotificationKey"
 #define kNotificationCategoryIdentifile @"kNotificationCategoryIdentifile"
 
+#define __WeakSelf__  __weak typeof (self)
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
+#define weakifyself __WeakSelf__ wSelf = self;
+#define strongifyself __WeakSelf__ self = wSelf;
 
 #import "style.h"
 #import "CommonCategory.h"
 #import "TipView.h"
+#import "AlterView.h"
 
 #import <PureLayout/PureLayout.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>

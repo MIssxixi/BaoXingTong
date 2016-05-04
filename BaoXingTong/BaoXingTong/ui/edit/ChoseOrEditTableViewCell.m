@@ -16,6 +16,11 @@
 
 @implementation ChoseOrEditTableViewCell
 
+- (void)dealloc
+{
+    
+}
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];

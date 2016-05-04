@@ -46,8 +46,17 @@ static PdfManager *sharedManager;      //这个必须在+ (instancetype)sharedMa
 - (NSString *)convertModelToString:(GuaranteeSlipModel *)model
 {
     NSString *commercialInsuranceString = @"";
+    NSInteger i = 0;
     for (NSString *string in model.commercialInsurance) {
-        commercialInsuranceString = [commercialInsuranceString stringByAppendingString:string];
+        NSString *tmpString;
+        if (i++ > 0) {
+            tmpString = [NSString stringWithFormat:@"  %@", string];
+        }
+        else
+        {
+            tmpString = string;
+        }
+        commercialInsuranceString = [commercialInsuranceString stringByAppendingString:tmpString];
     }
     
     NSString *convertString = [NSString stringWithFormat:@"\
@@ -68,7 +77,7 @@ static PdfManager *sharedManager;      //这个必须在+ (instancetype)sharedMa
 
 - (NSString *)creatPdf:(GuaranteeSlipModel *)model
 {
-    NSString *fileName = [NSString stringWithFormat:@"%@-%ld.html", model.name, model.guaranteeSlipModelId];
+    NSString *fileName = [NSString stringWithFormat:@"%@-%ld.pdf", model.name, model.guaranteeSlipModelId];
     NSString *filePath = [NSString stringWithFormat:@"%@%@", [self folderPath], fileName];
     
     [self creatPdf:[self convertModelToString:model] filePath:filePath];

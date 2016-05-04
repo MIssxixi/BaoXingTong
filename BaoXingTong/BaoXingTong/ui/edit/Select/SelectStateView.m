@@ -83,7 +83,7 @@
     if (_configButton == nil) {
         _configButton = ({
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            [button setTitle:@"确认发送" forState:UIControlStateNormal];
+            [button setTitle:@"确认选择" forState:UIControlStateNormal];
             [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             button.titleLabel.font = FONT(15);
 //            [button setBackgroundImage:[UIImage tx_imageWithColor:TX_COLOR_MAIN size:CGSizeMake(10, 10)] forState:UIControlStateNormal];

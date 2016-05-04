@@ -24,6 +24,7 @@
 @property (nonatomic, copy) NSString *yearInterval;
 @property (nonatomic, assign) BOOL isNeedRemind;
 @property (nonatomic, copy) NSString *remindDate;
-@property (nonatomic, strong) NSMutableArray <UIImage *> *imageArray;
+@property (nonatomic, strong) NSMutableArray <UIImage *> *imageArray;       //不能用于存储，否则内存吃不消
+@property (nonatomic, strong) NSMutableArray <NSString *> *imageNames;
 
 @end
