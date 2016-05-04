@@ -23,7 +23,7 @@
 #define HOMEVIEWTABLEVIEWCELL_IDENTIFER @"HOMEVIEWTABLEVIEWCELL"
 static HomeViewController *sharedInstance = nil;
 
-@interface HomeViewController () <UITableViewDataSource, UITableViewDelegate, UIPopoverPresentationControllerDelegate, UIDocumentInteractionControllerDelegate>
+@interface HomeViewController () <UITableViewDataSource, UITableViewDelegate, UIPopoverPresentationControllerDelegate, UIDocumentInteractionControllerDelegate, UISearchResultsUpdating>
 
 @property (nonatomic, strong) UIBarButtonItem *leftBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;
@@ -36,6 +36,9 @@ static HomeViewController *sharedInstance = nil;
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) UIDocumentInteractionController *documentInteractionController;
+
+@property (nonatomic, strong) UISearchController *searchController;
+@property (nonatomic, strong) NSMutableArray *filteredArray;
 
 @end
 
@@ -84,6 +87,14 @@ static HomeViewController *sharedInstance = nil;
     [self updateBadgeView];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.searchController.active) {
+        self.searchController.active = NO;
+        [self.searchController.searchBar removeFromSuperview];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -100,6 +111,12 @@ static HomeViewController *sharedInstance = nil;
     
     [self.bottomButton autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
     self.bottomButtonHeight = [self.bottomButton autoSetDimension:ALDimensionHeight toSize:0];
+    
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    [self.searchController.searchBar sizeToFit];
+    self.tableView.tableHeaderView = self.searchController.searchBar;
     
     if (isUsingService) {
         [self.tableView.mj_header beginRefreshing];
@@ -118,6 +135,7 @@ static HomeViewController *sharedInstance = nil;
 {
     [self.tableView setEditing:YES animated:YES];
     self.bottomButtonHeight.constant = BUTTON_HEIGHT;
+    self.tableView.tableHeaderView = nil;
     [self updateButtonsToMatchTableState];
 }
 
@@ -125,6 +143,7 @@ static HomeViewController *sharedInstance = nil;
 {
     [self.tableView setEditing:NO animated:YES];
     self.bottomButtonHeight.constant = 0;
+    self.tableView.tableHeaderView = self.searchController.searchBar;
     [self updateButtonsToMatchTableState];
 }
 
@@ -328,6 +347,18 @@ static HomeViewController *sharedInstance = nil;
     return UIModalPresentationNone;     //!!!在iphone下必须实现改代理，否则会pop出一个全屏
 }
 
+#pragma mark - UISearchResultsUpdating
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+{
+    [self.filteredArray removeAllObjects];
+    NSString *keyString = searchController.searchBar.text;
+    NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS %@ or carId contains %@ or insuranceAgent contains %@", keyString, keyString, keyString];
+    [self.filteredArray addObjectsFromArray:[self.modelArray filteredArrayUsingPredicate:searchPredicate]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -336,12 +367,22 @@ static HomeViewController *sharedInstance = nil;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (self.searchController.active) {
+        return self.filteredArray.count;
+    }
     return self.modelArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HomeViewTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:HOMEVIEWTABLEVIEWCELL_IDENTIFER forIndexPath:indexPath];
+    if (self.searchController.active) {
+        if (indexPath.row < self.filteredArray.count) {
+            [cell setData:self.filteredArray[indexPath.row]];
+            return cell;
+        }
+    }
+    
     if (indexPath.row < self.modelArray.count) {
         [cell setData:self.modelArray[indexPath.row]];
         
@@ -360,10 +401,23 @@ static HomeViewController *sharedInstance = nil;
     }
     else
     {
-        if (indexPath.row < self.modelArray.count) {
-            EditGuaranteeSlipViewController *editGuaranteeSlipViewController = [[EditGuaranteeSlipViewController alloc] initWithModel:self.modelArray[indexPath.row]];
+        __block GuaranteeSlipModel *selecteModel = nil;
+        if (self.searchController.active && indexPath.row < self.filteredArray.count) {
+            selecteModel = self.filteredArray[indexPath.row];
+            self.navigationController.navigationBarHidden = NO;
+        }
+        else if (indexPath.row < self.modelArray.count)
+        {
+            selecteModel = self.modelArray[indexPath.row];
+        }
+        
+        if (selecteModel) {
+            EditGuaranteeSlipViewController *editGuaranteeSlipViewController = [[EditGuaranteeSlipViewController alloc] initWithModel:selecteModel];
             WS(weakSelf)
             [editGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
+                selecteModel.name = model.name;
+                selecteModel.carId = model.carId;
+                selecteModel.insuranceAgent = model.insuranceAgent;
                 [weakSelf.tableView reloadData];
             }];
             [editGuaranteeSlipViewController setDidDelete:^(GuaranteeSlipModel *model) {
@@ -371,7 +425,7 @@ static HomeViewController *sharedInstance = nil;
                 [weakSelf.tableView reloadData];
             }];
             [self.navigationController pushViewController:editGuaranteeSlipViewController animated:YES];
-            [[DataManager sharedManager] resetNotNeedRead:self.modelArray[indexPath.row].guaranteeSlipModelId];
+            [[DataManager sharedManager] resetNotNeedRead:selecteModel.guaranteeSlipModelId];
         }
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
@@ -477,6 +531,19 @@ static HomeViewController *sharedInstance = nil;
         }
     }
     return _modelArray;
+}
+
+- (NSMutableArray *)filteredArray
+{
+    if (!_filteredArray) {
+        _filteredArray = [[NSMutableArray alloc] init];
+    }
+    return _filteredArray;
+}
+
+- (void)dealloc
+{
+    
 }
 
 @end

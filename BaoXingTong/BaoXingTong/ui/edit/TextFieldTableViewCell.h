@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, TextFieldTableViewCellStyle)
 
 @property (nonatomic, assign) TextFieldTableViewCellStyle cellStyle;
 @property (nonatomic, strong) UILabel *leftLabel;
-@property (nonatomic, strong) UITextField *rightTextField;
+@property (nonatomic, strong) TextField *rightTextField;
 
 @property (nonatomic, copy) void (^keyBoardDidBeginEditing)();
 @property (nonatomic, copy) void (^keyBoardDidEndEditing)(NSString *text);

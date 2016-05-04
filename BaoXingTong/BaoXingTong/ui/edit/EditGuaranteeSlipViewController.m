@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 #define CHOSEOREDITTABLEVIEWCELLIDENTIFIER @"CHOSEOREDITTABLEVIEWCELL"
 #define IMAGEFOOTERVIEWIDENTIFIER @"IMAGEFOOTERVIEW"
 
-@interface EditGuaranteeSlipViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, DoImagePickerControllerDelegate, UIPopoverPresentationControllerDelegate, UIDocumentInteractionControllerDelegate>
+@interface EditGuaranteeSlipViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, DoImagePickerControllerDelegate, UIPopoverPresentationControllerDelegate, UIDocumentInteractionControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) GuaranteeSlipModel *model;
 @property (nonatomic, strong) NSArray *propertyList;
@@ -54,8 +54,6 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self updateFooterView];
 }
 
 - (instancetype)initWithModel:(GuaranteeSlipModel *)model
@@ -63,16 +61,23 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     self = [super init];
     if (self) {
         self.model = [[DataManager sharedManager] getModelWithId:model.guaranteeSlipModelId needImages:NO];
+        
+        UIImage *defaultImage = [UIImage imageNamed:@"default_avatar"];
+        for (NSString *imageName in self.model.imageNames) {
+            [self.model.imageArray addObject:defaultImage];
+        }
+        [self updateFooterView];
+        
         NSInteger item = 0;
         for (;item < self.model.imageNames.count; item++) {
-            [self.model.imageArray addObject:[UIImage imageNamed:@"default_avatar"]];
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                 UIImage *image = [[DataManager sharedManager] getImage:self.model.imageNames[item]];
+                UIImage *resizeImage = [image newImageWithResize:CGSizeMake(100, 100)];
                 
-                if (image) {
-                    [self.model.imageArray replaceObjectAtIndex:item withObject:image];
+                if (resizeImage) {
+                    [self.model.imageArray replaceObjectAtIndex:item withObject:resizeImage];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.imageFooterView updateImageAtItem:item];
+                        [self.imageFooterView updateImage:resizeImage AtItem:item];
                     });
                 }
             });
@@ -256,6 +261,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 - (void)updateFooterView
 {
     [self.imageFooterView setImageArray:self.model.imageArray];
+    [self.imageFooterView setImageNames:self.model.imageNames];
     CGRect rect = self.imageFooterView.frame;
     rect.size.height = [ImageFooterView heightWithImageArray:self.model.imageArray];
     self.imageFooterView.frame = rect;
@@ -465,25 +471,52 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     NSInteger selectCellAction = [[dic valueForKey:EDITGUARANTEESLIPLIST_SELECT_CELL_ACTION] integerValue];
     
     if (selectCellAction == SelectCellActionAddPicture) {
-        if (self.model.imageArray.count >= 9) {
-            [TipView show:@"最多添加9张照片"];
+        if (self.model.imageArray.count >= 100) {
+            [TipView show:@"最多添加100张照片"];
             return;
         }
         
-        DoImagePickerController *doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
-        doImagePickerController.nColumnCount = 3;
-        doImagePickerController.nMaxCount = 9 - self.model.imageArray.count;
-        doImagePickerController.delegate = self;
-        [self.navigationController pushViewController:doImagePickerController animated:YES];
+        if (self.model.imageArray.count - self.model.imageNames.count >= 20) {
+            [TipView show:@"一次最多添加20张照片"];
+            return;
+        }
+        
+        WS(weakSelf);
+        UIAlertController *alterController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *photoLibraryAction = [UIAlertAction actionWithTitle:@"相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+             DoImagePickerController *doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
+            doImagePickerController.nColumnCount = 3;
+            NSInteger canAddCount = 100 - weakSelf.model.imageArray.count;
+            doImagePickerController.nMaxCount = canAddCount > 20 ? 20 : canAddCount;
+            doImagePickerController.delegate = weakSelf;
+            [weakSelf.navigationController pushViewController:doImagePickerController animated:YES];
+        }];
+        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+            imagePickerController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+            imagePickerController.delegate = weakSelf;
+            imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [weakSelf presentViewController:imagePickerController animated:YES completion:nil];
+        }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [alterController dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alterController addAction:photoLibraryAction];
+        [alterController addAction:cameraAction];
+        [alterController addAction:cancelAction];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentViewController:alterController animated:YES completion:nil];
+        });
     }
     else if (selectCellAction == SelectCellActionForceInsurance)
     {
+        WS(weakSelf);
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"交强险" message:nil preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *alertActionYes = [UIAlertAction actionWithTitle:@"是" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self updateForceInsurance:YES];
+            [weakSelf updateForceInsurance:YES];
         }];
         UIAlertAction *alertActionNo = [UIAlertAction actionWithTitle:@"否" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self updateForceInsurance:NO];
+            [weakSelf updateForceInsurance:NO];
         }];
         [alertController addAction:alertActionYes];
         [alertController addAction:alertActionNo];
@@ -521,6 +554,20 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     return self.view.frame;
 }
 
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    [self.model.imageArray addObject:orgImage];
+    [self updateFooterView];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - UIPopoverPresentationControllerDelegate
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
 {
@@ -543,7 +590,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 {
     [self.model.imageArray addObjectsFromArray:aSelected];
     [picker.navigationController popViewControllerAnimated:YES];
-    [self.tableView reloadData];
+    [self updateFooterView];
 }
 
 #pragma mark - get

@@ -62,6 +62,11 @@
     return NO;
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"[name = %@, carId = %@, insuranceAgent = %@", self.name, self.carId, self.insuranceAgent];
+}
+
 - (void)dealloc
 {
     

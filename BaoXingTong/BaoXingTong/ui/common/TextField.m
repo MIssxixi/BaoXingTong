@@ -14,12 +14,12 @@
 
 @implementation TextField
 
-- (CGRect)textRectForBounds:(CGRect)bounds {
-    return UIEdgeInsetsInsetRect([super textRectForBounds:bounds], self.textInsets);
-}
-
-- (CGRect)editingRectForBounds:(CGRect)bounds {
-    return UIEdgeInsetsInsetRect([super editingRectForBounds:bounds], self.textInsets);
-}
+//- (CGRect)textRectForBounds:(CGRect)bounds {
+//    return UIEdgeInsetsInsetRect([super textRectForBounds:bounds], self.textInsets);
+//}
+//
+//- (CGRect)editingRectForBounds:(CGRect)bounds {
+//    return UIEdgeInsetsInsetRect([super editingRectForBounds:bounds], self.textInsets);
+//}
 
 @end

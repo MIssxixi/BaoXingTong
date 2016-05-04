@@ -12,8 +12,9 @@
 
 @property (nonatomic, copy) void (^didDeleteAction)(NSInteger index);
 
-- (void)setImageArray:(NSArray <UIImage *> *)imageArray;
-- (void)updateImageAtItem:(NSInteger)item;
+- (void)setImageNames:(NSMutableArray <NSString *> *)imageNames;        //用于取本地图片，需要随时维护，编辑保单时可能会删除一些图片
+- (void)setImageArray:(NSMutableArray <UIImage *> *)imageArray;
+- (void)updateImage:(UIImage *)image AtItem:(NSInteger)item;
 
 + (CGFloat)heightWithImageArray:(NSArray <UIImage *> *)imageArray;
 

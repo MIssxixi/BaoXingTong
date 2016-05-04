@@ -9,6 +9,7 @@
 #import "ImageFooterView.h"
 #import "ImageCollectionViewCell.h"
 #import "MWPhotoBrowser.h"
+#import "DataManager.h"
 
 #define IMAGECOLLECTIONVIEWCELL_IDENTIFIER @"IMAGECOLLECTIONVIEWCELL"
 
@@ -17,7 +18,8 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
 
 @interface ImageFooterView () <UICollectionViewDataSource, UICollectionViewDelegate, MWPhotoBrowserDelegate>
 
-@property (nonatomic, strong) NSArray <UIImage *> * imageArray;
+@property (nonatomic, strong) NSMutableArray <NSString *> *imageNames;
+@property (nonatomic, strong) NSMutableArray <UIImage *> *imageArray;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
 @end
@@ -84,7 +86,15 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
 - (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index
 {
     if (index < self.imageArray.count) {
-        MWPhoto *photo = [MWPhoto photoWithImage:self.imageArray[index]];
+        UIImage *image;
+        if (index < self.imageNames.count) {
+            image = [[DataManager sharedManager] getImage:self.imageNames[index]];
+        }
+        else
+        {
+            image = self.imageArray[index];
+        }
+        MWPhoto *photo = [MWPhoto photoWithImage:image];
         return photo;
     }
     return nil;
@@ -110,14 +120,20 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
     return _collectionView;
 }
 
-- (void)setImageArray:(NSArray<UIImage *> *)imageArray
+- (void)setImageNames:(NSMutableArray<NSString *> *)imageNames
+{
+    _imageNames = imageNames;
+}
+
+- (void)setImageArray:(NSMutableArray <UIImage *> *)imageArray
 {
     _imageArray = imageArray;
     [self.collectionView reloadData];
 }
 
-- (void)updateImageAtItem:(NSInteger)item
+- (void)updateImage:(UIImage *)image AtItem:(NSInteger)item
 {
+    [self.imageArray replaceObjectAtIndex:item withObject:image];
     [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:item inSection:0]]];
 }
 
