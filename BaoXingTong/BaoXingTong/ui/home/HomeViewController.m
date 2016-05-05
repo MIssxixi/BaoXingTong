@@ -352,7 +352,7 @@ static HomeViewController *sharedInstance = nil;
 {
     [self.filteredArray removeAllObjects];
     NSString *keyString = searchController.searchBar.text;
-    NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS %@ or carId contains %@ or insuranceAgent contains %@", keyString, keyString, keyString];
+    NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@ or carId contains[c] %@ or insuranceAgent contains[c] %@", keyString, keyString, keyString];
     [self.filteredArray addObjectsFromArray:[self.modelArray filteredArrayUsingPredicate:searchPredicate]];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];

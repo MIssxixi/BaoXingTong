@@ -19,7 +19,7 @@
 
 #import "ForgetPasswordGetVerificationCodeViewController.h"
 
-@interface LoginViewController ()
+@interface LoginViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) TextField *nameField;
@@ -34,7 +34,12 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    self.navigationController.navigationBarHidden = YES;
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
 - (void)viewDidLoad {
@@ -42,6 +47,8 @@
     
     [self configUI];
 }
+
+
 
 - (void)configUI
 {
@@ -53,14 +60,14 @@
     [self.imageView autoSetDimensionsToSize:CGSizeMake(120, 120)];
     
     [self.view addSubview:self.nameField];
-    [self.nameField autoAlignAxisToSuperviewAxis:ALAxisVertical];
+//    [self.nameField autoAlignAxisToSuperviewAxis:ALAxisVertical];
     [self.nameField autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.imageView withOffset:48];
     [self.nameField autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:15];
     [self.nameField autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:15];
     [self.nameField autoSetDimension:ALDimensionHeight toSize:44];
     
     [self.view addSubview:self.passwordField];
-    [self.passwordField autoAlignAxisToSuperviewAxis:ALAxisVertical];
+//    [self.passwordField autoAlignAxisToSuperviewAxis:ALAxisVertical];
     [self.passwordField autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.nameField];
     [self.passwordField autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self.nameField];
     [self.passwordField autoPinEdge:ALEdgeTrailing toEdge:ALEdgeTrailing ofView:self.nameField];
@@ -104,9 +111,6 @@
 
 - (void)registerAccount
 {
-//    RegisterViewController *vc = [[RegisterViewController alloc] initWithPhoneNumber:@"13387596279"];
-//    self.navigationController.navigationBarHidden = NO;
-//    [self.navigationController pushViewController:vc animated:YES];
     GetVerificationCodeViewController *registerViewController = [[GetVerificationCodeViewController alloc] init];
     [self.navigationController pushViewController:registerViewController animated:YES];
 }
@@ -128,6 +132,19 @@
     return label;
 }
 
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    [self login];
+    return YES;
+}
+
 #pragma mark - get
 - (UIImageView *)imageView
 {
@@ -144,10 +161,14 @@
         _nameField = [TextField newAutoLayoutView];
         _nameField.textInsets = UIEdgeInsetsMake(10, 0, 10, 0);
         _nameField.backgroundColor = [UIColor whiteColor];
-        _nameField.layer.borderColor = [UIColor colorWithHexString:@"dddddd"].CGColor;
-        _nameField.layer.borderWidth = 0.5;
+        _nameField.font = FONT(15);
+        _nameField.delegate = self;
         _nameField.leftView = [self leftLabel:@"用户名"];
         _nameField.leftViewMode = UITextFieldViewModeAlways;
+        _nameField.keyboardType = UIKeyboardTypeAlphabet;
+        _nameField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _nameField.layer.borderColor = [UIColor colorWithHexString:@"dddddd"].CGColor;
+        _nameField.layer.borderWidth = 0.5;
     }
     return _nameField;
 }
@@ -158,10 +179,14 @@
         _passwordField = [TextField newAutoLayoutView];
         _passwordField.textInsets = UIEdgeInsetsMake(10, 0, 10, 0);
         _passwordField.backgroundColor = [UIColor whiteColor];
-        _passwordField.layer.borderColor = [UIColor colorWithHexString:@"dddddd"].CGColor;
-        _passwordField.layer.borderWidth = 0.5;
+        _passwordField.font = FONT(15);
+        _passwordField.delegate = self;
         _passwordField.leftView = [self leftLabel:@"密    码"];
         _passwordField.leftViewMode = UITextFieldViewModeAlways;
+        _passwordField.keyboardType = UIKeyboardTypeAlphabet;
+        _passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _passwordField.layer.borderColor = [UIColor colorWithHexString:@"dddddd"].CGColor;
+        _passwordField.layer.borderWidth = 0.5;
     }
     return _passwordField;
 }
@@ -201,6 +226,11 @@
         [_forgetButton addTarget:self action:@selector(forgetPassword) forControlEvents:UIControlEventTouchUpInside];
     }
     return _forgetButton;
+}
+
+- (void)dealloc
+{
+    
 }
 
 @end

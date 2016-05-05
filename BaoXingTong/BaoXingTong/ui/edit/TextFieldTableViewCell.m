@@ -117,7 +117,7 @@
 {
     if (!_rightTextField) {
         _rightTextField = [TextField newAutoLayoutView];
-        _rightTextField.textInsets = UIEdgeInsetsMake(10, 0, 10, 0);
+//        _rightTextField.textInsets = UIEdgeInsetsMake(10, 0, 10, 0);
         _rightTextField.font = FONT(15);
         _rightTextField.textColor = COLOR_FROM_RGB(33, 33, 33, 1);
         _rightTextField.delegate = self;

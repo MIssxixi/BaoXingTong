@@ -71,10 +71,14 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         NSInteger item = 0;
         for (;item < self.model.imageNames.count; item++) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                //进入后，快速退出该界面，如何停止这些线程？？
+                if ([self isMovingToParentViewController]) {
+                    return ;
+                }
                 UIImage *image = [[DataManager sharedManager] getImage:self.model.imageNames[item]];
                 UIImage *resizeImage = [image newImageWithResize:CGSizeMake(100, 100)];
                 
-                if (resizeImage) {
+                if (resizeImage && item < self.model.imageArray.count) {
                     [self.model.imageArray replaceObjectAtIndex:item withObject:resizeImage];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self.imageFooterView updateImage:resizeImage AtItem:item];
@@ -153,6 +157,23 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     [self presentViewController:popoverController animated:YES completion:nil];
 }
 
+- (BOOL)checkModelIsTrue
+{
+    NSPredicate *predicate;
+    BOOL result = YES;
+    
+    {
+//        predicate = [NSPredicate predicateWithFormat:@"^[1][3-8]\\d{9}$"];
+//        result = [predicate evaluateWithObject:self.model.phone];
+//        if (!result) {
+//            [TipView show:@"手机号格式不正确"];
+//            return result;
+//        }
+    }
+    
+    return result;
+}
+
 - (void)restoreData
 {
     [self.tableView endEditing:YES];
@@ -161,6 +182,11 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         [TipView show:@"姓名不能为空"];
         return;
     }
+    
+    if (![self checkModelIsTrue]) {
+        return;
+    }
+    
     if (self.model.isNeedRemind) {
         if (0 == self.model.remindDate.length) {
             [TipView show:@"到期提醒日期为空"];

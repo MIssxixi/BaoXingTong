@@ -133,8 +133,10 @@ const CGFloat collectionViewCellminimumLineSpacing = 10;
 
 - (void)updateImage:(UIImage *)image AtItem:(NSInteger)item
 {
-    [self.imageArray replaceObjectAtIndex:item withObject:image];
-    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:item inSection:0]]];
+    if (item < self.imageArray.count) {
+        [self.imageArray replaceObjectAtIndex:item withObject:image];
+        [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:item inSection:0]]];
+    }
 }
 
 #pragma mark - static methods

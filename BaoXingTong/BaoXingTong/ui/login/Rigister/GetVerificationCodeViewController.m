@@ -21,10 +21,17 @@
 
 @implementation GetVerificationCodeViewController
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+//    [self.navigationController setNavigationBarHidden:NO];    //会导致UITextField显示出错，原因不明！！！
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationController.navigationBarHidden = NO;
     self.title = @"验证手机号码";
     [self configUI];
     
@@ -43,7 +50,7 @@
     [self.phoneField autoSetDimension:ALDimensionHeight toSize:44];
     
     [self.view addSubview:self.registerButton];
-    [self.registerButton autoAlignAxisToSuperviewAxis:ALAxisVertical];
+//    [self.registerButton autoAlignAxisToSuperviewAxis:ALAxisVertical];
     [self.registerButton autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:15];
     [self.registerButton autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:15];
     [self.registerButton autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.phoneField withOffset:20];
@@ -96,6 +103,11 @@
         [_registerButton addTarget:self action:@selector(nextAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _registerButton;
+}
+
+- (void)dealloc
+{
+    
 }
 
 @end
