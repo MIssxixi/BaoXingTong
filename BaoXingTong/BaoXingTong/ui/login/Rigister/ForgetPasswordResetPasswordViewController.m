@@ -133,6 +133,7 @@
         _newlyPassWordTextField.backgroundColor = [UIColor whiteColor];
         _newlyPassWordTextField.leftView = [self leftLabel:@"新密码"];
         _newlyPassWordTextField.leftViewMode = UITextFieldViewModeAlways;
+        _newlyPassWordTextField.secureTextEntry = YES;
     }
     return _newlyPassWordTextField;
 }
@@ -147,6 +148,7 @@
         _confirmPassWordTextField.backgroundColor = [UIColor whiteColor];
         _confirmPassWordTextField.leftView = [self leftLabel:@"确认密码"];
         _confirmPassWordTextField.leftViewMode = UITextFieldViewModeAlways;
+        _confirmPassWordTextField.secureTextEntry = YES;
     }
     return _confirmPassWordTextField;
 }

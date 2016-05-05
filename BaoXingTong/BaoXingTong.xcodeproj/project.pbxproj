@@ -60,6 +60,8 @@
 		1FDB1F641CCF3BBA0018AB19 /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB1F631CCF3BBA0018AB19 /* VerificationViewController.m */; };
 		1FDB472F1CCE1321000C31B7 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB472E1CCE1321000C31B7 /* LoginViewController.m */; };
 		1FDB47321CCE3807000C31B7 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB47311CCE3807000C31B7 /* UserModel.m */; };
+		1FDB8E891CDB211500256139 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB8E881CDB211500256139 /* LoadingView.m */; };
+		1FDB8E8C1CDB251400256139 /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDB8E8B1CDB251400256139 /* NSString+Utils.m */; };
 		1FDBD21B1CD19F0B0045DE01 /* PdfManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDBD21A1CD19F0B0045DE01 /* PdfManager.m */; };
 		1FDBD21E1CD1E9D50045DE01 /* AlterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDBD21D1CD1E9D50045DE01 /* AlterView.m */; };
 		1FDE4DA51CB7985800DAC317 /* TipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FDE4DA41CB7985800DAC317 /* TipView.m */; };
@@ -179,6 +181,10 @@
 		1FDB472E1CCE1321000C31B7 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		1FDB47301CCE3807000C31B7 /* UserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserModel.h; sourceTree = "<group>"; };
 		1FDB47311CCE3807000C31B7 /* UserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserModel.m; sourceTree = "<group>"; };
+		1FDB8E871CDB211500256139 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
+		1FDB8E881CDB211500256139 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
+		1FDB8E8A1CDB251400256139 /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utils.h"; sourceTree = "<group>"; };
+		1FDB8E8B1CDB251400256139 /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utils.m"; sourceTree = "<group>"; };
 		1FDBD2191CD19F0B0045DE01 /* PdfManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PdfManager.h; sourceTree = "<group>"; };
 		1FDBD21A1CD19F0B0045DE01 /* PdfManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PdfManager.m; sourceTree = "<group>"; };
 		1FDBD21C1CD1E9D50045DE01 /* AlterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlterView.h; sourceTree = "<group>"; };
@@ -318,6 +324,8 @@
 				1FD1AB631C9C034F0057710B /* UIViewController+Utils.m */,
 				1FD95B5C1CD9E99A008362A7 /* UIImage+Utils.h */,
 				1FD95B5D1CD9E99A008362A7 /* UIImage+Utils.m */,
+				1FDB8E8A1CDB251400256139 /* NSString+Utils.h */,
+				1FDB8E8B1CDB251400256139 /* NSString+Utils.m */,
 			);
 			path = category;
 			sourceTree = "<group>";
@@ -483,6 +491,8 @@
 			children = (
 				1FDE4DA31CB7985800DAC317 /* TipView.h */,
 				1FDE4DA41CB7985800DAC317 /* TipView.m */,
+				1FDB8E871CDB211500256139 /* LoadingView.h */,
+				1FDB8E881CDB211500256139 /* LoadingView.m */,
 				1FD3F97B1CB8FF5C0050349C /* PopoverController.h */,
 				1FD3F97C1CB8FF5C0050349C /* PopoverController.m */,
 				1FDB1F5F1CCF36740018AB19 /* TextField.h */,
@@ -704,6 +714,7 @@
 				1FE0F8AF1CC08681000A0D74 /* DataServiceManager.m in Sources */,
 				1F5262851CCF8691006821D9 /* ForgetPasswordGetVerificationCodeViewController.m in Sources */,
 				1FDBD21E1CD1E9D50045DE01 /* AlterView.m in Sources */,
+				1FDB8E8C1CDB251400256139 /* NSString+Utils.m in Sources */,
 				1F52627F1CCF6041006821D9 /* AccountViewController.m in Sources */,
 				1FD3F97D1CB8FF5C0050349C /* PopoverController.m in Sources */,
 				1FB2FA781CB516D5002CB0FA /* DataManager.m in Sources */,
@@ -715,6 +726,7 @@
 				1FDB1F5E1CCF0CBA0018AB19 /* GetVerificationCodeViewController.m in Sources */,
 				1FD4F6011C75F53B00012DCD /* AppDelegate.m in Sources */,
 				1FD95B5E1CD9E99A008362A7 /* UIImage+Utils.m in Sources */,
+				1FDB8E891CDB211500256139 /* LoadingView.m in Sources */,
 				1FB2FA741CB5127F002CB0FA /* HomeViewController.m in Sources */,
 				1FD61F8E1C9ABA6200F40906 /* ImageCollectionViewCell.m in Sources */,
 				1FDB47321CCE3807000C31B7 /* UserModel.m in Sources */,

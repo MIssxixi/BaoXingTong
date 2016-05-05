@@ -182,6 +182,7 @@
         _passwordField.font = FONT(15);
         _passwordField.delegate = self;
         _passwordField.leftView = [self leftLabel:@"密    码"];
+        _passwordField.secureTextEntry = YES;
         _passwordField.leftViewMode = UITextFieldViewModeAlways;
         _passwordField.keyboardType = UIKeyboardTypeAlphabet;
         _passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;

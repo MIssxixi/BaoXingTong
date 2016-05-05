@@ -12,5 +12,6 @@
 #import "UIColor+WithString.h"
 #import "UIViewController+Utils.h"
 #import "UIImage+Utils.h"
+#import "NSString+Utils.h"
 
 #endif /* CommonCategory_h */

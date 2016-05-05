@@ -98,7 +98,7 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     if (self.keyBoardDidEndEditing && (self.cellStyle == TextFieldTableViewCellKeyBoard || self.cellStyle == TextFieldTableViewCellDatePicker)) {
-        self.keyBoardDidEndEditing(textField.text);
+        self.keyBoardDidEndEditing([textField.text trim]);
     }
 }
 

@@ -59,8 +59,10 @@
 
 - (void)nextAction
 {
+    [LoadingView showMessage:@"正在验证短信" toView:self.view];
     WS(weakSelf)
     [SMSSDK commitVerificationCode:self.verificationCodeTextField.text phoneNumber:self.phoneNumber zone:@"86" result:^(NSError *error) {
+        [LoadingView hide];
         if (error) {
             [TipView show:[error.userInfo valueForKey:@"commitVerificationCode"]];
         }

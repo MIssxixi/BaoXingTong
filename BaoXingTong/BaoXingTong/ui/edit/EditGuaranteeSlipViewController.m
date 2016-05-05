@@ -159,18 +159,45 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 - (BOOL)checkModelIsTrue
 {
-    NSPredicate *predicate;
     BOOL result = YES;
     
-    {
-//        predicate = [NSPredicate predicateWithFormat:@"^[1][3-8]\\d{9}$"];
-//        result = [predicate evaluateWithObject:self.model.phone];
-//        if (!result) {
-//            [TipView show:@"手机号格式不正确"];
-//            return result;
-//        }
+    if (self.model.IDcard.length) {
+        {
+            result = [self.model.IDcard isUserIdCard];
+            if (!result) {
+                [TipView show:@"身份证格式不正确"];
+                return result;
+            }
+        }
     }
     
+    if (self.model.phone.length) {
+        {
+            result = [self.model.phone isPhoneNumber];
+            if (!result) {
+                [TipView show:@"手机号格式不正确"];
+                return result;
+            }
+        }
+    }
+    
+    if (self.model.carId.length) {
+        {
+            result = [self.model.carId isCarId];
+            if (!result) {
+                [TipView show:@"车牌号格式不正确"];
+                return result;
+            }
+        }
+    }
+    
+    if (self.model.remindDate.length) {
+        result = [self.model.remindDate isDate];
+        if (!result) {
+            [TipView show:@"日期格式不正确"];
+            return result;
+        }
+    }
     return result;
 }
 
@@ -192,22 +219,24 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
             [TipView show:@"到期提醒日期为空"];
             return;
         }
-        
-        if (self.model.remindDate.length < 19) {
-            self.model.remindDate = [self.model.remindDate stringByAppendingString:@" 10:00:00"];   //这个地方需要改进
-        }
-        
+
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        formatter.dateFormat = @"yyyy-MM-dd";
         NSTimeInterval currentSec = [[NSDate date] timeIntervalSince1970];
         NSTimeInterval remindSec = [[formatter dateFromString:self.model.remindDate] timeIntervalSince1970];
+        if (remindSec <= 0) {
+            [TipView show:@"日期格式不正确"];
+            return;
+        }
         if (remindSec <= currentSec && remindSec > 0) {
             [TipView show:@"到期提醒日期已过期"];
             return;
         }
         
 //        [[DataManager sharedManager] addLocalNotifaction:self.model.guaranteeSlipModelId fireDate:[formatter dateFromString:self.model.remindDate]];
-        [[DataManager sharedManager] addLocalNotifaction:self.model.guaranteeSlipModelId fireDate:[formatter dateFromString:self.model.remindDate]];
+        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        NSString *remindDateString = [self.model.remindDate stringByAppendingString:@" 10:00:00"];
+        [[DataManager sharedManager] addLocalNotifaction:self.model.guaranteeSlipModelId fireDate:[formatter dateFromString:remindDateString]];
     }
     else
     {
@@ -455,8 +484,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         
         return cell;
     }
-    else
-        if ([cellClass isEqualToString:NSStringFromClass([UITableViewCell class])])
+    else if ([cellClass isEqualToString:NSStringFromClass([UITableViewCell class])])
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:UITABLEVIEWCELLIDENTIFIER forIndexPath:indexPath];
         cell.textLabel.font = FONT(15);
@@ -481,7 +509,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         
         return cell;
     }
-    return nil;
+    return [tableView dequeueReusableCellWithIdentifier:UITABLEVIEWCELLIDENTIFIER forIndexPath:indexPath];
 }
 
 #pragma mark - UITableViewDelegate

@@ -23,6 +23,7 @@
 #import "style.h"
 #import "CommonCategory.h"
 #import "TipView.h"
+#import "LoadingView.h"
 #import "AlterView.h"
 
 #import <PureLayout/PureLayout.h>
@@ -31,6 +32,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <MJRefresh/MJRefresh.h>
 #import <SMS_SDK/SMSSDK.h>
+#import <MBProgressHUD/MBProgressHUD.h>
 
 static BOOL isUsingService = NO;
 

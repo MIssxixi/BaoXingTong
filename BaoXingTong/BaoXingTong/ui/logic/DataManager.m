@@ -293,7 +293,7 @@ static DataManager *sharedDataManager = nil;
 
 - (void)addLocalNotifaction:(NSInteger)Id fireDate:(NSDate *)date
 {
-    if (![self.IdsArray containsObject:@(Id)]) {
+    if (![self.IdsArray containsObject:@(Id)] || !date) {
         return;         //为该Id的保单不存在
     }
     NSArray *array = [[UIApplication sharedApplication] scheduledLocalNotifications];

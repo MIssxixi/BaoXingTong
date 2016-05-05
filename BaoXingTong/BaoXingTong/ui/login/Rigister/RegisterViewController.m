@@ -157,6 +157,7 @@
         _passwordField.layer.borderWidth = 0.5;
         _passwordField.leftView = [self leftLabel:@"密    码"];
         _passwordField.leftViewMode = UITextFieldViewModeAlways;
+        _passwordField.secureTextEntry = YES;
     }
     return _passwordField;
 }

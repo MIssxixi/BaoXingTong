@@ -59,8 +59,10 @@
 
 - (void)nextAction
 {
+    [LoadingView showMessage:@"正在发送短信" toView:self.view];
     WS(weakSelf)
     [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:self.phoneField.text zone:@"86" customIdentifier:nil result:^(NSError *error) {
+        [LoadingView hide];
         if (error) {
             [TipView show:[error.userInfo valueForKey:@"getVerificationCode"]];
         }
