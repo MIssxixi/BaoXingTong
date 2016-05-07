@@ -12,6 +12,7 @@
 
 @property (nonatomic, assign) NSInteger guaranteeSlipModelId;
 @property (nonatomic, copy) NSString *avatar;
+@property (nonatomic, strong) UIImage *avatarImage;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *IDcard;
 @property (nonatomic, copy) NSString *phone;

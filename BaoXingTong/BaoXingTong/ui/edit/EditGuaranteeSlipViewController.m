@@ -8,6 +8,7 @@
 
 #import "EditGuaranteeSlipViewController.h"
 #import "SelectViewController.h"
+#import "InterceptImageViewController.h"
 #import "PopoverController.h"
 #import "GuaranteeSlipModel.h"
 #import <DoImagePickerController/DoImagePickerController.h>
@@ -61,9 +62,18 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     self = [super init];
     if (self) {
         self.model = [[DataManager sharedManager] getModelWithId:model.guaranteeSlipModelId needImages:NO];
+        self.model.avatarImage = model.avatarImage;
+        
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+//            self.model.avatarImage = [[DataManager sharedManager] getImage:self.model.avatar];
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [self updateAvatar:self.model.avatarImage];
+//            });
+//        });
         
         UIImage *defaultImage = [UIImage imageNamed:@"default_avatar"];
-        for (NSString *imageName in self.model.imageNames) {
+        NSInteger count = 0;
+        for (;count < self.model.imageNames.count; count++) {
             [self.model.imageArray addObject:defaultImage];
         }
         [self updateFooterView];
@@ -76,7 +86,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
                     return ;
                 }
                 UIImage *image = [[DataManager sharedManager] getImage:self.model.imageNames[item]];
-                UIImage *resizeImage = [image newImageWithResize:CGSizeMake(100, 100)];
+                UIImage *resizeImage = [image newImageWithResize:CGSizeMake(SCREEN_WIDTH / 3.0 - 25.0, 80)];
                 
                 if (resizeImage && item < self.model.imageArray.count) {
                     [self.model.imageArray replaceObjectAtIndex:item withObject:resizeImage];
@@ -263,8 +273,9 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         return;
     }
     
-    [[DataManager sharedManager] saveDataWithModel:self.model];
+    [[DataManager sharedManager] saveDataWithModel:self.model];     //要在回调之前，因为可能该保单是新建的，需要生成id
     if (self.didSave) {
+        [self.model.imageArray removeAllObjects];
         self.didSave(self.model);
     }
     
@@ -341,6 +352,48 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     }
 }
 
+- (void)tapAvatarButton
+{
+    UIAlertController *alterController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    WS(weakSelf);
+    UIAlertAction *photoAction = [UIAlertAction actionWithTitle:@"相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        DoImagePickerController *doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
+        doImagePickerController.view.tag = 1;
+        doImagePickerController.nColumnCount = 3;
+        doImagePickerController.nMaxCount = 1;
+        doImagePickerController.delegate = weakSelf;
+        [weakSelf.navigationController pushViewController:doImagePickerController animated:YES];
+    }];
+    
+    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.view.tag = 1;
+        imagePickerController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        imagePickerController.delegate = weakSelf;
+        imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [weakSelf presentViewController:imagePickerController animated:YES completion:nil];
+    }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [alterController dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [alterController addAction:photoAction];
+    [alterController addAction:cameraAction];
+    [alterController addAction:cancelAction];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:alterController animated:YES completion:nil];
+    });
+}
+
+- (void)updateAvatar:(UIImage *)image
+{
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+    [(UIButton *)cell.accessoryView setImage:image forState:UIControlStateNormal];
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -371,7 +424,10 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         TextFieldTableViewCell *cell = (TextFieldTableViewCell *)[tableView dequeueReusableCellWithIdentifier:TEXTFIELDTABLEVIEWCELLIDENTIFIER forIndexPath:indexPath];
         cell.accessoryView = nil;                       //出现数据混乱，提醒框会出现在其他cell中
         cell.rightTextField.text = nil;                 //出现数据混乱
+        
+        cell.rightTextField.placeholder = title;
        
+        //生成placeholder
         NSString *text = [NSString string];             //= [self.model valueForKey:cellId];
         if ([cellId isEqualToString:@"hasBoughtForceInsurance"]) {
             if (self.model.hasBoughtForceInsurance) {
@@ -413,6 +469,9 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
             cell.accessoryView.userInteractionEnabled = YES;
             [cell.accessoryView addGestureRecognizer:gesture];
             text = [self.model valueForKey:cellId];
+            if (!text.length) {
+                cell.rightTextField.placeholder = @"yyyy-MM-dd";
+            }
         }
         else
         {
@@ -424,9 +483,20 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         }
         
         cell.leftLabel.text = title;
-        cell.rightTextField.placeholder = title;
         cell.rightTextField.keyboardType = keyboardType;
         cell.cellStyle = cellType;
+        
+        //增加头像
+        if ([cellId isEqualToString:@"name"]) {
+            UIButton *avatarButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, AVATAR_SIZE.width, AVATAR_SIZE.height)];
+            avatarButton.layer.cornerRadius = AVATAR_SIZE.width / 2.0;
+            avatarButton.layer.masksToBounds = YES;
+            avatarButton.contentMode = UIViewContentModeScaleAspectFit;
+            [avatarButton setBackgroundImage:[UIImage imageNamed:@"default_avatar"] forState:UIControlStateNormal];
+            [avatarButton setImage:self.model.avatarImage forState:UIControlStateNormal];
+            [avatarButton addTarget:self action:@selector(tapAvatarButton) forControlEvents:UIControlEventTouchUpInside];
+            cell.accessoryView = avatarButton;
+        }
         
         WS(weakSelf)
         [cell setKeyBoardDidEndEditing:^(NSString *text) {
@@ -538,7 +608,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         WS(weakSelf);
         UIAlertController *alterController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *photoLibraryAction = [UIAlertAction actionWithTitle:@"相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-             DoImagePickerController *doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
+            DoImagePickerController *doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
             doImagePickerController.nColumnCount = 3;
             NSInteger canAddCount = 100 - weakSelf.model.imageArray.count;
             doImagePickerController.nMaxCount = canAddCount > 20 ? 20 : canAddCount;
@@ -611,8 +681,21 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
     [picker dismissViewControllerAnimated:YES completion:nil];
+    UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
+    if (1 == picker.view.tag) {
+        InterceptImageViewController *vc = [[InterceptImageViewController alloc] initWithImage:orgImage];
+        
+        [vc setDidSure:^(UIImage *image) {
+            self.model.avatarImage = image;
+            [self updateAvatar:image];
+            [self.navigationController popToViewController:self animated:YES];
+        }];
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    
     [self.model.imageArray addObject:orgImage];
     [self updateFooterView];
 }
@@ -642,8 +725,24 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 - (void)didSelectPhotosFromDoImagePickerController:(DoImagePickerController *)picker result:(NSArray *)aSelected
 {
+    if (picker.view.tag == 1) {
+        InterceptImageViewController *vc = [[InterceptImageViewController alloc] initWithImage:aSelected[0]];
+        [vc setDidCancel:^{
+            [picker readAlbumList:YES];
+        }];
+        
+        [vc setDidSure:^(UIImage *image) {
+            self.model.avatarImage = image;
+            [self updateAvatar:image];
+            [self.navigationController popToViewController:self animated:YES];
+        }];
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    
+    [picker.navigationController popViewControllerAnimated:NO];
     [self.model.imageArray addObjectsFromArray:aSelected];
-    [picker.navigationController popViewControllerAnimated:YES];
     [self updateFooterView];
 }
 

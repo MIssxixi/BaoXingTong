@@ -39,6 +39,14 @@
     return self;
 }
 
+- (void)setHidden:(BOOL)hidden
+{
+    [super setHidden:hidden];
+    
+    [self.leftButton setHidden:hidden];
+    [self.rightButton setHidden:hidden];
+}
+
 #pragma mark - get
 - (UIButton *)leftButton
 {

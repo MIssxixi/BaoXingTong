@@ -45,8 +45,9 @@
 		1FD61F8B1C9AB47500F40906 /* ImageFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD61F8A1C9AB47500F40906 /* ImageFooterView.m */; };
 		1FD61F8E1C9ABA6200F40906 /* ImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD61F8D1C9ABA6200F40906 /* ImageCollectionViewCell.m */; };
 		1FD95B5E1CD9E99A008362A7 /* UIImage+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD95B5D1CD9E99A008362A7 /* UIImage+Utils.m */; };
-		1FD95B651CD9FDF8008362A7 /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD95B631CD9FDF8008362A7 /* Icon-60@2x.png */; };
-		1FD95B661CD9FDF8008362A7 /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD95B641CD9FDF8008362A7 /* Icon-60@3x.png */; };
+		1FD9726F1CDD7F910086020F /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD9726D1CDD7F910086020F /* Icon-60@2x.png */; };
+		1FD972701CDD7F910086020F /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD9726E1CDD7F910086020F /* Icon-60@3x.png */; };
+		1FD9C2601CDC3F680046976B /* InterceptImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD9C25F1CDC3F680046976B /* InterceptImageViewController.m */; };
 		1FD9E5611CB754B300DEF124 /* HomeViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD9E5601CB754B300DEF124 /* HomeViewTableViewCell.m */; };
 		1FDB1EF41CCF00990018AB19 /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FDB1EF21CCF00990018AB19 /* MOBFoundation.framework */; };
 		1FDB1EF51CCF00990018AB19 /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FDB1EF31CCF00990018AB19 /* SMS_SDK.framework */; };
@@ -160,8 +161,10 @@
 		1FD61F8D1C9ABA6200F40906 /* ImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCollectionViewCell.m; sourceTree = "<group>"; };
 		1FD95B5C1CD9E99A008362A7 /* UIImage+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utils.h"; sourceTree = "<group>"; };
 		1FD95B5D1CD9E99A008362A7 /* UIImage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utils.m"; sourceTree = "<group>"; };
-		1FD95B631CD9FDF8008362A7 /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
-		1FD95B641CD9FDF8008362A7 /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@3x.png"; sourceTree = "<group>"; };
+		1FD9726D1CDD7F910086020F /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
+		1FD9726E1CDD7F910086020F /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@3x.png"; sourceTree = "<group>"; };
+		1FD9C25E1CDC3F680046976B /* InterceptImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptImageViewController.h; sourceTree = "<group>"; };
+		1FD9C25F1CDC3F680046976B /* InterceptImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptImageViewController.m; sourceTree = "<group>"; };
 		1FD9E55F1CB754B300DEF124 /* HomeViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewTableViewCell.h; sourceTree = "<group>"; };
 		1FD9E5601CB754B300DEF124 /* HomeViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewTableViewCell.m; sourceTree = "<group>"; };
 		1FDB1EF21CCF00990018AB19 /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
@@ -428,6 +431,8 @@
 				1FD61F8A1C9AB47500F40906 /* ImageFooterView.m */,
 				1FD61F8C1C9ABA6200F40906 /* ImageCollectionViewCell.h */,
 				1FD61F8D1C9ABA6200F40906 /* ImageCollectionViewCell.m */,
+				1FD9C25E1CDC3F680046976B /* InterceptImageViewController.h */,
+				1FD9C25F1CDC3F680046976B /* InterceptImageViewController.m */,
 				1F5080841C9FC9D800C9D28C /* Select */,
 			);
 			path = edit;
@@ -442,8 +447,8 @@
 				1FD1AB651C9C0CBE0057710B /* cell_cancle@2x.png */,
 				1FD5B57F1C9693E000C9E8CD /* cell_indicator@2x.png */,
 				1FD5F9E11CBB930000642D7C /* delete@2x.png */,
-				1FD95B631CD9FDF8008362A7 /* Icon-60@2x.png */,
-				1FD95B641CD9FDF8008362A7 /* Icon-60@3x.png */,
+				1FD9726D1CDD7F910086020F /* Icon-60@2x.png */,
+				1FD9726E1CDD7F910086020F /* Icon-60@3x.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -633,10 +638,10 @@
 				1FD4F6071C75F53B00012DCD /* Main.storyboard in Resources */,
 				1FD5F9DE1CBB92DC00642D7C /* check_gray@2x.png in Resources */,
 				1FD5F9E01CBB92F100642D7C /* uncheck_gray@2x.png in Resources */,
-				1FD95B661CD9FDF8008362A7 /* Icon-60@3x.png in Resources */,
+				1FD972701CDD7F910086020F /* Icon-60@3x.png in Resources */,
 				1FD5B57A1C96660800C9E8CD /* EditGuaranteeSlipList.plist in Resources */,
 				1F50808B1C9FD83A00C9D28C /* InsuranceAgentList.plist in Resources */,
-				1FD95B651CD9FDF8008362A7 /* Icon-60@2x.png in Resources */,
+				1FD9726F1CDD7F910086020F /* Icon-60@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -726,6 +731,7 @@
 				1FDB1F5E1CCF0CBA0018AB19 /* GetVerificationCodeViewController.m in Sources */,
 				1FD4F6011C75F53B00012DCD /* AppDelegate.m in Sources */,
 				1FD95B5E1CD9E99A008362A7 /* UIImage+Utils.m in Sources */,
+				1FD9C2601CDC3F680046976B /* InterceptImageViewController.m in Sources */,
 				1FDB8E891CDB211500256139 /* LoadingView.m in Sources */,
 				1FB2FA741CB5127F002CB0FA /* HomeViewController.m in Sources */,
 				1FD61F8E1C9ABA6200F40906 /* ImageCollectionViewCell.m in Sources */,

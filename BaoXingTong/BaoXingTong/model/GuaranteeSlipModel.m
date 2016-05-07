@@ -15,6 +15,7 @@
     return @{
              @"guaranteeSlipModelId":@"guaranteeSlipModelId",
              @"name":@"name",
+             @"avatarImage":@"avatarImage",
              @"IDcard":@"IDcard",
              @"phone":@"phone",
              @"carType":@"carType",

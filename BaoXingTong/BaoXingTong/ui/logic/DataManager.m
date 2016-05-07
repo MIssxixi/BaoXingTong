@@ -23,7 +23,7 @@ static NSString *const allIdsIdentifer = @"allIdsIdentifer";
 @property (nonatomic, strong) NSMutableArray *userIdsArray;
 @property (nonatomic, strong) NSMutableArray *notificationArray;
 @property (nonatomic, strong) NSMutableArray *needReadArray;
-@property (nonatomic, strong) NSMutableArray *IdsArray;         //保单id
+@property (nonatomic, strong) NSMutableArray *IdsArray;         //当前用户保单id
 
 @end
 
@@ -106,7 +106,7 @@ static DataManager *sharedDataManager = nil;
 - (id)getDataWithIdentifer:(NSString *)identifer
 {
     if (identifer.length) {
-        return [[NSUserDefaults standardUserDefaults] valueForKey:identifer];
+        return [[NSUserDefaults standardUserDefaults] objectForKey:identifer];      //之前写错了，写成valueForKey了,导致有时得不到对象
     }
     return nil;
 }
@@ -151,6 +151,7 @@ static DataManager *sharedDataManager = nil;
 - (void)logout
 {
     self.loginUserId = 0;
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     [self saveData:@(0) WithIdentifer:loginIdentifer];
 }
 
@@ -361,8 +362,6 @@ static DataManager *sharedDataManager = nil;
         GuaranteeSlipModel *model = [self getModelWithId:modelId needImages:NO];
         model.isNeedRemind = NO;
         [self saveDataWithModel:model];
-        
-        [UIApplication sharedApplication].applicationIconBadgeNumber = self.needReadArray.count;
     }
 }
 
@@ -371,8 +370,6 @@ static DataManager *sharedDataManager = nil;
     if ([self.needReadArray containsObject:@(modelId)]) {
         [self.needReadArray removeObject:@(modelId)];
         [self saveData:self.needReadArray WithIdentifer:allRemindGuaranteeSlipsIdentifer];
-        
-        [UIApplication sharedApplication].applicationIconBadgeNumber = self.needReadArray.count;
     }
 }
 
@@ -427,6 +424,16 @@ static DataManager *sharedDataManager = nil;
 //        [[NSFileManager defaultManager] removeItemAtPath:[[self imageFolder] stringByAppendingPathComponent:imageName] error:nil];
 //    }
     
+    model.avatar = [NSString stringWithFormat:@"%@-%ld-avatar.png", model.name, model.guaranteeSlipModelId];
+    NSString *avatarPath = [[self imageFolder] stringByAppendingPathComponent:model.avatar];
+    UIImage *avatarImage = model.avatarImage;
+    if (avatarImage) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [self saveImage:avatarImage filePath:avatarPath];
+        });
+    }
+//    model.avatarImage = nil;              //不改变传进来的model
+    
     NSInteger temp = model.imageNames.count;
     for (;temp < model.imageArray.count; temp++) {
         NSString *imageName = [NSString stringWithFormat:@"%@-%ld-%@.png", model.name, model.guaranteeSlipModelId, [[NSProcessInfo processInfo] globallyUniqueString]];
@@ -437,8 +444,11 @@ static DataManager *sharedDataManager = nil;
             [self saveImage:image filePath:imagePath];
         });
     }
-    [model.imageArray removeAllObjects];
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:model];
+//    [model.imageArray removeAllObjects];      ////不改变传进来的model
+    GuaranteeSlipModel *copyModel = [model copy];
+    copyModel.avatarImage = nil;
+    [copyModel.imageArray removeAllObjects];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:copyModel];
     [self saveData:data WithIdentifer:[self guaranteeSlipIdentifer:model.guaranteeSlipModelId]];
 }
 

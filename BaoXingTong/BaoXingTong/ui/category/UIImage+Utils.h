@@ -12,4 +12,6 @@
 
 - (UIImage *)newImageWithResize:(CGSize)resize;
 
+- (UIImage *)normalizedImage;       //让图片已正常的方向显示
+
 @end

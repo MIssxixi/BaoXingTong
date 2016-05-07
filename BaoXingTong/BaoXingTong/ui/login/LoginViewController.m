@@ -150,7 +150,7 @@
 {
     if (!_imageView) {
         _imageView = [UIImageView newAutoLayoutView];
-        _imageView.image = [UIImage imageNamed:@"default_avatar"];
+        _imageView.image = [UIImage imageNamed:@"Icon-60"];
     }
     return _imageView;
 }

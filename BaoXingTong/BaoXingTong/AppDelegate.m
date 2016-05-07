@@ -95,7 +95,7 @@
         GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue needImages:NO];
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
-        NSDate *remindDate = [formatter dateFromString:model.remindDate];
+        NSDate *remindDate = [formatter dateFromString:[model.remindDate stringByAppendingString:@" 10:00:00"]];
         if ([currentDate compare:remindDate] == NSOrderedDescending && model.isNeedRemind) {
             [[DataManager sharedManager] setNeedRead:model.guaranteeSlipModelId];
         }

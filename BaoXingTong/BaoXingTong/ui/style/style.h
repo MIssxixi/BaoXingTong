@@ -22,6 +22,8 @@
 #pragma mark - 通用边距
 #define PADDING_LR      20      //// 通用的左右边距
 
+#define AVATAR_SIZE   CGSizeMake(44, 44)
+
 #define MAIN_BACKGROUND_COLOR [UIColor colorWithHexString:@"f0f0f0"]
 #define MAIN_BLUE_COLOR [UIColor colorWithHexString:@"00ccff"]
 #define LINE_GRAY_COLOR [UIColor colorWithHexString:@"dddddd"].CGColor

@@ -186,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaoXingTong/ui/home/HomeViewController.m"
-            timestampString = "484041269.368568"
+            timestampString = "484295655.655381"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
             landmarkName = "-share"
             landmarkType = "5">
          </BreakpointContent>
@@ -202,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaoXingTong/ui/logic/DataManager.m"
-            timestampString = "483972473.56865"
+            timestampString = "484295655.655381"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
+            startingLineNumber = "392"
+            endingLineNumber = "392"
             landmarkName = "-getModelWithId:needImages:"
             landmarkType = "5">
          </BreakpointContent>
@@ -234,11 +234,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaoXingTong/ui/home/HomeViewController.m"
-            timestampString = "484041269.368568"
+            timestampString = "484295655.655381"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "546"
-            endingLineNumber = "546"
+            startingLineNumber = "582"
+            endingLineNumber = "582"
             landmarkName = "-dealloc"
             landmarkType = "5">
          </BreakpointContent>
@@ -249,13 +249,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BaoXingTong/ui/edit/ImageFooterView.m"
-            timestampString = "484044801.321673"
+            filePath = "BaoXingTong/ui/edit/EditGuaranteeSlipViewController.m"
+            timestampString = "484283133.437158"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
-            landmarkName = "-photoBrowser:photoAtIndex:"
+            startingLineNumber = "699"
+            endingLineNumber = "699"
+            landmarkName = "-imagePickerController:didFinishPickingMediaWithInfo:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -265,13 +265,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BaoXingTong/ui/edit/ImageFooterView.m"
-            timestampString = "484044803.945312"
+            filePath = "BaoXingTong/ui/home/HomeViewController.m"
+            timestampString = "484297079.969017"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
-            landmarkName = "-photoBrowser:photoAtIndex:"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
+            landmarkName = "-updateNeedReadNumber"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

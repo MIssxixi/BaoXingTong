@@ -111,12 +111,25 @@ static HomeViewController *sharedInstance = nil;
     
     [self.bottomButton autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
     self.bottomButtonHeight = [self.bottomButton autoSetDimension:ALDimensionHeight toSize:0];
+    [self.bottomButton setHidden:YES];
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     [self.searchController.searchBar sizeToFit];
     self.tableView.tableHeaderView = self.searchController.searchBar;
+    
+    NSInteger item = 0;
+    for (; item < self.modelArray.count; item++) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            self.modelArray[item].avatarImage = [[DataManager sharedManager] getImage:self.modelArray[item].avatar];
+            if (self.modelArray[item].avatarImage) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateAvatar:self.modelArray[item].avatarImage index:item];
+                });
+            }
+        });
+    }
     
     if (isUsingService) {
         [self.tableView.mj_header beginRefreshing];
@@ -126,15 +139,29 @@ static HomeViewController *sharedInstance = nil;
 - (void)updateBadgeView
 {
     if (!self.tableView.isEditing) {
-        self.needReadIdsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllRemindGuaranteeSlipIds]];
+        [self updateNeedReadNumber];
         [self.tableView reloadData];
     }
+}
+
+- (void)updateNeedReadNumber
+{
+    self.needReadIdsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllRemindGuaranteeSlipIds]];
+    NSInteger number = 0;
+    NSInteger count = 0;
+    for (; number < self.modelArray.count; number++) {
+        if ([self.needReadIdsArray containsObject:@(self.modelArray[number].guaranteeSlipModelId)]) {
+            count++;
+        }
+    }
+    [UIApplication sharedApplication].applicationIconBadgeNumber = count;
 }
 
 - (void)edit
 {
     [self.tableView setEditing:YES animated:YES];
     self.bottomButtonHeight.constant = BUTTON_HEIGHT;
+    [self.bottomButton setHidden:NO];
     self.tableView.tableHeaderView = nil;
     [self updateButtonsToMatchTableState];
 }
@@ -143,6 +170,7 @@ static HomeViewController *sharedInstance = nil;
 {
     [self.tableView setEditing:NO animated:YES];
     self.bottomButtonHeight.constant = 0;
+    [self.bottomButton setHidden:YES];
     self.tableView.tableHeaderView = self.searchController.searchBar;
     [self updateButtonsToMatchTableState];
 }
@@ -330,6 +358,12 @@ static HomeViewController *sharedInstance = nil;
     }
 }
 
+- (void)updateAvatar:(UIImage *)avatar index:(NSInteger)row
+{
+    HomeViewTableViewCell *cell = (HomeViewTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
+    [cell.imageView setImage:avatar];
+}
+
 #pragma mark - 下拉刷新
 - (void)onRefresh
 {
@@ -418,6 +452,7 @@ static HomeViewController *sharedInstance = nil;
                 selecteModel.name = model.name;
                 selecteModel.carId = model.carId;
                 selecteModel.insuranceAgent = model.insuranceAgent;
+                selecteModel.avatarImage = model.avatarImage;
                 [weakSelf.tableView reloadData];
             }];
             [editGuaranteeSlipViewController setDidDelete:^(GuaranteeSlipModel *model) {
@@ -426,6 +461,7 @@ static HomeViewController *sharedInstance = nil;
             }];
             [self.navigationController pushViewController:editGuaranteeSlipViewController animated:YES];
             [[DataManager sharedManager] resetNotNeedRead:selecteModel.guaranteeSlipModelId];
+            [self updateNeedReadNumber];
         }
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
