@@ -201,22 +201,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BaoXingTong/ui/logic/DataManager.m"
-            timestampString = "484295655.655381"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "392"
-            endingLineNumber = "392"
-            landmarkName = "-getModelWithId:needImages:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "BaoXingTong/ui/logic/PdfManager.m"
             timestampString = "483951093.470543"
             startingColumnNumber = "9223372036854775807"
@@ -234,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaoXingTong/ui/home/HomeViewController.m"
-            timestampString = "484295655.655381"
+            timestampString = "484300795.794598"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "582"
-            endingLineNumber = "582"
+            startingLineNumber = "584"
+            endingLineNumber = "584"
             landmarkName = "-dealloc"
             landmarkType = "5">
          </BreakpointContent>
@@ -249,13 +233,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BaoXingTong/ui/edit/EditGuaranteeSlipViewController.m"
-            timestampString = "484283133.437158"
+            filePath = "BaoXingTong/ui/logic/DataManager.m"
+            timestampString = "484297900.300595"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "699"
-            endingLineNumber = "699"
-            landmarkName = "-imagePickerController:didFinishPickingMediaWithInfo:"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
+            landmarkName = "-currentUser"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -265,13 +249,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BaoXingTong/ui/home/HomeViewController.m"
-            timestampString = "484297079.969017"
+            filePath = "BaoXingTong/ui/logic/DataManager.m"
+            timestampString = "484297905.1387"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
-            landmarkName = "-updateNeedReadNumber"
+            startingLineNumber = "185"
+            endingLineNumber = "185"
+            landmarkName = "-getAllUsers"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

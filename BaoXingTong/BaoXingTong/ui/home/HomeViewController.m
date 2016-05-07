@@ -276,6 +276,7 @@ static HomeViewController *sharedInstance = nil;
     [self.modelArray removeAllObjects];
     [self.tableView reloadData];
     [self updateButtonsToMatchTableState];
+    [self updateNeedReadNumber];
 }
 
 - (void)tapDeleteAllButton
@@ -302,6 +303,7 @@ static HomeViewController *sharedInstance = nil;
     [self.tableView deleteRowsAtIndexPaths:selectedIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
     
     [self updateButtonsToMatchTableState];
+    [self updateNeedReadNumber];
 }
 
 - (void)tapDeleteButton

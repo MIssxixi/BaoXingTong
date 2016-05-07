@@ -383,6 +383,9 @@ static DataManager *sharedDataManager = nil;
     if ([self.IdsArray containsObject:@(Id)]) {
 //        NSData *data = [self getDataWithIdentifer:@(Id).stringValue];
         NSData *data = [self getDataWithIdentifer:[self guaranteeSlipIdentifer:Id]];
+        if (!data) {
+            return nil;
+        }
         GuaranteeSlipModel *model = (GuaranteeSlipModel *)[NSKeyedUnarchiver unarchiveObjectWithData:data];
         
         if (needImages) {

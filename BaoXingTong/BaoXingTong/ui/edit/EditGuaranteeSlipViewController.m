@@ -278,19 +278,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         [self.model.imageArray removeAllObjects];
         self.didSave(self.model);
     }
-    
-    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-    localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:5];
-    localNotification.timeZone = [NSTimeZone defaultTimeZone];
-    localNotification.alertBody = @"你有保单快到期了！";
-    localNotification.applicationIconBadgeNumber = 2;
-    localNotification.soundName = UILocalNotificationDefaultSoundName;
-    localNotification.userInfo = @{kLocalNotificationKey: @(self.model.guaranteeSlipModelId)};
-    localNotification.category = kNotificationCategoryIdentifile;
-    
-//    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 
-    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
