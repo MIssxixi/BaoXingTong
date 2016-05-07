@@ -427,7 +427,7 @@ static DataManager *sharedDataManager = nil;
 //        [[NSFileManager defaultManager] removeItemAtPath:[[self imageFolder] stringByAppendingPathComponent:imageName] error:nil];
 //    }
     
-    model.avatar = [NSString stringWithFormat:@"%@-%ld-avatar.png", model.name, model.guaranteeSlipModelId];
+    model.avatar = [NSString stringWithFormat:@"%ld-avatar.png", model.guaranteeSlipModelId];
     NSString *avatarPath = [[self imageFolder] stringByAppendingPathComponent:model.avatar];
     UIImage *avatarImage = model.avatarImage;
     if (avatarImage) {
@@ -455,8 +455,9 @@ static DataManager *sharedDataManager = nil;
     [self saveData:data WithIdentifer:[self guaranteeSlipIdentifer:model.guaranteeSlipModelId]];
 }
 
-- (void)deleteDataWithId:(NSInteger)Id
+- (void)deleteDataWithModel:(GuaranteeSlipModel *)model
 {
+    NSInteger Id = model.guaranteeSlipModelId;
     if ([self.IdsArray containsObject:@(Id)]) {
         [self.IdsArray removeObject:@(Id)];
 //        [self deleteDataWithIdentifer:@(Id).stringValue];
@@ -465,6 +466,17 @@ static DataManager *sharedDataManager = nil;
         
         [self removeLocalNotifaction:Id];
         [self resetNotNeedRead:Id];
+    }
+    
+    if (model.avatar) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [self deleteImage:model.avatar];
+        });
+    }
+    for (NSString *imageName in model.imageNames) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [self deleteImage:imageName];
+        });
     }
 }
 

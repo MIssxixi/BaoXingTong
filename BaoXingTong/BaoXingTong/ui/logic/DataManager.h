@@ -37,7 +37,7 @@
 - (NSArray *)getAllIds;
 - (GuaranteeSlipModel *)getModelWithId:(NSInteger)Id needImages:(BOOL)needImages;
 - (void)saveDataWithModel:(GuaranteeSlipModel *)model;
-- (void)deleteDataWithId:(NSInteger)Id;
+- (void)deleteDataWithModel:(GuaranteeSlipModel *)model;
 
 - (UIImage *)getImage:(NSString *)imageName;
 - (BOOL)deleteImage:(NSString *)imageName;

@@ -133,6 +133,7 @@
     [self.popBackgroudView addGestureRecognizer: tapGesture];
     
     [self.popTextField becomeFirstResponder];
+    self.popTextField.text = nil;
     [self.popBackgroudView addSubview:self.popTextField];
     [self.popTextField autoCenterInSuperview];
     [self.popTextField autoSetDimensionsToSize:CGSizeMake(SCREEN_WIDTH - PADDING_LR * 2, TABLEVIEWCELL_HEIGHT_DEFAULT)];

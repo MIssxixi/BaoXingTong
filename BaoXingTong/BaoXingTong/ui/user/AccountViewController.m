@@ -46,6 +46,8 @@
     if (cell) {
         if (0 == indexPath.section) {
             [cell.imageView setImage:[UIImage imageNamed:@"default_avatar"]];
+            cell.imageView.layer.cornerRadius = 22;
+            cell.imageView.clipsToBounds = YES;
             cell.textLabel.text = [[DataManager sharedManager] currentUser].name;
         }
         else if (1 == indexPath.section)

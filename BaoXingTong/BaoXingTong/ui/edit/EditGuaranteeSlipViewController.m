@@ -286,7 +286,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 {
     [self.tableView endEditing:YES];
     
-    [[DataManager sharedManager] deleteDataWithId:self.model.guaranteeSlipModelId];
+    [[DataManager sharedManager] deleteDataWithModel:self.model];
     if (self.didDelete) {
         self.didDelete(self.model);
     }
@@ -464,6 +464,9 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         else
         {
             text = [self.model valueForKey:cellId];
+            if (!text.length && [cellId isEqualToString:@"boughtDate"]) {
+                cell.rightTextField.placeholder = @"yyyy-MM-dd";
+            }
         }
         
         if (text.length > 0) {

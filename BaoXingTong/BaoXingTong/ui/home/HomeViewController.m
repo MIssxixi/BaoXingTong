@@ -69,10 +69,20 @@ static HomeViewController *sharedInstance = nil;
         //每次退出账号然后登录，由于采用单例，所以需要改变之前数据
         [_modelArray removeAllObjects];
         _idsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllIds]];
+        NSInteger item = 0;
         for (NSNumber *number in self.idsArray) {
             GuaranteeSlipModel *model = [[DataManager sharedManager] getModelWithId:number.integerValue needImages:NO];
             if (model) {                                    //！！！为nil会崩溃
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                    model.avatarImage = [[DataManager sharedManager] getImage:model.avatar];
+                    if (model.avatarImage) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self updateAvatar:model.avatarImage index:item];
+                        });
+                    }
+                });
                 [_modelArray addObject:model];
+                item++;
             }
         }
         [self.tableView reloadData];
@@ -119,17 +129,17 @@ static HomeViewController *sharedInstance = nil;
     [self.searchController.searchBar sizeToFit];
     self.tableView.tableHeaderView = self.searchController.searchBar;
     
-    NSInteger item = 0;
-    for (; item < self.modelArray.count; item++) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            self.modelArray[item].avatarImage = [[DataManager sharedManager] getImage:self.modelArray[item].avatar];
-            if (self.modelArray[item].avatarImage) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateAvatar:self.modelArray[item].avatarImage index:item];
-                });
-            }
-        });
-    }
+//    NSInteger item = 0;
+//    for (; item < self.modelArray.count; item++) {
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+//            self.modelArray[item].avatarImage = [[DataManager sharedManager] getImage:self.modelArray[item].avatar];
+//            if (self.modelArray[item].avatarImage) {
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [self updateAvatar:self.modelArray[item].avatarImage index:item];
+//                });
+//            }
+//        });
+//    }
     
     if (isUsingService) {
         [self.tableView.mj_header beginRefreshing];
@@ -270,7 +280,7 @@ static HomeViewController *sharedInstance = nil;
     }
     
     for (GuaranteeSlipModel *model in self.modelArray) {
-        [[DataManager sharedManager] deleteDataWithId:model.guaranteeSlipModelId];
+        [[DataManager sharedManager] deleteDataWithModel:model];
     }
     
     [self.modelArray removeAllObjects];
@@ -295,7 +305,7 @@ static HomeViewController *sharedInstance = nil;
     NSMutableIndexSet *selectedIndexSet = [NSMutableIndexSet new];
     
     for (NSIndexPath *indexPath in selectedIndexPaths) {
-        [[DataManager sharedManager] deleteDataWithId:self.modelArray[indexPath.row].guaranteeSlipModelId];
+        [[DataManager sharedManager] deleteDataWithModel:self.modelArray[indexPath.row]];
         [selectedIndexSet addIndex:indexPath.row];
     }
     
