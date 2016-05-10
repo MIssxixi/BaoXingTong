@@ -8,6 +8,7 @@
 
 #import "HomeViewController.h"
 #import "HomeViewTableViewCell.h"
+#import "BlankHomeView.h"
 #import "DataManager.h"
 #import "HtmlManager.h"
 #import "DataServiceManager.h"
@@ -29,6 +30,8 @@ static HomeViewController *sharedInstance = nil;
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;
 @property (nonatomic, strong) HomeBottomButton *bottomButton;
 @property (nonatomic, strong) NSLayoutConstraint *bottomButtonHeight;
+
+@property (nonatomic, strong) BlankHomeView *blankHomeView;
 
 @property (nonatomic, strong) NSMutableArray *idsArray;
 @property (nonatomic, strong) NSMutableArray <GuaranteeSlipModel *> *modelArray;    //暂时不支持加载，直接一次性将数据获取完
@@ -116,12 +119,15 @@ static HomeViewController *sharedInstance = nil;
     
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.bottomButton];
+    [self.view addSubview:self.blankHomeView];
     [self.tableView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
     [self.tableView autoPinEdge:ALEdgeBottom toEdge:ALEdgeTop ofView:self.bottomButton];
     
     [self.bottomButton autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
     self.bottomButtonHeight = [self.bottomButton autoSetDimension:ALDimensionHeight toSize:0];
     [self.bottomButton setHidden:YES];
+    
+    [self.blankHomeView autoPinEdgesToSuperviewEdges];
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
@@ -169,6 +175,9 @@ static HomeViewController *sharedInstance = nil;
 
 - (void)edit
 {
+    if (!self.modelArray.count) {
+        return;
+    }
     [self.tableView setEditing:YES animated:YES];
     self.bottomButtonHeight.constant = BUTTON_HEIGHT;
     [self.bottomButton setHidden:NO];
@@ -293,6 +302,7 @@ static HomeViewController *sharedInstance = nil;
 {
     AlterView *alterView = [[AlterView alloc] initWithTitle:@"确认删除所有保单" message:nil sureAction:^{
         [self deleteAll];
+        [self cancel];
     } cancelAction:^{
         
     } owner:self];
@@ -416,6 +426,7 @@ static HomeViewController *sharedInstance = nil;
     if (self.searchController.active) {
         return self.filteredArray.count;
     }
+    self.blankHomeView.hidden = (BOOL)self.modelArray.count;
     return self.modelArray.count;
 }
 
@@ -530,6 +541,25 @@ static HomeViewController *sharedInstance = nil;
         [_bottomButton.rightButton addTarget:self action:@selector(tapDeleteButton) forControlEvents:UIControlEventTouchUpInside];
     }
     return _bottomButton;
+}
+
+- (BlankHomeView *)blankHomeView
+{
+    if (!_blankHomeView) {
+        _blankHomeView = [[BlankHomeView alloc] init];
+        WS(weakSelf);
+        [_blankHomeView setTapButton:^{
+            EditGuaranteeSlipViewController *editGuaranteeSlipViewController = [[EditGuaranteeSlipViewController alloc] init];
+            [editGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
+                if (model) {
+                    [weakSelf.modelArray addObject:model];
+                    [weakSelf.tableView reloadData];
+                }
+            }];
+            [weakSelf.navigationController pushViewController:editGuaranteeSlipViewController animated:YES];
+        }];
+    }
+    return _blankHomeView;
 }
 
 - (UITableView *)tableView

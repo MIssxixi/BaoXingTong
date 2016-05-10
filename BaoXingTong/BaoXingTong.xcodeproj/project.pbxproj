@@ -47,6 +47,7 @@
 		1FD95B5E1CD9E99A008362A7 /* UIImage+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD95B5D1CD9E99A008362A7 /* UIImage+Utils.m */; };
 		1FD9726F1CDD7F910086020F /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD9726D1CDD7F910086020F /* Icon-60@2x.png */; };
 		1FD972701CDD7F910086020F /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD9726E1CDD7F910086020F /* Icon-60@3x.png */; };
+		1FD972731CDDF2E30086020F /* BlankHomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD972721CDDF2E30086020F /* BlankHomeView.m */; };
 		1FD9C2601CDC3F680046976B /* InterceptImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD9C25F1CDC3F680046976B /* InterceptImageViewController.m */; };
 		1FD9E5611CB754B300DEF124 /* HomeViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD9E5601CB754B300DEF124 /* HomeViewTableViewCell.m */; };
 		1FDB1EF41CCF00990018AB19 /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FDB1EF21CCF00990018AB19 /* MOBFoundation.framework */; };
@@ -163,6 +164,8 @@
 		1FD95B5D1CD9E99A008362A7 /* UIImage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utils.m"; sourceTree = "<group>"; };
 		1FD9726D1CDD7F910086020F /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
 		1FD9726E1CDD7F910086020F /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@3x.png"; sourceTree = "<group>"; };
+		1FD972711CDDF2E30086020F /* BlankHomeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlankHomeView.h; sourceTree = "<group>"; };
+		1FD972721CDDF2E30086020F /* BlankHomeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlankHomeView.m; sourceTree = "<group>"; };
 		1FD9C25E1CDC3F680046976B /* InterceptImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptImageViewController.h; sourceTree = "<group>"; };
 		1FD9C25F1CDC3F680046976B /* InterceptImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptImageViewController.m; sourceTree = "<group>"; };
 		1FD9E55F1CB754B300DEF124 /* HomeViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewTableViewCell.h; sourceTree = "<group>"; };
@@ -277,6 +280,8 @@
 				1FD9E5601CB754B300DEF124 /* HomeViewTableViewCell.m */,
 				1FD5F9D81CBB4F9000642D7C /* HomeBottomButton.h */,
 				1FD5F9D91CBB4F9000642D7C /* HomeBottomButton.m */,
+				1FD972711CDDF2E30086020F /* BlankHomeView.h */,
+				1FD972721CDDF2E30086020F /* BlankHomeView.m */,
 			);
 			path = home;
 			sourceTree = "<group>";
@@ -736,6 +741,7 @@
 				1FB2FA741CB5127F002CB0FA /* HomeViewController.m in Sources */,
 				1FD61F8E1C9ABA6200F40906 /* ImageCollectionViewCell.m in Sources */,
 				1FDB47321CCE3807000C31B7 /* UserModel.m in Sources */,
+				1FD972731CDDF2E30086020F /* BlankHomeView.m in Sources */,
 				1FD4F5FE1C75F53B00012DCD /* main.m in Sources */,
 				1FD9E5611CB754B300DEF124 /* HomeViewTableViewCell.m in Sources */,
 				1FD4F30C1CA0F90A00748C4E /* SelectStateView.m in Sources */,
