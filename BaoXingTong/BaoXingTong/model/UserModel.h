@@ -8,7 +8,7 @@
 
 #import <Mantle/Mantle.h>
 
-@interface UserModel : MTLModel
+@interface UserModel : MTLModel <MTLJSONSerializing>
 
 @property (nonatomic, assign) NSInteger userId;
 @property (nonatomic, copy) NSString *phone;

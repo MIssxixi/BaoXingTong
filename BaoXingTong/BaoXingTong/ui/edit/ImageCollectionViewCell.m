@@ -73,4 +73,10 @@
     _image = image;
 }
 
+- (void)setImageName:(NSString *)imageName
+{
+    NSString *url = [NSString stringWithFormat:@"%@%@", [DataServiceManager sharedManager].domainName, @"BaoXingTongPHP/deleteGuaranteeSlips.php"];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
+}
+
 @end

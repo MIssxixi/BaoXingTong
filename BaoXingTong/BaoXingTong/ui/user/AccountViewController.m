@@ -48,7 +48,13 @@
             [cell.imageView setImage:[UIImage imageNamed:@"default_avatar"]];
             cell.imageView.layer.cornerRadius = 22;
             cell.imageView.clipsToBounds = YES;
-            cell.textLabel.text = [[DataManager sharedManager] currentUser].name;
+            if ([DataServiceManager sharedManager].isUsingService) {
+                cell.textLabel.text = [DataServiceManager sharedManager].currentUser.name;
+            }
+            else
+            {
+                cell.textLabel.text = [[DataManager sharedManager] currentUser].name;
+            }
         }
         else if (1 == indexPath.section)
         {
@@ -103,7 +109,15 @@
     }
     else if (2 == indexPath.section)
     {
-        [[DataManager sharedManager] logout];
+        if ([DataServiceManager sharedManager].isUsingService) {
+            [[DataServiceManager sharedManager] logout:^(ServiceResponseModel *responseModel) {
+                
+            }];
+        }
+        else
+        {
+            [[DataManager sharedManager] logout];
+        }
         LoginViewController *loginViewController = [[LoginViewController alloc] init];
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:loginViewController];
         [UIApplication sharedApplication].windows[0].rootViewController = navi;

@@ -14,6 +14,7 @@
 #import "DataServiceManager.h"
 #import "GuaranteeSlipModel.h"
 #import "EditGuaranteeSlipViewController.h"
+#import "ServiceEditGuaranteeSlipViewController.h"
 #import "AccountViewController.h"
 #import "PopoverController.h"
 #import "HomeBottomButton.h"
@@ -65,9 +66,16 @@ static HomeViewController *sharedInstance = nil;
 {
     self = [super init];
     if (self) {
-//        if (isUsingService) {         //采用服务器
-//            return self;
-//        }
+        if ([DataServiceManager sharedManager].isUsingService) {         //采用服务器
+            WS(weakSelf);
+            self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+                [weakSelf onRefresh];
+            }];
+            [self.modelArray removeAllObjects];
+            [self.tableView reloadData];
+            [self.tableView.mj_header beginRefreshing];
+            return self;
+        }
         
         //每次退出账号然后登录，由于采用单例，所以需要改变之前数据
         [_modelArray removeAllObjects];
@@ -147,7 +155,7 @@ static HomeViewController *sharedInstance = nil;
 //        });
 //    }
     
-    if (isUsingService) {
+    if ([DataServiceManager sharedManager].isUsingService) {
         [self.tableView.mj_header beginRefreshing];
     }
 }
@@ -205,14 +213,24 @@ static HomeViewController *sharedInstance = nil;
     
     PopoverController *popover = [[PopoverController alloc] initWithBarButtonItem:self.navigationItem.rightBarButtonItem Options:@[@"新增", @"账户管理"] selectedCallBack:^(NSInteger index) {
         if (0 == index) {
-            EditGuaranteeSlipViewController *editGuaranteeSlipViewController = [[EditGuaranteeSlipViewController alloc] init];
-            [editGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
-                if (model) {
-                    [self.modelArray addObject:model];
-                    [self.tableView reloadData];
-                }
-            }];
-            [self.navigationController pushViewController:editGuaranteeSlipViewController animated:YES];
+            if ([DataServiceManager sharedManager].isUsingService) {
+                ServiceEditGuaranteeSlipViewController * serviceEditGuaranteeSlipViewController = [[ServiceEditGuaranteeSlipViewController alloc] init];
+                [serviceEditGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
+                    [self.tableView.mj_header beginRefreshing];
+                }];
+                [self.navigationController pushViewController:serviceEditGuaranteeSlipViewController animated:YES];
+            }
+            else
+            {
+                EditGuaranteeSlipViewController *editGuaranteeSlipViewController = [[EditGuaranteeSlipViewController alloc] init];
+                [editGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
+                    if (model) {
+                        [self.modelArray addObject:model];
+                        [self.tableView reloadData];
+                    }
+                }];
+                [self.navigationController pushViewController:editGuaranteeSlipViewController animated:YES];
+            }
         }
         else if (1 == index)
         {
@@ -275,7 +293,7 @@ static HomeViewController *sharedInstance = nil;
 
 - (void)deleteAll
 {
-    if (isUsingService) {
+    if ([DataServiceManager sharedManager].isUsingService) {
         NSMutableArray *ids = [NSMutableArray new];
         for (GuaranteeSlipModel *model in self.modelArray) {
             [ids addObject:@(model.guaranteeSlipModelId)];
@@ -284,12 +302,12 @@ static HomeViewController *sharedInstance = nil;
         [[DataServiceManager sharedManager] deleteDataWithIds:ids response:^(ServiceResponseModel *responseModel) {
             
         }];
-        
-        return;
     }
-    
-    for (GuaranteeSlipModel *model in self.modelArray) {
-        [[DataManager sharedManager] deleteDataWithModel:model];
+    else
+    {
+        for (GuaranteeSlipModel *model in self.modelArray) {
+            [[DataManager sharedManager] deleteDataWithModel:model];
+        }
     }
     
     [self.modelArray removeAllObjects];
@@ -315,7 +333,15 @@ static HomeViewController *sharedInstance = nil;
     NSMutableIndexSet *selectedIndexSet = [NSMutableIndexSet new];
     
     for (NSIndexPath *indexPath in selectedIndexPaths) {
-        [[DataManager sharedManager] deleteDataWithModel:self.modelArray[indexPath.row]];
+        if ([DataServiceManager sharedManager].isUsingService) {
+            [[DataServiceManager sharedManager] deleteDataWithIds:@[@(self.modelArray[indexPath.row].guaranteeSlipModelId)] response:^(ServiceResponseModel *responseModel) {
+                
+            }];
+        }
+        else
+        {
+            [[DataManager sharedManager] deleteDataWithModel:self.modelArray[indexPath.row]];
+        }
         [selectedIndexSet addIndex:indexPath.row];
     }
     
@@ -392,6 +418,12 @@ static HomeViewController *sharedInstance = nil;
     WS(weakSelf)
     [[DataServiceManager sharedManager] listOfGuarateeSlips:^(ServiceResponseModel *responseModel) {
         weakSelf.modelArray = [NSMutableArray arrayWithArray:[MTLJSONAdapter modelsOfClass:[GuaranteeSlipModel class] fromJSONArray:responseModel.data error:nil]];
+        for (GuaranteeSlipModel *model in weakSelf.modelArray) {
+            if (model.avatar.length) {
+                model.avatarImage = [[DataServiceManager sharedManager] getImageWithName:model.avatar];
+            }
+        }
+        weakSelf.blankHomeView.hidden = weakSelf.modelArray.count;
         [weakSelf.tableView reloadData];
         [weakSelf.tableView.mj_header endRefreshing];
     }];
@@ -426,7 +458,9 @@ static HomeViewController *sharedInstance = nil;
     if (self.searchController.active) {
         return self.filteredArray.count;
     }
-    self.blankHomeView.hidden = (BOOL)self.modelArray.count;
+    if (![DataServiceManager sharedManager].isUsingService) {
+        self.blankHomeView.hidden = (BOOL)self.modelArray.count;
+    }
     return self.modelArray.count;
 }
 
@@ -469,20 +503,40 @@ static HomeViewController *sharedInstance = nil;
         }
         
         if (selecteModel) {
-            EditGuaranteeSlipViewController *editGuaranteeSlipViewController = [[EditGuaranteeSlipViewController alloc] initWithModel:selecteModel];
-            WS(weakSelf)
-            [editGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
-                selecteModel.name = model.name;
-                selecteModel.carId = model.carId;
-                selecteModel.insuranceAgent = model.insuranceAgent;
-                selecteModel.avatarImage = model.avatarImage;
-                [weakSelf.tableView reloadData];
-            }];
-            [editGuaranteeSlipViewController setDidDelete:^(GuaranteeSlipModel *model) {
-                [weakSelf.modelArray removeObject:model];
-                [weakSelf.tableView reloadData];
-            }];
-            [self.navigationController pushViewController:editGuaranteeSlipViewController animated:YES];
+            if ([DataServiceManager sharedManager].isUsingService) {
+                ServiceEditGuaranteeSlipViewController *vc = [[ServiceEditGuaranteeSlipViewController alloc] initWithModel:selecteModel];
+                WS(weakSelf)
+                [vc setDidSave:^(GuaranteeSlipModel *model) {
+//                    selecteModel.name = model.name;
+//                    selecteModel.carId = model.carId;
+//                    selecteModel.insuranceAgent = model.insuranceAgent;
+//                    selecteModel.avatarImage = model.avatarImage;
+//                    [weakSelf.tableView reloadData];
+                    [weakSelf.tableView.mj_header beginRefreshing];
+                }];
+                [vc setDidDelete:^(GuaranteeSlipModel *model) {
+                    [weakSelf.modelArray removeObject:model];
+                    [weakSelf.tableView reloadData];
+                }];
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+            else
+            {
+                EditGuaranteeSlipViewController *editGuaranteeSlipViewController = [[EditGuaranteeSlipViewController alloc] initWithModel:selecteModel];
+                WS(weakSelf)
+                [editGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
+                    selecteModel.name = model.name;
+                    selecteModel.carId = model.carId;
+                    selecteModel.insuranceAgent = model.insuranceAgent;
+                    selecteModel.avatarImage = model.avatarImage;
+                    [weakSelf.tableView reloadData];
+                }];
+                [editGuaranteeSlipViewController setDidDelete:^(GuaranteeSlipModel *model) {
+                    [weakSelf.modelArray removeObject:model];
+                    [weakSelf.tableView reloadData];
+                }];
+                [self.navigationController pushViewController:editGuaranteeSlipViewController animated:YES];
+            }
             [[DataManager sharedManager] resetNotNeedRead:selecteModel.guaranteeSlipModelId];
             [self updateNeedReadNumber];
         }
@@ -547,8 +601,18 @@ static HomeViewController *sharedInstance = nil;
 {
     if (!_blankHomeView) {
         _blankHomeView = [[BlankHomeView alloc] init];
+        _blankHomeView.hidden = YES;
         WS(weakSelf);
         [_blankHomeView setTapButton:^{
+            if ([DataServiceManager sharedManager].isUsingService) {
+                ServiceEditGuaranteeSlipViewController * serviceEditGuaranteeSlipViewController = [[ServiceEditGuaranteeSlipViewController alloc] init];
+                [serviceEditGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
+                    [weakSelf.tableView.mj_header beginRefreshing];
+                }];
+                [weakSelf.navigationController pushViewController:serviceEditGuaranteeSlipViewController animated:YES];
+                return;
+            }
+            
             EditGuaranteeSlipViewController *editGuaranteeSlipViewController = [[EditGuaranteeSlipViewController alloc] init];
             [editGuaranteeSlipViewController setDidSave:^(GuaranteeSlipModel *model) {
                 if (model) {
@@ -574,12 +638,6 @@ static HomeViewController *sharedInstance = nil;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
         _tableView.allowsMultipleSelectionDuringEditing = YES;
-        
-        if (isUsingService) {
-            _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-                [self onRefresh];
-            }];
-        }
     }
     return _tableView;
 }
@@ -597,7 +655,7 @@ static HomeViewController *sharedInstance = nil;
     if (!_modelArray) {
         _modelArray = [[NSMutableArray alloc] init];
         
-        if (isUsingService) {       //采用服务器
+        if ([DataServiceManager sharedManager].isUsingService) {       //采用服务器
             return _modelArray;
         }
         

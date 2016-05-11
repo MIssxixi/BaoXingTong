@@ -68,7 +68,15 @@
 
 - (void)confirm
 {
-    UserModel *currentUser = [DataManager sharedManager].currentUser;
+    UserModel *currentUser;
+    if ([DataServiceManager sharedManager].isUsingService) {
+        currentUser = [DataServiceManager sharedManager].currentUser;
+    }
+    else
+    {
+        currentUser = [DataManager sharedManager].currentUser;
+    }
+    
     if (![currentUser.password isEqualToString:self.oldPassWordTextField.text]) {
         [TipView show:@"旧密码输入错误"];
         return;
@@ -91,7 +99,15 @@
         }
     }
     currentUser.password = self.newlyPassWordTextField.text;
-    [[DataManager sharedManager] saveUser:currentUser];
+    if ([DataServiceManager sharedManager].isUsingService) {
+        [[DataServiceManager sharedManager] changeName:currentUser.name password:currentUser.password response:^(ServiceResponseModel *responseModel) {
+            
+        }];
+    }
+    else
+    {
+        [[DataManager sharedManager] saveUser:currentUser];
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 

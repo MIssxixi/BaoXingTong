@@ -10,6 +10,7 @@
 
 @interface GuaranteeSlipModel : MTLModel <MTLJSONSerializing>
 
+@property (nonatomic, assign) NSInteger userId;
 @property (nonatomic, assign) NSInteger guaranteeSlipModelId;
 @property (nonatomic, copy) NSString *avatar;
 @property (nonatomic, strong) UIImage *avatarImage;

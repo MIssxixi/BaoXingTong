@@ -22,6 +22,7 @@
 @interface LoginViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UITextField *domainField;
 @property (nonatomic, strong) TextField *nameField;
 @property (nonatomic, strong) TextField *passwordField;
 @property (nonatomic, strong) UIButton *loginButton;
@@ -59,9 +60,15 @@
     [self.imageView autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:68];
     [self.imageView autoSetDimensionsToSize:CGSizeMake(120, 120)];
     
+    [self.view addSubview:self.domainField];
+    [self.domainField autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.imageView withOffset:48];
+    [self.domainField autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:15];
+    [self.domainField autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:15];
+    [self.domainField autoSetDimension:ALDimensionHeight toSize:44];
+    
     [self.view addSubview:self.nameField];
 //    [self.nameField autoAlignAxisToSuperviewAxis:ALAxisVertical];
-    [self.nameField autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.imageView withOffset:48];
+    [self.nameField autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.domainField];
     [self.nameField autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:15];
     [self.nameField autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:15];
     [self.nameField autoSetDimension:ALDimensionHeight toSize:44];
@@ -94,6 +101,35 @@
 {
     if (0 == self.nameField.text.length || 0 == self.passwordField.text.length) {
         [TipView show:@"用户名和密码不能为空"];
+        return;
+    }
+    
+    BOOL canOpen = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:self.domainField.text]];
+    if (self.domainField.text.length > 0) {
+        if (!canOpen) {
+            [TipView show:@"无法打开的域名"];
+            return;
+        }
+        [DataServiceManager sharedManager].domainName = self.domainField.text;
+        [DataServiceManager sharedManager].isUsingService = YES;
+    }
+    else
+    {
+        [DataServiceManager sharedManager].isUsingService = NO;
+    }
+    
+    if ([DataServiceManager sharedManager].isUsingService) {
+        [[DataServiceManager sharedManager] loginWithName:self.nameField.text password:self.passwordField.text response:^(ServiceResponseModel *responseModel) {
+            if (responseModel.errorMessage.length) {
+                [TipView show:responseModel.errorMessage];
+            }
+            else
+            {
+                HomeViewController *homeViewController = [[HomeViewController alloc] init];
+                UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:homeViewController];
+                [UIApplication sharedApplication].windows[0].rootViewController = navi;
+            }
+        }];
         return;
     }
     
@@ -153,6 +189,24 @@
         _imageView.image = [UIImage imageNamed:@"Icon-60"];
     }
     return _imageView;
+}
+
+- (UITextField *)domainField
+{
+    if (!_domainField) {
+        _domainField = [UITextField newAutoLayoutView];
+        _domainField.backgroundColor = [UIColor whiteColor];
+        _domainField.font = FONT(15);
+        _domainField.delegate = self;
+        _domainField.placeholder = @"不输入则本地存储";
+        _domainField.leftView = [self leftLabel:@"域    名"];
+        _domainField.leftViewMode = UITextFieldViewModeAlways;
+        _domainField.keyboardType = UIKeyboardTypeAlphabet;
+        _domainField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _domainField.layer.borderColor = [UIColor colorWithHexString:@"dddddd"].CGColor;
+        _domainField.layer.borderWidth = 0.5;
+    }
+    return _domainField;
 }
 
 - (UITextField *)nameField

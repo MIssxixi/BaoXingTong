@@ -83,6 +83,15 @@
     self.userModel.name = self.nameField.text;
     self.userModel.password = self.passwordField.text;
     
+    if ([DataServiceManager sharedManager].isUsingService) {
+        [[DataServiceManager sharedManager] registerWithModel:self.userModel response:^(ServiceResponseModel *responseModel) {
+            HomeViewController *homeViewController = [[HomeViewController alloc] init];
+            UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:homeViewController];
+            [UIApplication sharedApplication].windows[0].rootViewController = navi;
+        }];
+        return;
+    }
+    
     NSArray *allUsers = [[DataManager sharedManager] getAllUsers];
     for (UserModel *model in allUsers) {
         if ([model.phone isEqualToString:self.userModel.phone]) {

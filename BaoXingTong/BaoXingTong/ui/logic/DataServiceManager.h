@@ -11,9 +11,9 @@
 #import <Foundation/Foundation.h>
 #import "ServiceResponseModel.h"
 
+@class UserModel;
 @class GuaranteeSlipModel;
 
-static NSString *ipAddress = @"http://172.26.251.63";         //因为是局域网，所以可以改变
 
 typedef void (^serviceResponseBlock)(ServiceResponseModel *responseModel);
 
@@ -21,12 +21,25 @@ typedef void (^serviceResponseBlock)(ServiceResponseModel *responseModel);
 
 + (instancetype)sharedManager;
 
+@property (nonatomic, assign) BOOL isUsingService;
+@property (nonatomic, copy) NSString *domainName;
+
+@property (nonatomic, strong) UserModel *currentUser;
+
+- (void)registerWithModel:(UserModel *)model response:(serviceResponseBlock)response;
+- (void)loginWithName:(NSString *)name password:(NSString *)password response:(serviceResponseBlock)response;
+- (void)logout:(serviceResponseBlock)response;
+- (void)changeName:(NSString *)name password:(NSString *)password response:(serviceResponseBlock)response;
+
 - (void)listOfGuarateeSlips:(serviceResponseBlock)response;
 - (NSArray *)getAllIds:(serviceResponseBlock)response;
 - (GuaranteeSlipModel *)getModelWithId:(NSInteger)Id response:(serviceResponseBlock)response;
 - (void)saveDataWithModel:(GuaranteeSlipModel *)model response:(serviceResponseBlock)response;
-- (void)uploadImageWithImage:(UIImage *)image progress:(void (^)(NSProgress *uploadProgress)) uploadProgressBlock response:(serviceResponseBlock)responseBlock;
-- (void)uploadImageWithPath:(NSString *)path progress:(void (^)(NSProgress *uploadProgress)) uploadProgressBlock response:(serviceResponseBlock)responseBlock;
 - (void)deleteDataWithIds:(NSArray *)ids response:(serviceResponseBlock)response;
+
+- (void)uploadImageWithImage:(UIImage *)image name:(NSString *)name progress:(void (^)(NSProgress *uploadProgress)) uploadProgressBlock response:(serviceResponseBlock)responseBlock;
+- (void)uploadImageWithPath:(NSString *)path progress:(void (^)(NSProgress *uploadProgress)) uploadProgressBlock response:(serviceResponseBlock)responseBlock;
+- (UIImage *)getImageWithName:(NSString *)imageName;
+- (void)downloadImageWithName:(NSString *)imageName response:(serviceResponseBlock)response;
 
 @end

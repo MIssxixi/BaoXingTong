@@ -10,4 +10,13 @@
 
 @implementation UserModel
 
++ (NSDictionary *)JSONKeyPathsByPropertyKey
+{
+    return @{
+             @"name":@"name",
+             @"password":@"password",
+             @"phone":@"phone"
+             };
+}
+
 @end

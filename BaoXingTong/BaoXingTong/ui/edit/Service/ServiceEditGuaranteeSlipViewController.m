@@ -1,12 +1,12 @@
 //
-//  EditGuaranteeSlipViewController.m
+//  ServiceEditGuaranteeSlipViewController.m
 //  BaoXingTong
 //
-//  Created by yongjie_zou on 16/2/20.
+//  Created by yongjie_zou on 16/5/10.
 //  Copyright © 2016年 yongjie_zou. All rights reserved.
 //
 
-#import "EditGuaranteeSlipViewController.h"
+#import "ServiceEditGuaranteeSlipViewController.h"
 #import "SelectViewController.h"
 #import "InterceptImageViewController.h"
 #import "PopoverController.h"
@@ -41,7 +41,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 #define CHOSEOREDITTABLEVIEWCELLIDENTIFIER @"CHOSEOREDITTABLEVIEWCELL"
 #define IMAGEFOOTERVIEWIDENTIFIER @"IMAGEFOOTERVIEW"
 
-@interface EditGuaranteeSlipViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, DoImagePickerControllerDelegate, UIPopoverPresentationControllerDelegate, UIDocumentInteractionControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ServiceEditGuaranteeSlipViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, DoImagePickerControllerDelegate, UIPopoverPresentationControllerDelegate, UIDocumentInteractionControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) GuaranteeSlipModel *model;
 @property (nonatomic, strong) NSArray *propertyList;
@@ -50,7 +50,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 @end
 
-@implementation EditGuaranteeSlipViewController
+@implementation ServiceEditGuaranteeSlipViewController
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -61,41 +61,14 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 {
     self = [super init];
     if (self) {
-        self.model = [[DataManager sharedManager] getModelWithId:model.guaranteeSlipModelId needImages:NO];
-        self.model.avatarImage = model.avatarImage;
-        
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-//            self.model.avatarImage = [[DataManager sharedManager] getImage:self.model.avatar];
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self updateAvatar:self.model.avatarImage];
-//            });
-//        });
-        
-        UIImage *defaultImage = [UIImage imageNamed:@"default_avatar"];
-        NSInteger count = 0;
-        for (;count < self.model.imageNames.count; count++) {
-            [self.model.imageArray addObject:defaultImage];
+        self.model = [model copy];
+        self.model.avatarImage = [[DataServiceManager sharedManager] getImageWithName:self.model.avatar];
+        [self updateAvatar:self.model.avatarImage];
+        for (NSString *imageName in self.model.imageNames) {
+            UIImage *image = [[DataServiceManager sharedManager] getImageWithName:imageName];
+            [self.model.imageArray addObject:image];
         }
         [self updateFooterView];
-        
-        NSInteger item = 0;
-        for (;item < self.model.imageNames.count; item++) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                //进入后，快速退出该界面，如何停止这些线程？？
-                if ([self isMovingToParentViewController]) {
-                    return ;
-                }
-                UIImage *image = [[DataManager sharedManager] getImage:self.model.imageNames[item]];
-                UIImage *resizeImage = [image newImageWithResize:CGSizeMake(SCREEN_WIDTH / 3.0 - 25.0, 80)];
-                
-                if (resizeImage && item < self.model.imageArray.count) {
-                    [self.model.imageArray replaceObjectAtIndex:item withObject:resizeImage];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.imageFooterView updateImage:resizeImage AtItem:item];
-                    });
-                }
-            });
-        }
     }
     return self;
 }
@@ -254,21 +227,44 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         self.model.remindDate = nil;
     }
 
-//    if (isUsingService) {
-//        [[DataServiceManager sharedManager] saveDataWithModel:self.model response:^(ServiceResponseModel *responseModel) {
-//            NSLog(@"%@", responseModel);
-//        }];
+    if ([DataServiceManager sharedManager].isUsingService) {
+
+        NSInteger item = 0;
+        NSInteger count = self.model.imageNames.count;
+        NSInteger imagesCount = self.model.imageArray.count;
+        for (;item < imagesCount; item++) {
+            if (item >= count) {
+                NSString *imageName = [NSString stringWithFormat:@"%@-%@.png", self.model.name, [[NSProcessInfo processInfo] globallyUniqueString]];
+                [self.model.imageNames addObject:imageName];
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [[DataServiceManager sharedManager] uploadImageWithImage:self.model.imageArray[item] name:self.model.imageNames[item] progress:^(NSProgress *uploadProgress) {
+                        
+                    } response:^(ServiceResponseModel *responseModel) {
+                        
+                    }];
+                });
+            }
+        }
         
-        for (UIImage *image in self.model.imageArray) {
-//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//                [[DataServiceManager sharedManager] uploadImageWithImage:image progress:^(NSProgress *uploadProgress) {
-//                    
-//                } response:^(ServiceResponseModel *responseModel) {
-//                    
-//                }];
-//            });
-//        }
+        if (self.model.avatarImage) {
+            self.model.avatar = [NSString stringWithFormat:@"avatar-%@.png", [[NSProcessInfo processInfo] globallyUniqueString]];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[DataServiceManager sharedManager] uploadImageWithImage:self.model.avatarImage name:self.model.avatar progress:^(NSProgress *uploadProgress) {
+                    
+                } response:^(ServiceResponseModel *responseModel) {
+                    
+                }];
+            });
+        }
         
+        [[DataServiceManager sharedManager] saveDataWithModel:self.model response:^(ServiceResponseModel *responseModel) {
+            NSLog(@"%@", responseModel);
+        }];
+        
+        if (self.didSave) {
+            [self.model.imageArray removeAllObjects];
+            self.didSave(self.model);
+        }
         [self.navigationController popViewControllerAnimated:YES];
         return;
     }
@@ -286,6 +282,18 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 {
     [self.tableView endEditing:YES];
     
+    if ([DataServiceManager sharedManager].isUsingService) {
+        [LoadingView showMessage:@"正在删除" toView:self.view];
+        WS(weakSelf)
+        [[DataServiceManager sharedManager] deleteDataWithIds:@[@(self.model.guaranteeSlipModelId)] response:^(ServiceResponseModel *responseModel) {
+            [LoadingView hide];
+            if (weakSelf.didDelete) {
+                weakSelf.didDelete(weakSelf.model);
+            }
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        }];
+        return;
+    }
     [[DataManager sharedManager] deleteDataWithModel:self.model];
     if (self.didDelete) {
         self.didDelete(self.model);
@@ -780,6 +788,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 - (void)dealloc
 {
+    [self.model.imageArray removeAllObjects];
 }
 
 @end

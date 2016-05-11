@@ -8,6 +8,11 @@
 
 #import "DataServiceManager.h"
 #import "GuaranteeSlipModel.h"
+#import "UserModel.h"
+
+@interface DataServiceManager ()
+
+@end
 
 @implementation DataServiceManager
 
@@ -32,9 +37,119 @@ static  DataServiceManager *sharedDataManager = nil;
     return self;
 }
 
+#pragma mark - Account
+- (void)registerWithModel:(UserModel *)model response:(serviceResponseBlock)response
+{
+//    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/registerAccount.php"];
+    NSString *url = [self.domainName stringByAppendingPathComponent:@"BaoXingTongPHP/registerAccount.php"];
+    NSDictionary *paramas = [MTLJSONAdapter JSONDictionaryFromModel:model error:nil];
+    
+    __block ServiceResponseModel *responseModel = [ServiceResponseModel new];
+    [[AFHTTPSessionManager manager] POST:url parameters:paramas progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"%@", responseObject);
+        responseModel.data = responseObject;
+        if (response) {
+            response(responseModel);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%@", error);
+        responseModel.errorMessage = error.domain;
+        if (response) {
+            response(responseModel);
+        }
+    }];
+}
+
+- (void)loginWithName:(NSString *)name password:(NSString *)password response:(serviceResponseBlock)response
+{
+//    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/login.php"];
+    NSString *url = [self.domainName stringByAppendingPathComponent:@"BaoXingTongPHP/login.php"];
+    NSDictionary *paramas = @{
+                              @"name":name,
+                              @"password":password
+                              };
+    self.currentUser.name = name;
+    self.currentUser.password = password;
+    
+    __block ServiceResponseModel *responseModel = [ServiceResponseModel new];
+    [[AFHTTPSessionManager manager] POST:url parameters:paramas progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"%@", responseObject);
+        responseModel.errorMessage = [responseObject objectForKey:@"error"];
+        responseModel.data = responseObject;
+        if (response) {
+            response(responseModel);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%@", error);
+        responseModel.errorMessage = error.domain;
+        if (response) {
+            response(responseModel);
+        }
+    }];
+}
+
+- (void)logout:(serviceResponseBlock)response
+{
+//    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/logout.php"];
+    NSString *url = [self.domainName stringByAppendingPathComponent:@"BaoXingTongPHP/logout.php"];
+    
+    __block ServiceResponseModel *responseModel = [ServiceResponseModel new];
+    [[AFHTTPSessionManager manager] POST:url parameters:nil progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"%@", responseObject);
+        responseModel.errorMessage = [responseObject objectForKey:@"error"];
+        responseModel.data = responseObject;
+        if (response) {
+            response(responseModel);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%@", error);
+        responseModel.errorMessage = error.domain;
+        if (response) {
+            response(responseModel);
+        }
+    }];
+}
+
+- (void)changeName:(NSString *)name password:(NSString *)password response:(serviceResponseBlock)response
+{
+//    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/changeNameOrPassword.php"];
+    NSString *url = [self.domainName stringByAppendingPathComponent:@"BaoXingTongPHP/changeNameOrPassword.php"];
+    
+    NSDictionary *paramas = @{
+                              @"name":name,
+                              @"password":password
+                              };
+    
+    __block ServiceResponseModel *responseModel = [ServiceResponseModel new];
+    [[AFHTTPSessionManager manager] POST:url parameters:paramas progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"%@", responseObject);
+        responseModel.errorMessage = [responseObject objectForKey:@"error"];
+        responseModel.data = responseObject;
+        if (response) {
+            response(responseModel);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%@", error);
+        responseModel.errorMessage = error.domain;
+        if (response) {
+            response(responseModel);
+        }
+    }];
+}
+
+#pragma mark - GuarateeSlips
 - (void)listOfGuarateeSlips:(serviceResponseBlock)response
 {
-    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/listOfGuarateeSlips.php"];
+//    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/listOfGuarateeSlips.php"];
+    NSString *url = [self.domainName stringByAppendingPathComponent:@"BaoXingTongPHP/listOfGuarateeSlips.php"];
     NSDictionary *params = @{
         @"fuck":@"shit"
     };
@@ -56,7 +171,8 @@ static  DataServiceManager *sharedDataManager = nil;
 
 - (void)saveDataWithModel:(GuaranteeSlipModel *)model response:(serviceResponseBlock)response
 {
-    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/editGuaranteeSlip.php"];
+//    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/editGuaranteeSlip.php"];
+    NSString *url = [self.domainName stringByAppendingPathComponent:@"BaoXingTongPHP/editGuaranteeSlip.php"];
     NSDictionary *paramas = [MTLJSONAdapter JSONDictionaryFromModel:model error:nil];
     
     __block ServiceResponseModel *responseModel = [ServiceResponseModel new];
@@ -78,10 +194,11 @@ static  DataServiceManager *sharedDataManager = nil;
 
 }
 
-- (void)uploadImageWithImage:(UIImage *)image progress:(void (^)(NSProgress *))uploadProgressBlock response:(serviceResponseBlock)responseBlock
+- (void)uploadImageWithImage:(UIImage *)image name:(NSString *)name progress:(void (^)(NSProgress *))uploadProgressBlock response:(serviceResponseBlock)responseBlock
 {
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:@"http://172.26.251.63/~yongjie_zou/BaoXingTongPHP/upload.php" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:UIImagePNGRepresentation(image) name:@"file" fileName:@"filename.png" mimeType:@"image/png"];          //name必须为@"file"，否则不会成功！！！！！
+    NSString *url = [self.domainName stringByAppendingPathComponent:@"BaoXingTongPHP/upload.php"];
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:UIImagePNGRepresentation(image) name:@"file" fileName:name mimeType:@"image/png"];          //name必须为@"file"，否则不会成功！！！！！
     } error:nil];
     
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -118,7 +235,8 @@ static  DataServiceManager *sharedDataManager = nil;
 
 - (void)uploadImageWithPath:(NSString *)path progress:(void (^)(NSProgress *))uploadProgressBlock response:(serviceResponseBlock)responseBlock
 {
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:@"http://172.26.251.63/~yongjie_zou/BaoXingTongPHP/upload.php" parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSString *url = [self.domainName stringByAppendingPathComponent:@"BaoXingTongPHP/upload.php"];
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 //        [formData appendPartWithFileURL:[NSURL fileURLWithPath:path] name:@"file" fileName:@"filename.jpg" mimeType:@"image/jpeg" error:nil];
         UIImage *image = [UIImage imageNamed:@"/Users/bjhl/Documents/ios/MyRepository/BaoXingTong/BaoXingTong/BaoXingTong/Resources/default_avatar.png"];
         [formData appendPartWithFormData:UIImagePNGRepresentation(image) name:@"default.png"];
@@ -156,9 +274,37 @@ static  DataServiceManager *sharedDataManager = nil;
     [uploadTask resume];
 }
 
+- (UIImage *)getImageWithName:(NSString *)imageName
+{
+    NSString *url = [self.domainName stringByAppendingPathComponent:[NSString stringWithFormat:@"image/%@", imageName]];
+    NSURL *URL = [NSURL URLWithString:url];
+    NSData *data = [NSData dataWithContentsOfURL:URL];
+    return [UIImage imageWithData:data];
+}
+
+- (void)downloadImageWithName:(NSString *)imageName response:(serviceResponseBlock)response
+{
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+    
+    NSString *url = [self.domainName stringByAppendingPathComponent:[NSString stringWithFormat:@"image/%@", imageName]];
+    NSURL *URL =[NSURL URLWithString:url];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+    NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+        
+        return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        NSLog(@"File downloaded to: %@", filePath);
+    }];
+    [downloadTask resume];
+}
+
 - (void)deleteDataWithIds:(NSArray *)ids response:(serviceResponseBlock)response
 {
-    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/deleteGuaranteeSlips.php"];
+//    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/deleteGuaranteeSlips.php"];
+    NSString *url = [self.domainName stringByAppendingPathComponent:@"BaoXingTongPHP/deleteGuaranteeSlips.php"];
     NSDictionary *params = @{
                              @"ids" : ids
                              };
@@ -178,6 +324,15 @@ static  DataServiceManager *sharedDataManager = nil;
             response(responseModel);
         }
     }];
+}
+
+#pragma mark - get
+- (UserModel *)currentUser
+{
+    if (!_currentUser) {
+        _currentUser = [[UserModel alloc] init];
+    }
+    return _currentUser;
 }
 
 @end

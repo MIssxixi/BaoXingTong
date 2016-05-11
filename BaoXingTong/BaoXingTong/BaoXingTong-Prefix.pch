@@ -25,6 +25,8 @@
 #import "TipView.h"
 #import "LoadingView.h"
 #import "AlterView.h"
+#import "DataServiceManager.h"
+#import "GlobalVariables.h"
 
 #import <PureLayout/PureLayout.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
@@ -33,7 +35,14 @@
 #import <MJRefresh/MJRefresh.h>
 #import <SMS_SDK/SMSSDK.h>
 #import <MBProgressHUD/MBProgressHUD.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
-static BOOL isUsingService = NO;
+//static BOOL isUsingService = NO;
+//static NSString *ipAddress = @"http://172.26.251.63";         //因为是局域网，所以可以改变
+//static NSString *domainName;
+
+//extern BOOL isUsingService;
+//extern NSString *ipAddress;
+//extern NSString *domainName;
 
 #endif /* BaoXingTong_Prefix_pch */

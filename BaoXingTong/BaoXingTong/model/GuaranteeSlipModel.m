@@ -13,8 +13,10 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
+             @"userId":@"userId",
              @"guaranteeSlipModelId":@"guaranteeSlipModelId",
              @"name":@"name",
+             @"avatar":@"avatar",
              @"avatarImage":@"avatarImage",
              @"IDcard":@"IDcard",
              @"phone":@"phone",
@@ -27,8 +29,18 @@
              @"yearInterval":@"yearInterval",
              @"isNeedRemind":@"isNeedRemind",
              @"remindDate":@"remindDate",
-             @"imageArray":@"imageArray",
+             @"imageNames":@"imageNames"
              };
+}
+
++ (NSValueTransformer *)JSONTransformerForKey:(NSString *)key
+{
+    if ([key isEqualToString:@"imageNames"]) {
+        return [MTLValueTransformer transformerUsingForwardBlock:^id(id value, BOOL *success, NSError *__autoreleasing *error) {
+            return [NSMutableArray arrayWithArray:value];
+        }];
+    }
+    return nil;
 }
 
 - (NSArray <NSString *> *)commercialInsurance
