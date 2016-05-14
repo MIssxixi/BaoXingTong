@@ -73,7 +73,8 @@ static  DataServiceManager *sharedDataManager = nil;
                               };
     self.currentUser.name = name;
     self.currentUser.password = password;
-    
+   
+    [[AFHTTPSessionManager manager].requestSerializer setTimeoutInterval:20];       //不知道为什么没用了
     __block ServiceResponseModel *responseModel = [ServiceResponseModel new];
     [[AFHTTPSessionManager manager] POST:url parameters:paramas progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -91,7 +92,6 @@ static  DataServiceManager *sharedDataManager = nil;
             response(responseModel);
         }
     }];
-    [[AFHTTPSessionManager manager].requestSerializer setTimeoutInterval:10];
 }
 
 - (void)logout:(serviceResponseBlock)response

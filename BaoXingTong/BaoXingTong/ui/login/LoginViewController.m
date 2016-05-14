@@ -131,7 +131,10 @@
     [self checkDomain];
     
     if ([DataServiceManager sharedManager].isUsingService) {
+        [LoadingView showMessage:@"正在登录" toView:self.view];
         [[DataServiceManager sharedManager] loginWithName:self.nameField.text password:self.passwordField.text response:^(ServiceResponseModel *responseModel) {
+            [LoadingView hide];
+            
             if (responseModel.errorMessage.length) {
                 [TipView show:responseModel.errorMessage];
             }

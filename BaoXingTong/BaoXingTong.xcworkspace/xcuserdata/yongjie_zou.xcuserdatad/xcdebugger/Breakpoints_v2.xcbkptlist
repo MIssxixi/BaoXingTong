@@ -250,12 +250,12 @@
                   moduleName = "BaoXingTong"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/bjhl/Documents/ios/MyRepository/BaoXingTong/BaoXingTong/BaoXingTong/ui/edit/Service/ServiceEditGuaranteeSlipViewController.m"
-                  timestampString = "484888120.964345"
+                  timestampString = "484899731.980283"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "731"
                   endingLineNumber = "731"
-                  offsetFromSymbolStart = "324">
+                  offsetFromSymbolStart = "372">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -265,12 +265,12 @@
                   moduleName = "BaoXingTong"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/bjhl/Documents/ios/MyRepository/BaoXingTong/BaoXingTong/BaoXingTong/ui/edit/Service/ServiceEditGuaranteeSlipViewController.m"
-                  timestampString = "484888120.964579"
+                  timestampString = "484899731.980435"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "731"
                   endingLineNumber = "731"
-                  offsetFromSymbolStart = "36">
+                  offsetFromSymbolStart = "48">
                </Location>
             </Locations>
          </BreakpointContent>
