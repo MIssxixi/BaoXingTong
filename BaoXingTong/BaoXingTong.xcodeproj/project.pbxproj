@@ -47,6 +47,7 @@
 		1FD9726F1CDD7F910086020F /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD9726D1CDD7F910086020F /* Icon-60@2x.png */; };
 		1FD972701CDD7F910086020F /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FD9726E1CDD7F910086020F /* Icon-60@3x.png */; };
 		1FD972731CDDF2E30086020F /* BlankHomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD972721CDDF2E30086020F /* BlankHomeView.m */; };
+		1FD9BA761CE41C04007B1579 /* ServiceImageFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD9BA751CE41C04007B1579 /* ServiceImageFooterView.m */; };
 		1FD9C2601CDC3F680046976B /* InterceptImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD9C25F1CDC3F680046976B /* InterceptImageViewController.m */; };
 		1FD9E5611CB754B300DEF124 /* HomeViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD9E5601CB754B300DEF124 /* HomeViewTableViewCell.m */; };
 		1FDB1EF41CCF00990018AB19 /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FDB1EF21CCF00990018AB19 /* MOBFoundation.framework */; };
@@ -166,6 +167,8 @@
 		1FD972711CDDF2E30086020F /* BlankHomeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlankHomeView.h; sourceTree = "<group>"; };
 		1FD972721CDDF2E30086020F /* BlankHomeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlankHomeView.m; sourceTree = "<group>"; };
 		1FD994BE1CE356520060F58C /* GlobalVariables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlobalVariables.h; sourceTree = "<group>"; };
+		1FD9BA741CE41C04007B1579 /* ServiceImageFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceImageFooterView.h; sourceTree = "<group>"; };
+		1FD9BA751CE41C04007B1579 /* ServiceImageFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceImageFooterView.m; sourceTree = "<group>"; };
 		1FD9C25E1CDC3F680046976B /* InterceptImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptImageViewController.h; sourceTree = "<group>"; };
 		1FD9C25F1CDC3F680046976B /* InterceptImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptImageViewController.m; sourceTree = "<group>"; };
 		1FD9E55F1CB754B300DEF124 /* HomeViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewTableViewCell.h; sourceTree = "<group>"; };
@@ -506,6 +509,8 @@
 			children = (
 				1FDBB7FF1CE1881E00A8E056 /* ServiceEditGuaranteeSlipViewController.h */,
 				1FDBB8001CE1881E00A8E056 /* ServiceEditGuaranteeSlipViewController.m */,
+				1FD9BA741CE41C04007B1579 /* ServiceImageFooterView.h */,
+				1FD9BA751CE41C04007B1579 /* ServiceImageFooterView.m */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -743,6 +748,7 @@
 				1F52627F1CCF6041006821D9 /* AccountViewController.m in Sources */,
 				1FD3F97D1CB8FF5C0050349C /* PopoverController.m in Sources */,
 				1FB2FA781CB516D5002CB0FA /* DataManager.m in Sources */,
+				1FD9BA761CE41C04007B1579 /* ServiceImageFooterView.m in Sources */,
 				1FDBB8071CE18A8100A8E056 /* EditGuaranteeSlipViewController.m in Sources */,
 				1F52627B1CCF4C29006821D9 /* RegisterViewController.m in Sources */,
 				1FD48E7F1C9174B5001E75E6 /* UIColor+WithString.m in Sources */,

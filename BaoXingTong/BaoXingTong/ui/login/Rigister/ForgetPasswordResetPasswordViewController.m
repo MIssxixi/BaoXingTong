@@ -81,6 +81,36 @@
         return;
     }
     
+    if ([DataServiceManager sharedManager].isUsingService) {
+        if (0 == self.nameTextField.text.length) {
+            [TipView show:@"请输入用户名"];
+            return;
+        }
+        
+        WS(weakSelf)
+        [[DataServiceManager sharedManager] changeName:self.nameTextField.text password:self.newlyPassWordTextField.text phone:self.phoneNumber response:^(ServiceResponseModel *responseModel) {
+            if (responseModel.errorMessage.length > 0) {
+                [TipView show:responseModel.errorMessage];
+            }
+            else
+            {
+                [[DataServiceManager sharedManager] loginWithName:weakSelf.nameTextField.text password:weakSelf.newlyPassWordTextField.text response:^(ServiceResponseModel *responseModel) {
+                    if (responseModel.errorMessage.length > 0) {
+                        [TipView show:responseModel.errorMessage];
+                    }
+                    else
+                    {
+                        HomeViewController *homeViewController = [[HomeViewController alloc] init];
+                        UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:homeViewController];
+                        [UIApplication sharedApplication].windows[0].rootViewController = navi;
+                    }
+                }];
+            }
+        }];
+        
+        return;
+    }
+    
     UserModel *currentUser = [[DataManager sharedManager] getUserWithPhoneNumber:self.phoneNumber];
     
     if (self.nameTextField.text.length) {
@@ -118,7 +148,9 @@
         _nameTextField.leftView = [self leftLabel:@"姓    名"];
         _nameTextField.leftViewMode = UITextFieldViewModeAlways;
         UserModel *model = [[DataManager sharedManager] getUserWithPhoneNumber:self.phoneNumber];
-        _nameTextField.placeholder = model.name;
+        if (![DataServiceManager sharedManager].isUsingService) {
+            _nameTextField.placeholder = model.name;
+        }
     }
     return _nameTextField;
 }

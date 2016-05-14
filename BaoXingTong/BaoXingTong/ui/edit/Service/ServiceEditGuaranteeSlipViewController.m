@@ -16,6 +16,7 @@
 #import "TextFieldTableViewCell.h"
 #import "ChoseOrEditTableViewCell.h"
 #import "ImageFooterView.h"
+#import "ServiceImageFooterView.h"
 #import "DataManager.h"
 #import "DataServiceManager.h"
 #import "TipView.h"
@@ -45,7 +46,8 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 @property (nonatomic, strong) GuaranteeSlipModel *model;
 @property (nonatomic, strong) NSArray *propertyList;
-@property (nonatomic, retain) ImageFooterView *imageFooterView;
+//@property (nonatomic, retain) ImageFooterView *imageFooterView;
+@property (nonatomic, strong) ServiceImageFooterView *imageFooterView;
 @property (nonatomic, strong) UIDocumentInteractionController *documentInteractionController;
 
 @end
@@ -62,12 +64,19 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     self = [super init];
     if (self) {
         self.model = [model copy];
-        self.model.avatarImage = [[DataServiceManager sharedManager] getImageWithName:self.model.avatar];
-        [self updateAvatar:self.model.avatarImage];
-        for (NSString *imageName in self.model.imageNames) {
-            UIImage *image = [[DataServiceManager sharedManager] getImageWithName:imageName];
-            [self.model.imageArray addObject:image];
-        }
+        WS(weakSelf)
+        [[DataServiceManager sharedManager] getImageWithName:self.model.avatar response:^(ServiceResponseModel *responseModel) {
+            if (responseModel.data.count > 0) {
+                weakSelf.model.avatarImage = responseModel.data[0];
+                [weakSelf updateAvatar:weakSelf.model.avatarImage];
+            }
+        }];
+//        for (NSString *imageName in self.model.imageNames) {
+//            UIImage *image = [[DataServiceManager sharedManager] getImageWithName:imageName];
+//            if (image) {
+//                [self.model.imageArray addObject:image];
+//            }
+//        }
         [self updateFooterView];
     }
     return self;
@@ -184,6 +193,25 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     return result;
 }
 
+- (void)addImages:(NSArray <UIImage *> *)images
+{
+    NSInteger item = 0;
+    NSInteger imagesCount = images.count;
+    for (;item < imagesCount; item++) {
+        NSString *imageName = [NSString stringWithFormat:@"%@-%@.png", self.model.name, [[NSProcessInfo processInfo] globallyUniqueString]];
+//        [self.model.imageNames addObject:imageName];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            WS(weakSelf)
+            [[DataServiceManager sharedManager] uploadImageWithImage:images[item] name:imageName progress:^(NSProgress *uploadProgress) {
+                
+            } response:^(ServiceResponseModel *responseModel) {
+                [weakSelf.model.imageNames addObject:imageName];
+                [weakSelf updateFooterView];
+            }];
+        });
+    }
+}
+
 - (void)restoreData
 {
     [self.tableView endEditing:YES];
@@ -229,22 +257,22 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
     if ([DataServiceManager sharedManager].isUsingService) {
 
-        NSInteger item = 0;
-        NSInteger count = self.model.imageNames.count;
-        NSInteger imagesCount = self.model.imageArray.count;
-        for (;item < imagesCount; item++) {
-            if (item >= count) {
-                NSString *imageName = [NSString stringWithFormat:@"%@-%@.png", self.model.name, [[NSProcessInfo processInfo] globallyUniqueString]];
-                [self.model.imageNames addObject:imageName];
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    [[DataServiceManager sharedManager] uploadImageWithImage:self.model.imageArray[item] name:self.model.imageNames[item] progress:^(NSProgress *uploadProgress) {
-                        
-                    } response:^(ServiceResponseModel *responseModel) {
-                        
-                    }];
-                });
-            }
-        }
+//        NSInteger item = 0;
+//        NSInteger count = self.model.imageNames.count;
+//        NSInteger imagesCount = self.model.imageArray.count;
+//        for (;item < imagesCount; item++) {
+//            if (item >= count) {
+//                NSString *imageName = [NSString stringWithFormat:@"%@-%@.png", self.model.name, [[NSProcessInfo processInfo] globallyUniqueString]];
+//                [self.model.imageNames addObject:imageName];
+//                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+//                    [[DataServiceManager sharedManager] uploadImageWithImage:self.model.imageArray[item] name:self.model.imageNames[item] progress:^(NSProgress *uploadProgress) {
+//                        
+//                    } response:^(ServiceResponseModel *responseModel) {
+//                        
+//                    }];
+//                });
+//            }
+//        }
         
         if (self.model.avatarImage) {
             self.model.avatar = [NSString stringWithFormat:@"avatar-%@.png", [[NSProcessInfo processInfo] globallyUniqueString]];
@@ -257,15 +285,23 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
             });
         }
         
+        WS(weakSelf)
+        [LoadingView showMessage:@"正在保存" toView:self.view];
         [[DataServiceManager sharedManager] saveDataWithModel:self.model response:^(ServiceResponseModel *responseModel) {
             NSLog(@"%@", responseModel);
-        }];
+            [LoadingView hide];
+            if (responseModel.errorMessage) {
+                [TipView show:responseModel.errorMessage];
+                return;
+            }
+            
+            if (weakSelf.didSave) {
+                [weakSelf.model.imageArray removeAllObjects];
+                weakSelf.didSave(weakSelf.model);
+            }
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+            }];
         
-        if (self.didSave) {
-            [self.model.imageArray removeAllObjects];
-            self.didSave(self.model);
-        }
-        [self.navigationController popViewControllerAnimated:YES];
         return;
     }
     
@@ -322,10 +358,10 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 - (void)updateFooterView
 {
-    [self.imageFooterView setImageArray:self.model.imageArray];
+//    [self.imageFooterView setImageArray:self.model.imageArray];
     [self.imageFooterView setImageNames:self.model.imageNames];
     CGRect rect = self.imageFooterView.frame;
-    rect.size.height = [ImageFooterView heightWithImageArray:self.model.imageArray];
+    rect.size.height = [ServiceImageFooterView heightWithImageNames:self.model.imageNames];
     self.imageFooterView.frame = rect;
     self.tableView.tableFooterView = self.imageFooterView;
 }
@@ -386,8 +422,12 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 
 - (void)updateAvatar:(UIImage *)image
 {
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
-    [(UIButton *)cell.accessoryView setImage:image forState:UIControlStateNormal];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:NO];
+    });
+//    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+//    [(UIButton *)cell.accessoryView setBackgroundImage:image forState:UIControlStateNormal];
+//    [(UIButton *)cell.accessoryView setImage:image forState:UIControlStateNormal];    //这样不会刷新, !!!不刷新是因为不在mainThread
 }
 
 #pragma mark - UITableViewDataSource
@@ -594,23 +634,26 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     NSInteger selectCellAction = [[dic valueForKey:EDITGUARANTEESLIPLIST_SELECT_CELL_ACTION] integerValue];
     
     if (selectCellAction == SelectCellActionAddPicture) {
-        if (self.model.imageArray.count >= 100) {
-            [TipView show:@"最多添加100张照片"];
+        if (self.model.imageNames.count >= 20) {
+            [TipView show:@"最多添加20张照片"];
             return;
         }
         
-        if (self.model.imageArray.count - self.model.imageNames.count >= 20) {
-            [TipView show:@"一次最多添加20张照片"];
-            return;
-        }
+        //这里可能有问题，选择图片后，可以继续选择，内存可能不够，崩溃
+//        static NSInteger lastImageCount;        //不能用变量初始化静态变量
+//        lastImageCount = self.model.imageNames.count + 20;
+//        if ((NSInteger)(self.model.imageArray.count - self.model.imageNames.count) >= 20) {
+//            [TipView show:@"一次最多添加20张照片"];
+//            return;
+//        }
         
         WS(weakSelf);
         UIAlertController *alterController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *photoLibraryAction = [UIAlertAction actionWithTitle:@"相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             DoImagePickerController *doImagePickerController = [[DoImagePickerController alloc] initWithNibName:@"DoImagePickerController" bundle:nil];
             doImagePickerController.nColumnCount = 3;
-            NSInteger canAddCount = 100 - weakSelf.model.imageArray.count;
-            doImagePickerController.nMaxCount = canAddCount > 20 ? 20 : canAddCount;
+            NSInteger canAddCount = 20 - weakSelf.model.imageNames.count;
+            doImagePickerController.nMaxCount = canAddCount > 10 ? 10 : canAddCount;
             doImagePickerController.delegate = weakSelf;
             [weakSelf.navigationController pushViewController:doImagePickerController animated:YES];
         }];
@@ -695,8 +738,9 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
         return;
     }
     
-    [self.model.imageArray addObject:orgImage];
-    [self updateFooterView];
+//    [self.model.imageArray addObject:orgImage];
+//    [self updateFooterView];
+    [self addImages:@[[orgImage normalizedImage]]];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
@@ -741,8 +785,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     }
     
     [picker.navigationController popViewControllerAnimated:NO];
-    [self.model.imageArray addObjectsFromArray:aSelected];
-    [self updateFooterView];
+    [self addImages:aSelected];
 }
 
 #pragma mark - get
@@ -763,17 +806,15 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
     return _propertyList;
 }
 
-- (ImageFooterView *)imageFooterView
+- (ServiceImageFooterView *)imageFooterView
 {
     if (!_imageFooterView) {
-        _imageFooterView = [[ImageFooterView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, [ImageFooterView heightWithImageArray:self.model.imageArray])];
+        _imageFooterView = [[ServiceImageFooterView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, [ServiceImageFooterView heightWithImageNames:self.model.imageNames])];
         __weak typeof (self) weakSelf = self;
         [_imageFooterView setDidDeleteAction:^(NSInteger index) {
             //会内存泄漏
-            if (index < weakSelf.model.imageArray.count) {
+            if (index < weakSelf.model.imageNames.count) {
                 AlterView *alterView = [[AlterView alloc] initWithTitle:@"确定删除照片吗" message:@"删除后不可复原" sureAction:^{
-                    [[DataManager sharedManager] deleteImage:weakSelf.model.imageNames[index]];
-                    [weakSelf.model.imageArray removeObjectAtIndex:index];
                     [weakSelf.model.imageNames removeObjectAtIndex:index];
                     [weakSelf updateFooterView];
                 } cancelAction:^{

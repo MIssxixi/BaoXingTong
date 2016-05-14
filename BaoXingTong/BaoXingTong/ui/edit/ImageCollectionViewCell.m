@@ -10,7 +10,7 @@
 
 @interface ImageCollectionViewCell ()
 
-@property (nonatomic, strong) UIImageView *imageView;
+//@property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIButton *deleteButton;
 
 @end
@@ -75,8 +75,8 @@
 
 - (void)setImageName:(NSString *)imageName
 {
-    NSString *url = [NSString stringWithFormat:@"%@%@", [DataServiceManager sharedManager].domainName, @"BaoXingTongPHP/deleteGuaranteeSlips.php"];
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
+//    NSString *url = [NSString stringWithFormat:@"%@%@", [DataServiceManager sharedManager].domainName, @"BaoXingTongPHP/deleteGuaranteeSlips.php"];
+//    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
 }
 
 @end

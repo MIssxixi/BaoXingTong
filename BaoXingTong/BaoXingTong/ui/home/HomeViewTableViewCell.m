@@ -51,7 +51,14 @@
 
 - (void)setData:(GuaranteeSlipModel *)data
 {
-    [self.imageView setImage:data.avatarImage ? data.avatarImage :[UIImage imageNamed:@"default_avatar"]];
+    if ([DataServiceManager sharedManager].isUsingService) {
+        NSString *url = [[DataServiceManager sharedManager].domainName stringByAppendingPathComponent:[NSString stringWithFormat:@"image/%@", data.avatar]];
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
+    }
+    else
+    {
+        [self.imageView setImage:data.avatarImage ? data.avatarImage :[UIImage imageNamed:@"default_avatar"]];
+    }
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.imageView.layer.cornerRadius = AVATAR_SIZE.width / 2.0;
 //    self.imageView.layer.masksToBounds = YES;       //必须要

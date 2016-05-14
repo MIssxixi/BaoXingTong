@@ -10,6 +10,8 @@
 
 @interface NSString (Utils)
 
+- (NSString *)url;  //字符串可能包含中文
+
 - (NSString *)trim;
 
 - (BOOL)isPhoneNumber;

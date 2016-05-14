@@ -67,6 +67,7 @@ static HomeViewController *sharedInstance = nil;
     self = [super init];
     if (self) {
         if ([DataServiceManager sharedManager].isUsingService) {         //采用服务器
+            self.blankHomeView.hidden = YES;
             WS(weakSelf);
             self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
                 [weakSelf onRefresh];
@@ -77,6 +78,7 @@ static HomeViewController *sharedInstance = nil;
             return self;
         }
         
+        [self.tableView.mj_header setHidden:YES];
         //每次退出账号然后登录，由于采用单例，所以需要改变之前数据
         [_modelArray removeAllObjects];
         _idsArray = [NSMutableArray arrayWithArray:[[DataManager sharedManager] getAllIds]];
@@ -186,6 +188,9 @@ static HomeViewController *sharedInstance = nil;
     if (!self.modelArray.count) {
         return;
     }
+    if ([DataServiceManager sharedManager].isUsingService) {
+        [self.tableView.mj_header setHidden:YES];
+    }
     [self.tableView setEditing:YES animated:YES];
     self.bottomButtonHeight.constant = BUTTON_HEIGHT;
     [self.bottomButton setHidden:NO];
@@ -195,6 +200,9 @@ static HomeViewController *sharedInstance = nil;
 
 - (void)cancel
 {
+    if ([DataServiceManager sharedManager].isUsingService) {
+        [self.tableView.mj_header setHidden:NO];
+    }
     [self.tableView setEditing:NO animated:YES];
     self.bottomButtonHeight.constant = 0;
     [self.bottomButton setHidden:YES];
@@ -420,7 +428,10 @@ static HomeViewController *sharedInstance = nil;
         weakSelf.modelArray = [NSMutableArray arrayWithArray:[MTLJSONAdapter modelsOfClass:[GuaranteeSlipModel class] fromJSONArray:responseModel.data error:nil]];
         for (GuaranteeSlipModel *model in weakSelf.modelArray) {
             if (model.avatar.length) {
-                model.avatarImage = [[DataServiceManager sharedManager] getImageWithName:model.avatar];
+//                model.avatarImage = [[DataServiceManager sharedManager] getImageWithName:model.avatar];
+//                [DataServiceManager sharedManager] getImageWithName:model.avatar response:^(ServiceResponseModel *responseModel) {
+//                    
+//                };
             }
         }
         weakSelf.blankHomeView.hidden = weakSelf.modelArray.count;
@@ -638,6 +649,8 @@ static HomeViewController *sharedInstance = nil;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
         _tableView.allowsMultipleSelectionDuringEditing = YES;
+        _tableView.backgroundView = [UIView new];   //Background color for UISearchController in UITableView, 刷新时，背景跳动
+        _tableView.backgroundColor = MAIN_BACKGROUND_COLOR;
     }
     return _tableView;
 }

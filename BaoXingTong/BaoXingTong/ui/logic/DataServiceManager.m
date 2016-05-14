@@ -49,6 +49,7 @@ static  DataServiceManager *sharedDataManager = nil;
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"%@", responseObject);
+        responseModel.errorMessage = [responseObject objectForKey:@"error"];
         responseModel.data = responseObject;
         if (response) {
             response(responseModel);
@@ -85,11 +86,12 @@ static  DataServiceManager *sharedDataManager = nil;
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"%@", error);
-        responseModel.errorMessage = error.domain;
+        responseModel.errorMessage = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         if (response) {
             response(responseModel);
         }
     }];
+    [[AFHTTPSessionManager manager].requestSerializer setTimeoutInterval:10];
 }
 
 - (void)logout:(serviceResponseBlock)response
@@ -116,14 +118,15 @@ static  DataServiceManager *sharedDataManager = nil;
     }];
 }
 
-- (void)changeName:(NSString *)name password:(NSString *)password response:(serviceResponseBlock)response
+- (void)changeName:(NSString *)name password:(NSString *)password phone:(NSString *)phone response:(serviceResponseBlock)response
 {
 //    NSString *url = [NSString stringWithFormat:@"%@%@", ipAddress, @"/~yongjie_zou/BaoXingTongPHP/changeNameOrPassword.php"];
     NSString *url = [self.domainName stringByAppendingPathComponent:@"BaoXingTongPHP/changeNameOrPassword.php"];
     
     NSDictionary *paramas = @{
                               @"name":name,
-                              @"password":password
+                              @"password":password,
+                              @"phone":phone.length ? phone : @""
                               };
     
     __block ServiceResponseModel *responseModel = [ServiceResponseModel new];
@@ -274,12 +277,26 @@ static  DataServiceManager *sharedDataManager = nil;
     [uploadTask resume];
 }
 
-- (UIImage *)getImageWithName:(NSString *)imageName
+- (void)getImageWithName:(NSString *)imageName response:(serviceResponseBlock)response
 {
+    if (0 == imageName.length) {
+        ServiceResponseModel *responseModel = [ServiceResponseModel new];
+        responseModel.errorMessage = @"图片名字为空";
+        response(responseModel);
+        return;
+    }
+    
     NSString *url = [self.domainName stringByAppendingPathComponent:[NSString stringWithFormat:@"image/%@", imageName]];
     NSURL *URL = [NSURL URLWithString:url];
-    NSData *data = [NSData dataWithContentsOfURL:URL];
-    return [UIImage imageWithData:data];
+    __block ServiceResponseModel *responseModel = [ServiceResponseModel new];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSData *data = [NSData dataWithContentsOfURL:URL];
+        if (data) {
+            responseModel.data = @[[UIImage imageWithData:data]];
+        }
+        response(responseModel);
+    });
 }
 
 - (void)downloadImageWithName:(NSString *)imageName response:(serviceResponseBlock)response

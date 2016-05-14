@@ -29,7 +29,7 @@ typedef void (^serviceResponseBlock)(ServiceResponseModel *responseModel);
 - (void)registerWithModel:(UserModel *)model response:(serviceResponseBlock)response;
 - (void)loginWithName:(NSString *)name password:(NSString *)password response:(serviceResponseBlock)response;
 - (void)logout:(serviceResponseBlock)response;
-- (void)changeName:(NSString *)name password:(NSString *)password response:(serviceResponseBlock)response;
+- (void)changeName:(NSString *)name password:(NSString *)password phone:(NSString *)phone response:(serviceResponseBlock)response;      //phone可以为nil，默认更改当前登录用户的信息
 
 - (void)listOfGuarateeSlips:(serviceResponseBlock)response;
 - (NSArray *)getAllIds:(serviceResponseBlock)response;
@@ -39,7 +39,7 @@ typedef void (^serviceResponseBlock)(ServiceResponseModel *responseModel);
 
 - (void)uploadImageWithImage:(UIImage *)image name:(NSString *)name progress:(void (^)(NSProgress *uploadProgress)) uploadProgressBlock response:(serviceResponseBlock)responseBlock;
 - (void)uploadImageWithPath:(NSString *)path progress:(void (^)(NSProgress *uploadProgress)) uploadProgressBlock response:(serviceResponseBlock)responseBlock;
-- (UIImage *)getImageWithName:(NSString *)imageName;
+- (void)getImageWithName:(NSString *)imageName response:(serviceResponseBlock)response;
 - (void)downloadImageWithName:(NSString *)imageName response:(serviceResponseBlock)response;
 
 @end

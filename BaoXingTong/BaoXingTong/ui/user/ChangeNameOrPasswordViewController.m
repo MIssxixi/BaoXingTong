@@ -76,9 +76,16 @@
     {
         currentUser = [DataManager sharedManager].currentUser;
     }
+    NSString *name = currentUser.name;
+    NSString *password;
     
     if (![currentUser.password isEqualToString:self.oldPassWordTextField.text]) {
         [TipView show:@"旧密码输入错误"];
+        return;
+    }
+    
+    if ([self.newlyPassWordTextField.text isEqualToString:currentUser.password]) {
+        [TipView show:@"新密码不能与旧密码相同"];
         return;
     }
     
@@ -93,22 +100,35 @@
     }
     
     if (self.nameTextField.text.length) {
-        currentUser.name = self.nameTextField.text;
-        if (self.didChangeName) {
+        name = self.nameTextField.text;
+        if (self.didChangeName && ![DataServiceManager sharedManager].isUsingService) { //tofix 可能出现用户名和密码相同
             self.didChangeName(currentUser.name);
         }
     }
-    currentUser.password = self.newlyPassWordTextField.text;
+    password = self.newlyPassWordTextField.text;
     if ([DataServiceManager sharedManager].isUsingService) {
-        [[DataServiceManager sharedManager] changeName:currentUser.name password:currentUser.password response:^(ServiceResponseModel *responseModel) {
+        WS(weakSelf);
+        [[DataServiceManager sharedManager] changeName:name password:password phone:nil response:^(ServiceResponseModel *responseModel) {
+            if (responseModel.errorMessage.length > 0) {
+                [TipView show:responseModel.errorMessage];
+                return;
+            }
             
+            if (weakSelf.didChangeName) {
+                weakSelf.didChangeName(name);
+            }
+            currentUser.name = name;
+            currentUser.password = password;
+            [weakSelf.navigationController popViewControllerAnimated:YES];
         }];
     }
     else
     {
+        currentUser.name = name;
+        currentUser.password = password;
         [[DataManager sharedManager] saveUser:currentUser];
+        [self.navigationController popViewControllerAnimated:YES];
     }
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (UILabel *)leftLabel:(NSString *)title
@@ -146,7 +166,13 @@
         _nameTextField.backgroundColor = [UIColor whiteColor];
         _nameTextField.leftView = [self leftLabel:@"姓    名"];
         _nameTextField.leftViewMode = UITextFieldViewModeAlways;
-        _nameTextField.placeholder = [DataManager sharedManager].currentUser.name;
+        if ([DataServiceManager sharedManager].isUsingService) {
+            _nameTextField.placeholder = [DataServiceManager sharedManager].currentUser.name;
+        }
+        else
+        {
+            _nameTextField.placeholder = [DataManager sharedManager].currentUser.name;
+        }
     }
     return _nameTextField;
 }

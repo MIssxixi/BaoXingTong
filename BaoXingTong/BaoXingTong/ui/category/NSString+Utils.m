@@ -10,6 +10,11 @@
 
 @implementation NSString (Utils)
 
+- (NSString *)url
+{
+    return [self stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+}
+
 - (NSString *)trim
 {
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];

@@ -85,6 +85,10 @@
     
     if ([DataServiceManager sharedManager].isUsingService) {
         [[DataServiceManager sharedManager] registerWithModel:self.userModel response:^(ServiceResponseModel *responseModel) {
+            if (responseModel.errorMessage.length > 0) {
+                [TipView show:responseModel.errorMessage];
+                return;
+            }
             HomeViewController *homeViewController = [[HomeViewController alloc] init];
             UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:homeViewController];
             [UIApplication sharedApplication].windows[0].rootViewController = navi;

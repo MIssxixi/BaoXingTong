@@ -47,9 +47,16 @@
     [super viewDidLoad];
     
     [self configUI];
+    
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureAction)];
+    [self.view addGestureRecognizer:tapGestureRecognizer];
 }
 
-
+- (void)tapGestureAction
+{
+    //If target is nil, the app sends the message to the first responder, from whence it progresses up the responder chain until it is handled.
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+}
 
 - (void)configUI
 {
@@ -97,13 +104,8 @@
     [self.registerButton autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.loginButton withOffset:30];
 }
 
-- (void)login
+- (void)checkDomain
 {
-    if (0 == self.nameField.text.length || 0 == self.passwordField.text.length) {
-        [TipView show:@"用户名和密码不能为空"];
-        return;
-    }
-    
     BOOL canOpen = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:self.domainField.text]];
     if (self.domainField.text.length > 0) {
         if (!canOpen) {
@@ -117,6 +119,16 @@
     {
         [DataServiceManager sharedManager].isUsingService = NO;
     }
+}
+
+- (void)login
+{
+    if (0 == self.nameField.text.length || 0 == self.passwordField.text.length) {
+        [TipView show:@"用户名和密码不能为空"];
+        return;
+    }
+    
+    [self checkDomain];
     
     if ([DataServiceManager sharedManager].isUsingService) {
         [[DataServiceManager sharedManager] loginWithName:self.nameField.text password:self.passwordField.text response:^(ServiceResponseModel *responseModel) {
@@ -147,12 +159,16 @@
 
 - (void)registerAccount
 {
+    [self checkDomain];
+    
     GetVerificationCodeViewController *registerViewController = [[GetVerificationCodeViewController alloc] init];
     [self.navigationController pushViewController:registerViewController animated:YES];
 }
 
 - (void)forgetPassword
 {
+    [self checkDomain];
+    
     ForgetPasswordGetVerificationCodeViewController *vc = [[ForgetPasswordGetVerificationCodeViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }

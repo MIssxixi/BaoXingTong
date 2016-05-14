@@ -1,22 +1,22 @@
 //
-//  ImageFooterView.m
+//  ServiceImageFooterView.m
 //  BaoXingTong
 //
-//  Created by yongjie_zou on 16/3/17.
+//  Created by yongjie_zou on 16/5/12.
 //  Copyright © 2016年 yongjie_zou. All rights reserved.
 //
 
-#import "ImageFooterView.h"
+#import "ServiceImageFooterView.h"
 #import "ImageCollectionViewCell.h"
 #import "MWPhotoBrowser.h"
 #import "DataManager.h"
 
 #define IMAGECOLLECTIONVIEWCELL_IDENTIFIER @"IMAGECOLLECTIONVIEWCELL"
 
-const CGFloat collectionCellHeight = 80;
-const CGFloat collectionCellminimumLineSpacing = 10;
+const CGFloat collectionViewCellHeight = 80;
+const CGFloat collectionViewCellminimumLineSpacing = 10;
 
-@interface ImageFooterView () <UICollectionViewDataSource, UICollectionViewDelegate, MWPhotoBrowserDelegate>
+@interface ServiceImageFooterView () <UICollectionViewDataSource, UICollectionViewDelegate, MWPhotoBrowserDelegate>
 
 @property (nonatomic, strong) NSMutableArray <NSString *> *imageNames;
 @property (nonatomic, strong) NSMutableArray <UIImage *> *imageArray;
@@ -24,7 +24,7 @@ const CGFloat collectionCellminimumLineSpacing = 10;
 
 @end
 
-@implementation ImageFooterView
+@implementation ServiceImageFooterView
 
 - (void)dealloc
 {
@@ -48,14 +48,18 @@ const CGFloat collectionCellminimumLineSpacing = 10;
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.imageArray.count;
+    return self.imageNames.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ImageCollectionViewCell *cell = (ImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:IMAGECOLLECTIONVIEWCELL_IDENTIFIER forIndexPath:indexPath];
-    if (self.imageArray.count > indexPath.row) {
-        cell.image = self.imageArray[indexPath.row];
+    if (self.imageNames.count > indexPath.row) {
+        NSString *url = [[DataServiceManager sharedManager].domainName stringByAppendingPathComponent:[NSString stringWithFormat:@"image/%@", self.imageNames[indexPath.row]]];
+        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        //url中可能含中文字符
+//        BOOL b = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:[url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]];
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"default_avatar"] options:SDWebImageRefreshCached];
         
         WS(weakSelf)
         [cell setDidDeleteAction:^(UICollectionViewCell *cell) {
@@ -70,7 +74,7 @@ const CGFloat collectionCellminimumLineSpacing = 10;
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.item < self.imageArray.count) {
+    if (indexPath.item < self.imageNames.count) {
         MWPhotoBrowser *photoBrowser = [[MWPhotoBrowser alloc] initWithDelegate:self];
         [photoBrowser setCurrentPhotoIndex:indexPath.row];
         [[UIViewController currentViewController].navigationController pushViewController:photoBrowser animated:YES];
@@ -80,21 +84,15 @@ const CGFloat collectionCellminimumLineSpacing = 10;
 #pragma mark - MWPhotoBrowserDelegate
 - (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser
 {
-    return self.imageArray.count;
+    return self.imageNames.count;
 }
 
 - (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index
 {
-    if (index < self.imageArray.count) {
-        UIImage *image;
-        if (index < self.imageNames.count) {
-            image = [[DataManager sharedManager] getImage:self.imageNames[index]];
-        }
-        else
-        {
-            image = self.imageArray[index];
-        }
-        MWPhoto *photo = [MWPhoto photoWithImage:image];
+    if (index < self.imageNames.count) {
+//        image = [[DataServiceManager sharedManager] getImageWithName:[self.imageNames[index] url]];
+        NSString *url = [[DataServiceManager sharedManager].domainName stringByAppendingPathComponent:[NSString stringWithFormat:@"image/%@", self.imageNames[index]]];
+        MWPhoto *photo = [MWPhoto photoWithURL:[NSURL URLWithString:[url url]]];
         return photo;
     }
     return nil;
@@ -105,8 +103,8 @@ const CGFloat collectionCellminimumLineSpacing = 10;
 {
     if (!_collectionView) {
         UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-        flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH / 3.0 - 25.0, collectionCellHeight);
-        flowLayout.minimumLineSpacing = collectionCellminimumLineSpacing;
+        flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH / 3.0 - 25.0, collectionViewCellHeight);
+        flowLayout.minimumLineSpacing = collectionViewCellminimumLineSpacing;
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         [_collectionView registerClass:[ImageCollectionViewCell class] forCellWithReuseIdentifier:IMAGECOLLECTIONVIEWCELL_IDENTIFIER];
         _collectionView.dataSource = self;
@@ -123,6 +121,7 @@ const CGFloat collectionCellminimumLineSpacing = 10;
 - (void)setImageNames:(NSMutableArray<NSString *> *)imageNames
 {
     _imageNames = imageNames;
+    [self.collectionView reloadData];
 }
 
 - (void)setImageArray:(NSMutableArray <UIImage *> *)imageArray
@@ -140,13 +139,13 @@ const CGFloat collectionCellminimumLineSpacing = 10;
 }
 
 #pragma mark - static methods
-+ (CGFloat)heightWithImageArray:(NSArray <UIImage *> *)imageArray
++ (CGFloat)heightWithImageNames:(NSArray<NSString *> *)imageName
 {
-    if (!imageArray.count) {
+    if (!imageName.count) {
         return 0;
     }
-    NSInteger line = (imageArray.count - 1) / 3 + 1;
-    return line * collectionCellHeight + (line - 1) * collectionCellminimumLineSpacing + 15;
+    NSInteger line = (imageName.count - 1) / 3 + 1;
+    return line * collectionViewCellHeight + (line - 1) * collectionViewCellminimumLineSpacing + 15;
 }
 
 @end

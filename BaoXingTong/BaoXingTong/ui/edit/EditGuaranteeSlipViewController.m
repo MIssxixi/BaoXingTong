@@ -259,7 +259,7 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 //            NSLog(@"%@", responseModel);
 //        }];
         
-        for (UIImage *image in self.model.imageArray) {
+//        for (UIImage *image in self.model.imageArray) {
 //            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 //                [[DataServiceManager sharedManager] uploadImageWithImage:image progress:^(NSProgress *uploadProgress) {
 //                    
@@ -269,9 +269,9 @@ typedef NS_ENUM(NSInteger, SelectCellAction) {
 //            });
 //        }
         
-        [self.navigationController popViewControllerAnimated:YES];
-        return;
-    }
+//        [self.navigationController popViewControllerAnimated:YES];
+//        return;
+//    }
     
     [[DataManager sharedManager] saveDataWithModel:self.model];     //要在回调之前，因为可能该保单是新建的，需要生成id
     if (self.didSave) {

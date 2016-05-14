@@ -11,6 +11,7 @@
 @interface ImageCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, copy) NSString *imageName;
 
 @property (nonatomic, copy) void (^didDeleteAction)(UICollectionViewCell *cell);
