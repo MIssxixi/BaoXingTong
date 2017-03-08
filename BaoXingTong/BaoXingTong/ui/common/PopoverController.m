@@ -26,7 +26,7 @@
         self.items = items;
         self.callBack = callBack;
         self.modalPresentationStyle = UIModalPresentationPopover;
-        self.preferredContentSize = CGSizeMake(100, 44 * self.items.count);
+        self.preferredContentSize = CGSizeMake(105, 44 * self.items.count);
         self.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
         self.popoverPresentationController.barButtonItem = self.barButtonItem;
         self.popoverPresentationController.delegate = delegate; //popoverPresentationController什么时候初始化，如果最先设置delegate，这时popoverPresentationController为nil，会设置不成功

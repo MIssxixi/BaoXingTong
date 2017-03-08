@@ -1,3 +1,4 @@
+target 'BaoXingTong'
 pod 'PureLayout'
 #pod 'ZYQAssetPickerController'
 pod 'DoImagePickerController'

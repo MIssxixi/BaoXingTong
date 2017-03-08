@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'FA482DC91A75879A283F6E61'
+               BlueprintIdentifier = '76AE3051AC89C1CE674EA678E3E35E4C'
                BlueprintName = 'iOS-htmltopdf'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libiOS-htmltopdf.a'>

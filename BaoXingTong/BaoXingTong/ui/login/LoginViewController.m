@@ -154,7 +154,7 @@
         UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:homeViewController];
         [UIApplication sharedApplication].windows[0].rootViewController = navi;
     }
-    else
+    else if (![DataServiceManager sharedManager].isUsingService)
     {
         [TipView show:@"登录名或密码错误"];
     }
