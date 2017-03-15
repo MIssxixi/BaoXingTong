@@ -16,6 +16,13 @@
 		1F5262881CCF8C48006821D9 /* ForgetPasswordVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F5262871CCF8C48006821D9 /* ForgetPasswordVerificationViewController.m */; };
 		1F52628B1CCF8EBA006821D9 /* ForgetPasswordResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F52628A1CCF8EBA006821D9 /* ForgetPasswordResetPasswordViewController.m */; };
 		1F52628F1CD055D8006821D9 /* HtmlManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F52628E1CD055D8006821D9 /* HtmlManager.m */; };
+		1F98750C1E79151B00652122 /* AssetHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F9875021E79151B00652122 /* AssetHelper.m */; };
+		1F98750D1E79151B00652122 /* DoAlbumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F9875041E79151B00652122 /* DoAlbumCell.m */; };
+		1F98750E1E79151B00652122 /* DoAlbumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F9875051E79151B00652122 /* DoAlbumCell.xib */; };
+		1F98750F1E79151B00652122 /* DoImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F9875071E79151B00652122 /* DoImagePickerController.m */; };
+		1F9875101E79151B00652122 /* DoImagePickerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F9875081E79151B00652122 /* DoImagePickerController.xib */; };
+		1F9875111E79151B00652122 /* DoPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F98750A1E79151B00652122 /* DoPhotoCell.m */; };
+		1F9875121E79151B00652122 /* DoPhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F98750B1E79151B00652122 /* DoPhotoCell.xib */; };
 		1FB2FA741CB5127F002CB0FA /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB2FA731CB5127F002CB0FA /* HomeViewController.m */; };
 		1FB2FA781CB516D5002CB0FA /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB2FA771CB516D5002CB0FA /* DataManager.m */; };
 		1FD1AB641C9C034F0057710B /* UIViewController+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FD1AB631C9C034F0057710B /* UIViewController+Utils.m */; };
@@ -109,6 +116,17 @@
 		1F52628A1CCF8EBA006821D9 /* ForgetPasswordResetPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgetPasswordResetPasswordViewController.m; sourceTree = "<group>"; };
 		1F52628D1CD055D8006821D9 /* HtmlManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HtmlManager.h; sourceTree = "<group>"; };
 		1F52628E1CD055D8006821D9 /* HtmlManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HtmlManager.m; sourceTree = "<group>"; };
+		1F9875011E79151B00652122 /* AssetHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetHelper.h; sourceTree = "<group>"; };
+		1F9875021E79151B00652122 /* AssetHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetHelper.m; sourceTree = "<group>"; };
+		1F9875031E79151B00652122 /* DoAlbumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoAlbumCell.h; sourceTree = "<group>"; };
+		1F9875041E79151B00652122 /* DoAlbumCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoAlbumCell.m; sourceTree = "<group>"; };
+		1F9875051E79151B00652122 /* DoAlbumCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoAlbumCell.xib; sourceTree = "<group>"; };
+		1F9875061E79151B00652122 /* DoImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoImagePickerController.h; sourceTree = "<group>"; };
+		1F9875071E79151B00652122 /* DoImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoImagePickerController.m; sourceTree = "<group>"; };
+		1F9875081E79151B00652122 /* DoImagePickerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoImagePickerController.xib; sourceTree = "<group>"; };
+		1F9875091E79151B00652122 /* DoPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoPhotoCell.h; sourceTree = "<group>"; };
+		1F98750A1E79151B00652122 /* DoPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoPhotoCell.m; sourceTree = "<group>"; };
+		1F98750B1E79151B00652122 /* DoPhotoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoPhotoCell.xib; sourceTree = "<group>"; };
 		1FB2FA721CB5127F002CB0FA /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		1FB2FA731CB5127F002CB0FA /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		1FB2FA761CB516D5002CB0FA /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
@@ -269,6 +287,24 @@
 			path = user;
 			sourceTree = "<group>";
 		};
+		1F9875001E79151B00652122 /* DoImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				1F9875011E79151B00652122 /* AssetHelper.h */,
+				1F9875021E79151B00652122 /* AssetHelper.m */,
+				1F9875031E79151B00652122 /* DoAlbumCell.h */,
+				1F9875041E79151B00652122 /* DoAlbumCell.m */,
+				1F9875051E79151B00652122 /* DoAlbumCell.xib */,
+				1F9875061E79151B00652122 /* DoImagePickerController.h */,
+				1F9875071E79151B00652122 /* DoImagePickerController.m */,
+				1F9875081E79151B00652122 /* DoImagePickerController.xib */,
+				1F9875091E79151B00652122 /* DoPhotoCell.h */,
+				1F98750A1E79151B00652122 /* DoPhotoCell.m */,
+				1F98750B1E79151B00652122 /* DoPhotoCell.xib */,
+			);
+			path = DoImagePicker;
+			sourceTree = "<group>";
+		};
 		1FB2FA711CB51150002CB0FA /* home */ = {
 			isa = PBXGroup;
 			children = (
@@ -408,6 +444,7 @@
 		1FD50D951C780929002F66F0 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				1F9875001E79151B00652122 /* DoImagePicker */,
 				1F52627C1CCF6022006821D9 /* user */,
 				1FDB472C1CCE12CB000C31B7 /* login */,
 				1FDE4DA21CB7983900DAC317 /* common */,
@@ -659,12 +696,15 @@
 				1FD5F9E21CBB930000642D7C /* delete@2x.png in Resources */,
 				1FD1AB661C9C0CBE0057710B /* cell_cancle@2x.png in Resources */,
 				1FD4F6091C75F53B00012DCD /* Assets.xcassets in Resources */,
+				1F9875101E79151B00652122 /* DoImagePickerController.xib in Resources */,
 				1FD5F9DC1CBB91A600642D7C /* default_avatar.png in Resources */,
 				1FD4F6071C75F53B00012DCD /* Main.storyboard in Resources */,
 				1FD5F9DE1CBB92DC00642D7C /* check_gray@2x.png in Resources */,
+				1F98750E1E79151B00652122 /* DoAlbumCell.xib in Resources */,
 				1FD5F9E01CBB92F100642D7C /* uncheck_gray@2x.png in Resources */,
 				1FD972701CDD7F910086020F /* Icon-60@3x.png in Resources */,
 				1FD5B57A1C96660800C9E8CD /* EditGuaranteeSlipList.plist in Resources */,
+				1F9875121E79151B00652122 /* DoPhotoCell.xib in Resources */,
 				1F50808B1C9FD83A00C9D28C /* InsuranceAgentList.plist in Resources */,
 				1FD9726F1CDD7F910086020F /* Icon-60@2x.png in Resources */,
 			);
@@ -746,9 +786,12 @@
 				1FDBD21E1CD1E9D50045DE01 /* AlterView.m in Sources */,
 				1FDB8E8C1CDB251400256139 /* NSString+Utils.m in Sources */,
 				1F52627F1CCF6041006821D9 /* AccountViewController.m in Sources */,
+				1F98750F1E79151B00652122 /* DoImagePickerController.m in Sources */,
 				1FD3F97D1CB8FF5C0050349C /* PopoverController.m in Sources */,
 				1FB2FA781CB516D5002CB0FA /* DataManager.m in Sources */,
 				1FD9BA761CE41C04007B1579 /* ServiceImageFooterView.m in Sources */,
+				1F9875111E79151B00652122 /* DoPhotoCell.m in Sources */,
+				1F98750C1E79151B00652122 /* AssetHelper.m in Sources */,
 				1FDBB8071CE18A8100A8E056 /* EditGuaranteeSlipViewController.m in Sources */,
 				1F52627B1CCF4C29006821D9 /* RegisterViewController.m in Sources */,
 				1FD48E7F1C9174B5001E75E6 /* UIColor+WithString.m in Sources */,
@@ -778,6 +821,7 @@
 				1FD1AB6A1C9C290E0057710B /* GuaranteeSlipModel.m in Sources */,
 				1FD1AB641C9C034F0057710B /* UIViewController+Utils.m in Sources */,
 				1FDB1F611CCF36740018AB19 /* TextField.m in Sources */,
+				1F98750D1E79151B00652122 /* DoAlbumCell.m in Sources */,
 				1FDB472F1CCE1321000C31B7 /* LoginViewController.m in Sources */,
 				1FDBD21B1CD19F0B0045DE01 /* PdfManager.m in Sources */,
 				1FD5B57D1C96906700C9E8CD /* ChoseOrEditTableViewCell.m in Sources */,

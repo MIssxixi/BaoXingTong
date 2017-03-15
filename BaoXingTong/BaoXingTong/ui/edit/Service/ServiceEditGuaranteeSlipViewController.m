@@ -11,8 +11,7 @@
 #import "InterceptImageViewController.h"
 #import "PopoverController.h"
 #import "GuaranteeSlipModel.h"
-#import <DoImagePickerController/DoImagePickerController.h>
-#import <DoImagePickerController/AssetHelper.h>
+#import "DoImagePickerController.h"
 #import "TextFieldTableViewCell.h"
 #import "ChoseOrEditTableViewCell.h"
 #import "ImageFooterView.h"

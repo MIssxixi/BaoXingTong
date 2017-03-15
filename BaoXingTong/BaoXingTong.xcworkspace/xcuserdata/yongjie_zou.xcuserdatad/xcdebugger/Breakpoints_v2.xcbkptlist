@@ -202,13 +202,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BaoXingTong/ui/edit/Service/ServiceEditGuaranteeSlipViewController.m"
-            timestampString = "484822155.087777"
+            timestampString = "511251939.48169"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "731"
-            endingLineNumber = "731"
+            startingLineNumber = "730"
+            endingLineNumber = "730"
             landmarkName = "-imagePickerController:didFinishPickingMediaWithInfo:"
-            landmarkType = "5">
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
@@ -217,12 +217,12 @@
                   symbolName = "-[ServiceEditGuaranteeSlipViewController imagePickerController:didFinishPickingMediaWithInfo:]"
                   moduleName = "BaoXingTong"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bjhl/ios/BaoXingTong/BaoXingTong/BaoXingTong/ui/edit/Service/ServiceEditGuaranteeSlipViewController.m"
-                  timestampString = "510657605.981624"
+                  urlString = "file:///Users/bjhl/backup/ios/BaoXingTong/BaoXingTong/BaoXingTong/ui/edit/Service/ServiceEditGuaranteeSlipViewController.m"
+                  timestampString = "511251940.909552"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "731"
-                  endingLineNumber = "731"
+                  startingLineNumber = "730"
+                  endingLineNumber = "730"
                   offsetFromSymbolStart = "372">
                </Location>
                <Location
@@ -232,12 +232,12 @@
                   symbolName = "__94-[ServiceEditGuaranteeSlipViewController imagePickerController:didFinishPickingMediaWithInfo:]_block_invoke"
                   moduleName = "BaoXingTong"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bjhl/ios/BaoXingTong/BaoXingTong/BaoXingTong/ui/edit/Service/ServiceEditGuaranteeSlipViewController.m"
-                  timestampString = "510657605.982941"
+                  urlString = "file:///Users/bjhl/backup/ios/BaoXingTong/BaoXingTong/BaoXingTong/ui/edit/Service/ServiceEditGuaranteeSlipViewController.m"
+                  timestampString = "511251940.910949"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "731"
-                  endingLineNumber = "731"
+                  startingLineNumber = "730"
+                  endingLineNumber = "730"
                   offsetFromSymbolStart = "24">
                </Location>
             </Locations>

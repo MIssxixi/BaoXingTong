@@ -4,15 +4,17 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++BCE2083" : 0,
+    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++39851D0" : 0,
+    "E82D90C91A0ED61185848232B3E32E0E18DA178C+++02D2B56" : 9223372036854775807,
     "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++B43E476" : 0,
-    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++39851D0" : 0
+    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++BCE2083" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "A1B2BFAB-3174-4F65-85C3-DD5E89D48344",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++BCE2083" : "",
+    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++39851D0" : "BaoXingTong\/",
+    "E82D90C91A0ED61185848232B3E32E0E18DA178C+++02D2B56" : "..",
     "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++B43E476" : "",
-    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++39851D0" : "BaoXingTong\/"
+    "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++BCE2083" : ""
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "BaoXingTong",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -32,6 +34,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/MIssxixi\/BaoXingTong.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BBC9F84F18AE2097ADCB07A900D5DA6B4DA14D14+++BCE2083"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/MIssxixi\/backup.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E82D90C91A0ED61185848232B3E32E0E18DA178C+++02D2B56"
     }
   ]
 }

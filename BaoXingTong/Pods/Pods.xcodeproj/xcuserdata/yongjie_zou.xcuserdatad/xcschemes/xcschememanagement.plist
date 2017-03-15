@@ -19,16 +19,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>DoImagePickerController-DoImagePickerController.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>DoImagePickerController.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>FPPopover.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -107,16 +97,6 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>09ED0BDECAC8AD028E9C3B19B1E3D7B0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>11F9881FD1156BB8EC5BCC917AD03F6B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>175B076ED45EB1A3E40F58BA14036467</key>
 		<dict>
 			<key>primary</key>
@@ -132,6 +112,11 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>2E20158F86466C7FA426D25C549A0F9E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>6BA3908FC4EFA523CD692796BB03F806</key>
 		<dict>
 			<key>primary</key>
@@ -142,12 +127,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8E2F85A9EA167EFA71B3DCB5DF170059</key>
+		<key>775BF5B9523882C71A5DA32FE954A4B1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>94A68D34BF15762D7A1B8A0704B1C85B</key>
+		<key>8E2F85A9EA167EFA71B3DCB5DF170059</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -182,12 +167,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E8B9CD9F9ACDBB97CA939728FB4D2BE0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F099C5C06CBA479866FFC597E07F3F0D</key>
+		<key>E78888E5BED1F90CE03A9259A407CAB4</key>
 		<dict>
 			<key>primary</key>
 			<true/>

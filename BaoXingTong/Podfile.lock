@@ -28,7 +28,6 @@ PODS:
   - ASIHTTPRequest/S3 (1.8.2):
     - ASIHTTPRequest/Core
   - DACircularProgress (2.3.1)
-  - DoImagePickerController (1.6)
   - FPPopover (1.4.1)
   - iOS-htmltopdf (1.0.3)
   - JSBadgeView (1.4.1)
@@ -57,7 +56,6 @@ PODS:
 DEPENDENCIES:
   - AFNetworking
   - ASIHTTPRequest
-  - DoImagePickerController
   - FPPopover
   - iOS-htmltopdf
   - JSBadgeView
@@ -73,7 +71,6 @@ SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
-  DoImagePickerController: f47aa6adcce360bd1d5187843f2c753cd3661a23
   FPPopover: aaf34a88cad4113867c5f1d0a4f9b2f1c06e2352
   iOS-htmltopdf: 1bd88a781cb4b20e4b8f921bd7374447a1876faf
   JSBadgeView: 3861ddee41094284d9468e6d0af5107f703aaac5
@@ -86,6 +83,6 @@ SPEC CHECKSUMS:
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
 
-PODFILE CHECKSUM: c39ae352a37ad211176ae548b988891c8ed97df8
+PODFILE CHECKSUM: e4ec73daa2700e510b77a86979b9faf9fe836bef
 
 COCOAPODS: 1.2.0.beta.1
